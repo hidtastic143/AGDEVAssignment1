@@ -24,6 +24,7 @@ void GenericEntity::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(position.x, position.y, position.z);
 	modelStack.Scale(scale.x, scale.y, scale.z);
+	modelStack.Rotate(rotation, 0, 1, 0);
 	if (GetLODStatus()==true)
 	{
 		if (theDetailLevel != NO_DETAILS)
@@ -43,7 +44,8 @@ void GenericEntity::SetAABB(Vector3 maxAABB, Vector3 minAABB)
 
 GenericEntity* Create::Entity(	const std::string& _meshName, 
 								const Vector3& _position,
-								const Vector3& _scale)
+								const Vector3& _scale,
+								const float _rotation)
 {
 	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
 	if (modelMesh == nullptr)
@@ -52,6 +54,7 @@ GenericEntity* Create::Entity(	const std::string& _meshName,
 	GenericEntity* result = new GenericEntity(modelMesh);
 	result->SetPosition(_position);
 	result->SetScale(_scale);
+	result->SetRotation(_rotation);
 	result->SetCollider(false);
 	EntityManager::GetInstance()->AddEntity(result, true);
 	return result;
@@ -59,7 +62,8 @@ GenericEntity* Create::Entity(	const std::string& _meshName,
 
 GenericEntity* Create::Asset(	const std::string& _meshName,
 								const Vector3& _position,
-								const Vector3& _scale)
+								const Vector3& _scale,
+								const float _rotation)
 {
 	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
 	if (modelMesh == nullptr)
@@ -68,6 +72,7 @@ GenericEntity* Create::Asset(	const std::string& _meshName,
 	GenericEntity* result = new GenericEntity(modelMesh);
 	result->SetPosition(_position);
 	result->SetScale(_scale);
+	result->SetRotation(_rotation);
 	result->SetCollider(false);
 	return result;
 }
