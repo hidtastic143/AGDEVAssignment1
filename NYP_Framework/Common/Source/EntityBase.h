@@ -14,23 +14,34 @@ public:
 	virtual void RenderUI();
 
 	inline void SetPositionX(const int& _value){ position.x = _value; };
-	inline Vector3 GetPositionX(){ return position.x; };
+	inline float GetPositionX(){ return position.x; };
 
 	inline void SetPositionY(const int& _value){ position.y = _value; };
-	inline Vector3 GetPositionY(){ return position.y; };
+	inline float GetPositionY(){ return position.y; };
 
 	inline void SetPositionZ(const int& _value){ position.z = _value; };
-	inline Vector3 GetPositionZ(){ return position.z; };
+	inline float GetPositionZ(){ return position.z; };
 
 	inline void SetPosition(const Vector3& value){ position = value; };
 	inline Vector3 GetPosition() { return position; };
 
-	inline void SetScale(const int& _value){
-		scale = Vector3(_value, _value, _value);
+	inline void SetScaleX(const int& _value){
+		scale.x = _value;
 	};
+	inline float GetScaleX(){ return scale.x; };
+	inline void SetScaleY(const int& _value){
+		scale.y = _value;
+	};
+	inline float GetScaleY(){ return scale.y; };
+	inline void SetScaleZ(const int& _value){
+		scale.z = _value;
+	};
+	inline float GetScaleZ(){ return scale.z; };
+
+	inline void SetScale(const Vector3& _value){ scale = _value; };
 	inline Vector3 GetScale(){ return scale; };
 
-	inline void SetRotation(const float& _value) { rotation = _value };
+	inline void SetRotation(const float& _value) { rotation = _value; };
 	inline float GetRotation(){ return rotation; };
 
 	bool IsDone();

@@ -62,7 +62,15 @@ bool GenericEntity::ReadFile(const string& NameOfObject, const string Details)
 			{
 				temp.clear();
 				getline(file, temp, ',');
-				SetScale(stoi(temp));
+				SetScaleX(stoi(temp));
+				temp.clear();
+
+				getline(file, temp, ',');
+				SetScaleY(stoi(temp));
+				temp.clear();
+
+				getline(file, temp, ',');
+				SetScaleZ(stoi(temp));
 				temp.clear();
 
 				getline(file, temp, ',');
@@ -80,6 +88,7 @@ bool GenericEntity::ReadFile(const string& NameOfObject, const string Details)
 				getline(file, temp, ',');
 				SetRotation(stoi(temp));
 				temp.clear();
+				file.close();
 				return true;
 			}
 		}
