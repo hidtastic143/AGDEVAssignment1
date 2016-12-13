@@ -5,6 +5,7 @@
 #include "KeyboardController.h"
 #include "Mtx44.h"
 #include "../Projectile/Projectile.h"
+#include "../WeaponInfo/Rifle.h"
 #include "../WeaponInfo/Pistol.h"
 #include "../WeaponInfo/LaserBlaster.h"
 #include "../WeaponInfo/GrenadeThrow.h"
@@ -62,12 +63,12 @@ void CPlayerInfo::Init(void)
 	minBoundary.Set(-1, -1, -1);
 
 	// Set the pistol as the primary weapon
-	primaryWeapon = new CPistol();
+	primaryWeapon = new Rifle();
 	primaryWeapon->Init();
 	// Set the laser blaster as the secondary weapon
 	//secondaryWeapon = new CLaserBlaster();
 	//secondaryWeapon->Init();
-	secondaryWeapon = new CGrenadeThrow();
+	secondaryWeapon = new CPistol();
 	secondaryWeapon->Init();
 }
 

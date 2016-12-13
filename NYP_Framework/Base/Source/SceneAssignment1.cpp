@@ -150,6 +150,10 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("GEO_GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("GEO_GRASS_LIGHTGREEN")->textureID = LoadTGA("Image//grass_lightgreen.tga");
 
+	//Gun
+	MeshBuilder::GetInstance()->GenerateOBJ("M4A4", "OBJ//M4A4.obj");
+	MeshBuilder::GetInstance()->GetMesh("M4A4")->textureID = LoadTGA("Image//M4A4_Texture.tga");
+
 	//Bullet
 	MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(1.0f, 0.64f, 0.0f), 1.0f);
 
@@ -195,6 +199,9 @@ void SceneAssignment1::Init()
 	aCube3->SetAABB(aCube3->GetScale(), -aCube3->GetScale());
 	aCube3->InitLOD("cube3", "sphere", "cubeSG");
 
+	Rifle = Create::Entity("M4A4");
+	Rifle->SetPosition(Vector3(playerInfo->GetPos().x + 1.f, playerInfo->GetPos().y - 2.f, playerInfo->GetPos().z - 5));
+
 	enemy = new Enemy();
 	enemy->Init();
 
@@ -206,6 +213,7 @@ void SceneAssignment1::Init()
 	theSkyBox = Create::SkyBox("SKYBOX_FRONT", "SKYBOX_BACK",
 		"SKYBOX_LEFT", "SKYBOX_RIGHT",
 		"SKYBOX_TOP", "SKYBOX_BOTTOM");
+
 
 	// Customise the ground entity
 	groundEntity->SetPosition(Vector3(0, -10, 0));
@@ -334,6 +342,7 @@ void SceneAssignment1::Render()
 	theSkyBox->Render();
 	groundEntity->Render();
 	EntityManager::GetInstance()->Render();
+	
 
 	// Setup 2D pipeline then render 2D
 	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;

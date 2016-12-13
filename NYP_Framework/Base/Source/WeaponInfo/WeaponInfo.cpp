@@ -182,6 +182,13 @@ void CWeaponInfo::Reload(void)
 	}
 }
 
+//void CWeaponInfo::Render()
+//{
+//	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
+//	modelStack.PushMatrix();
+//	modelStack.Translate(position.x, position.y, position.z);
+//}
+
 // Add rounds
 void CWeaponInfo::AddRounds(const int newRounds)
 {

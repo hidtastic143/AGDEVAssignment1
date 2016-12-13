@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Vector3.h"
+#include "GraphicsManager.h"
 
 class CPlayerInfo;
 
@@ -68,6 +69,8 @@ public:
 	void Reload(void);
 	// Add rounds
 	void AddRounds(const int newRounds);
+
+	//void Render();
 
 	// Print Self
 	void PrintSelf(void);

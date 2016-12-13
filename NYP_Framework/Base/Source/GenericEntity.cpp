@@ -97,6 +97,19 @@ bool GenericEntity::ReadFile(const string& NameOfObject, const string Details)
 	return true;
 }
 
+GenericEntity* Create::Entity(const string& _meshName, const Vector3& pos, const float rotation, const Vector3& scale)
+{
+	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
+	if (modelMesh == nullptr)
+		return nullptr;
+	GenericEntity* result = new GenericEntity(modelMesh);
+	result->SetPosition(pos);
+	result->SetScale(scale);
+	result->SetRotation(rotation);
+	result->SetCollider(false);
+	return result;
+}
+
 GenericEntity* Create::Entity(const string& _meshName)
 {
 	
