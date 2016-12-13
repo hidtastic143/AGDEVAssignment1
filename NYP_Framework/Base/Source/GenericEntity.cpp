@@ -24,6 +24,7 @@ void GenericEntity::Render()
 	modelStack.PushMatrix();
 	modelStack.Translate(position.x, position.y, position.z);
 	modelStack.Scale(scale.x, scale.y, scale.z);
+	modelStack.Rotate(rotation, 0, 1, 0);
 	if (GetLODStatus()==true)
 	{
 		if (theDetailLevel != NO_DETAILS)
@@ -41,6 +42,7 @@ void GenericEntity::SetAABB(Vector3 maxAABB, Vector3 minAABB)
 	this->minAABB = minAABB;
 }
 
+<<<<<<< HEAD
 bool GenericEntity::ReadFile(const string& NameOfObject, const string Details)
 {
 	string temp = "";
@@ -90,6 +92,12 @@ bool GenericEntity::ReadFile(const string& NameOfObject, const string Details)
 }
 
 GenericEntity* Create::Entity(	const string& _meshName)
+=======
+GenericEntity* Create::Entity(	const std::string& _meshName, 
+								const Vector3& _position,
+								const Vector3& _scale,
+								const float _rotation)
+>>>>>>> 21443b8092479efd4c568634283de6d5543e27ab
 {
 	
 	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
@@ -97,8 +105,14 @@ GenericEntity* Create::Entity(	const string& _meshName)
 		return nullptr;
 
 	GenericEntity* result = new GenericEntity(modelMesh);
+<<<<<<< HEAD
 
 	result->ReadFile(_meshName, "Source//CSV//File.csv");
+=======
+	result->SetPosition(_position);
+	result->SetScale(_scale);
+	result->SetRotation(_rotation);
+>>>>>>> 21443b8092479efd4c568634283de6d5543e27ab
 	result->SetCollider(false);
 	EntityManager::GetInstance()->AddEntity(result, true);
 	return result;
@@ -106,17 +120,28 @@ GenericEntity* Create::Entity(	const string& _meshName)
 
 GenericEntity* Create::Asset(	const std::string& _meshName/*,
 								const Vector3& _position,
+<<<<<<< HEAD
 								const Vector3& _scale*/)
+=======
+								const Vector3& _scale,
+								const float _rotation)
+>>>>>>> 21443b8092479efd4c568634283de6d5543e27ab
 {
 	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
 	if (modelMesh == nullptr)
 		return nullptr;
 
 	GenericEntity* result = new GenericEntity(modelMesh);
+<<<<<<< HEAD
 	/*result->SetPositionX(_position.x);
 	result->SetPositionY(_position.y);
 	result->SetPositionZ(_position.z);
 	result->SetScale(_scale);*/
+=======
+	result->SetPosition(_position);
+	result->SetScale(_scale);
+	result->SetRotation(_rotation);
+>>>>>>> 21443b8092479efd4c568634283de6d5543e27ab
 	result->SetCollider(false);
 	return result;
 }
