@@ -41,34 +41,86 @@ void GenericEntity::SetAABB(Vector3 maxAABB, Vector3 minAABB)
 	this->minAABB = minAABB;
 }
 
-GenericEntity* Create::Entity(	const std::string& _meshName, 
-								const Vector3& _position,
-								const Vector3& _scale)
+bool GenericEntity::ReadFile(const string& NameOfObject, const string Details)
 {
+	string temp = "";
+
+	ifstream file(Details.c_str(), std::ios::binary);
+
+	if (file.is_open())
+	{
+		while (file.good())
+		{
+			getline(file, temp, ',');
+			if (temp != NameOfObject)
+			{
+				getline(file, temp);
+				continue;
+			}
+			else if (temp == NameOfObject)
+			{
+				temp.clear();
+				getline(file, temp, ',');
+				SetScale(stoi(temp));
+				temp.clear();
+
+				getline(file, temp, ',');
+				SetPositionX(stoi(temp));
+				temp.clear();
+
+				getline(file, temp, ',');
+				SetPositionY(stoi(temp));
+				temp.clear();
+
+				getline(file, temp, ',');
+				SetPositionZ(stoi(temp));
+				temp.clear();
+				return true;
+			}
+		}
+		temp.clear();
+	}
+	return true;
+
+	/*SetScale(5.f);
+	SetPositionX(-20.f);
+	SetPositionY(0.f);
+	SetPositionZ(-20.f);
+	return true;*/
+}
+
+GenericEntity* Create::Entity(	const string& _meshName)
+{
+	
 	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
 	if (modelMesh == nullptr)
 		return nullptr;
 
 	GenericEntity* result = new GenericEntity(modelMesh);
-	result->SetPosition(_position);
-	result->SetScale(_scale);
+
+	result->ReadFile(_meshName, "Source//CSV//File.csv");
 	result->SetCollider(false);
 	EntityManager::GetInstance()->AddEntity(result, true);
 	return result;
 }
 
-GenericEntity* Create::Asset(	const std::string& _meshName,
+GenericEntity* Create::Asset(	const std::string& _meshName/*,
 								const Vector3& _position,
-								const Vector3& _scale)
+								const Vector3& _scale*/)
 {
 	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
 	if (modelMesh == nullptr)
 		return nullptr;
 
 	GenericEntity* result = new GenericEntity(modelMesh);
-	result->SetPosition(_position);
-	result->SetScale(_scale);
+	/*result->SetPositionX(_position.x);
+	result->SetPositionY(_position.y);
+	result->SetPositionZ(_position.z);
+	result->SetScale(_scale);*/
 	result->SetCollider(false);
 	return result;
 }
+
+
+
 

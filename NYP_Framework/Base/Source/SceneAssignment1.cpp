@@ -138,15 +138,22 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateSphere("lightball", Color(1, 1, 1), 18, 36, 1.f);
 	MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 0.5f);
 	MeshBuilder::GetInstance()->GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
+
 	MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
+	MeshBuilder::GetInstance()->GenerateCube("cube2", Color(0.0f, 1.0f, 0.0f), 1.0f);
+	MeshBuilder::GetInstance()->GenerateCube("cube3", Color(1.0f, 0.0f, 0.0f), 1.0f);
+
 	MeshBuilder::GetInstance()->GetMesh("cone")->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
 	MeshBuilder::GetInstance()->GetMesh("cone")->material.kSpecular.Set(0.f, 0.f, 0.f);
 	MeshBuilder::GetInstance()->GenerateQuad("GRASS_DARKGREEN", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("GRASS_DARKGREEN")->textureID = LoadTGA("Image//grass_darkgreen.tga");
 	MeshBuilder::GetInstance()->GenerateQuad("GEO_GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("GEO_GRASS_LIGHTGREEN")->textureID = LoadTGA("Image//grass_lightgreen.tga");
+
+	//Bullet
 	MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(1.0f, 0.64f, 0.0f), 1.0f);
 
+	//Skybox
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_FRONT", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BACK", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_LEFT", Color(1, 1, 1), 1.f);
@@ -159,6 +166,7 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GetMesh("SKYBOX_RIGHT")->textureID = LoadTGA("Image//SkyBox//skybox_right.tga");
 	MeshBuilder::GetInstance()->GetMesh("SKYBOX_TOP")->textureID = LoadTGA("Image//SkyBox//skybox_top.tga");
 	MeshBuilder::GetInstance()->GetMesh("SKYBOX_BOTTOM")->textureID = LoadTGA("Image//SkyBox//skybox_bottom.tga");
+
 	MeshBuilder::GetInstance()->GenerateRay("laser", 10.0f);
 	MeshBuilder::GetInstance()->GenerateQuad("GRIDMESH", Color(1, 1, 1), 10.f);
 
@@ -170,13 +178,22 @@ void SceneAssignment1::Init()
 	EntityManager::GetInstance()->SetSpatialPartition(CSpatialPartition::GetInstance());
 
 	// Create entities into the scene
-	Create::Entity("reference", Vector3(0.0f, 0.0f, 0.0f)); // Reference
-	Create::Entity("lightball", Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)); // Lightball
-
-	GenericEntity* aCube = Create::Entity("cube", Vector3(-20.0f, 0.0f, -20.0f), Vector3(5, 5, 5));
+	//Create::Entity("reference"/*, Vector3(0.0f, 0.0f, 0.0f)*/); // Reference
+	//Create::Entity("lightball"/*, Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)*/); // Lightball
+	GenericEntity* aCube = Create::Entity("cube");
 	aCube->SetCollider(true);
 	aCube->SetAABB(aCube->GetScale(), -aCube->GetScale());
 	aCube->InitLOD("cube", "sphere", "cubeSG");
+
+	GenericEntity* aCube2 = Create::Entity("cube2");
+	aCube2->SetCollider(true);
+	aCube2->SetAABB(aCube2->GetScale(), -aCube2->GetScale());
+	aCube2->InitLOD("cube2", "sphere", "cubeSG");
+
+	GenericEntity* aCube3 = Create::Entity("cube3");
+		aCube3->SetCollider(true);
+	aCube3->SetAABB(aCube3->GetScale(), -aCube3->GetScale());
+	aCube3->InitLOD("cube3", "sphere", "cubeSG");
 
 	enemy = new Enemy();
 	enemy->Init();

@@ -13,10 +13,21 @@ public:
 	virtual void Render();
 	virtual void RenderUI();
 
-	inline void SetPosition(const Vector3& _value){ position = _value; };
-	inline Vector3 GetPosition(){ return position; };
+	inline void SetPositionX(const int& _value){ position.x = _value; };
+	inline Vector3 GetPositionX(){ return position.x; };
 
-	inline void SetScale(const Vector3& _value){ scale = _value; };
+	inline void SetPositionY(const int& _value){ position.y = _value; };
+	inline Vector3 GetPositionY(){ return position.y; };
+
+	inline void SetPositionZ(const int& _value){ position.z = _value; };
+	inline Vector3 GetPositionZ(){ return position.z; };
+
+	inline void SetPosition(const Vector3& value){ position = value; };
+	inline Vector3 GetPosition() { return position; };
+
+	inline void SetScale(const int& _value){
+		scale = Vector3(_value, _value, _value);
+	};
 	inline Vector3 GetScale(){ return scale; };
 
 	bool IsDone();
@@ -34,6 +45,8 @@ public:
 protected:
 	Vector3 position;
 	Vector3 scale;
+
+
 
 	bool isDone;
 	bool m_bCollider;

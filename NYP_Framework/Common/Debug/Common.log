@@ -1,34 +1,14 @@
-﻿Build started 11/12/2016 20:01:33.
-     1>Project "D:\School\Sem4\AGdev\NYP_Framework\Common\Common.vcxproj" on node 2 (Build target(s)).
+﻿Build started 13/12/2016 3:30:27 PM.
+     1>Project "C:\Users\Terence\Desktop\AGdev\NYP_Framework\Common\Common.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         D:\VS13\VC\bin\CL.exe /c /ID:\School\Sem4\AGdev\NYP_Framework\/glew/include /ID:\School\Sem4\AGdev\NYP_Framework\/glfw/include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\CameraBase.cpp Source\Collider\Collider.cpp Source\EntityBase.cpp Source\GraphicsManager.cpp Source\KeyboardController.cpp Source\LightBase.cpp Source\LoadOBJ.cpp Source\LoadTGA.cpp Source\MathUtility.cpp Source\MatrixStack.cpp Source\Mesh.cpp Source\MeshBuilder.cpp Source\MouseController.cpp Source\Mtx44.cpp Source\RenderHelper.cpp Source\SceneManager.cpp Source\ShaderProgram.cpp Source\timer.cpp Source\Utility.cpp Source\Vector2.cpp Source\Vector3.cpp Source\Win32Input.cpp
-         Win32Input.cpp
-         Vector3.cpp
-         Vector2.cpp
-         Utility.cpp
-         timer.cpp
-         ShaderProgram.cpp
-         SceneManager.cpp
-         RenderHelper.cpp
-         Mtx44.cpp
-         MouseController.cpp
-         MeshBuilder.cpp
-         Mesh.cpp
-         MatrixStack.cpp
-         MathUtility.cpp
-         LoadTGA.cpp
-         LoadOBJ.cpp
-         LightBase.cpp
-         KeyboardController.cpp
-         GraphicsManager.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Terence\Desktop\AGdev\NYP_Framework\/glew/include /IC:\Users\Terence\Desktop\AGdev\NYP_Framework\/glfw/include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\EntityBase.cpp
          EntityBase.cpp
-         Generating Code...
-         Compiling...
-         Collider.cpp
-         CameraBase.cpp
-         Generating Code...
+     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(16): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
+     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(19): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
+     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(22): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
+     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(29): warning C4244: 'argument' : conversion from 'const int' to 'float', possible loss of data
        Lib:
-         D:\VS13\VC\bin\Lib.exe /OUT:"D:\School\Sem4\AGdev\NYP_Framework\Debug\Common.lib" /NOLOGO Debug\CameraBase.obj
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\Terence\Desktop\AGdev\NYP_Framework\Debug\Common.lib" /NOLOGO Debug\CameraBase.obj
          Debug\Collider.obj
          Debug\EntityBase.obj
          Debug\GraphicsManager.obj
@@ -50,9 +30,9 @@
          Debug\Vector2.obj
          Debug\Vector3.obj
          Debug\Win32Input.obj
-         Common.vcxproj -> D:\School\Sem4\AGdev\NYP_Framework\Debug\Common.lib
-     1>Done Building Project "D:\School\Sem4\AGdev\NYP_Framework\Common\Common.vcxproj" (Build target(s)).
+         Common.vcxproj -> C:\Users\Terence\Desktop\AGdev\NYP_Framework\Debug\Common.lib
+     1>Done Building Project "C:\Users\Terence\Desktop\AGdev\NYP_Framework\Common\Common.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:07.98
+Time Elapsed 00:00:01.07
