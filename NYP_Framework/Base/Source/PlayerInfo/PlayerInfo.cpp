@@ -70,6 +70,8 @@ void CPlayerInfo::Init(void)
 	//secondaryWeapon->Init();
 	secondaryWeapon = new CPistol();
 	secondaryWeapon->Init();
+
+	weaponHeld = primaryWeapon;
 }
 
 // Returns true if the player is on ground
@@ -276,8 +278,8 @@ void CPlayerInfo::Update(double dt)
 	double mouse_diff_x, mouse_diff_y;
 	MouseController::GetInstance()->GetMouseDelta(mouse_diff_x, mouse_diff_y);
 
-	double camera_yaw = mouse_diff_x * 0.0174555555555556;		// 3.142 / 180.0
-	double camera_pitch = mouse_diff_y * 0.0174555555555556;	// 3.142 / 180.0
+	double camera_yaw = mouse_diff_x * 0.05;		// 3.142 / 180.0
+	double camera_pitch = mouse_diff_y * 0.05;	// 3.142 / 180.0
 
 	// Update the position if the WASD buttons were activated
 	if (KeyboardController::GetInstance()->IsKeyDown('W') ||
@@ -435,13 +437,27 @@ void CPlayerInfo::Update(double dt)
 	// if Mouse Buttons were activated, then act on them
 	if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
 	{
-		if (primaryWeapon)
+		if (weaponHeld == primaryWeapon)
 			primaryWeapon->Discharge(position, target, this);
-	}
-	else if (MouseController::GetInstance()->IsButtonPressed(MouseController::RMB))
-	{
-		if (secondaryWeapon)
+		else if (weaponHeld == secondaryWeapon)
 			secondaryWeapon->Discharge(position, target, this);
+	}
+
+	if (KeyboardController::GetInstance()->IsKeyPressed(0x31))
+	{
+		if (weaponHeld == secondaryWeapon)
+		{
+			weaponHeld = primaryWeapon;
+			std::cout << "RIFLE" << std::endl;
+		}
+	}
+	else if (KeyboardController::GetInstance()->IsKeyPressed(0x32))
+	{
+		if (weaponHeld == primaryWeapon)
+		{
+			weaponHeld = secondaryWeapon;
+			std::cout << "PISTOL" << std::endl;
+		}
 	}
 
 	// If the user presses R key, then reset the view to default values
@@ -499,4 +515,27 @@ void CPlayerInfo::AttachCamera(FPSCamera* _cameraPtr)
 void CPlayerInfo::DetachCamera()
 {
 	attachedCamera = nullptr;
+}
+
+CWeaponInfo* CPlayerInfo::getPrimaryWeapon()
+{
+	return primaryWeapon;
+}
+CWeaponInfo* CPlayerInfo::getSecondaryWeapon()
+{
+	return secondaryWeapon;
+}
+CWeaponInfo* CPlayerInfo::getWeaponHeld()
+{
+	return weaponHeld;
+}
+
+void CPlayerInfo::SetRotationInfo(const Vector3& rotator)
+{
+	rotationInfo = rotator;
+}
+
+Vector3 CPlayerInfo::GetRotationInfo()
+{
+	return rotationInfo;
 }

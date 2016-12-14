@@ -56,7 +56,7 @@ void EntityManager::Render()
 	for (it = entityList.begin(); it != end; ++it)
 	{
 		// This needs to be edited
-		if (((cameraInfo->GetCameraTarget() - cameraInfo->GetCameraPos()).Dot((*it)->GetPosition() * (*it)->GetScale().x - cameraInfo->GetCameraPos())) > Math::EPSILON)
+		//if (((cameraInfo->GetCameraTarget() - cameraInfo->GetCameraPos()).Dot((*it)->GetPosition() * (*it)->GetScale().x - cameraInfo->GetCameraPos())) > Math::EPSILON)
 			(*it)->Render();
 	}
 
