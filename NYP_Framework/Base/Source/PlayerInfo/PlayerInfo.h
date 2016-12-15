@@ -96,8 +96,16 @@ public:
 	void AttachCamera(FPSCamera* _cameraPtr);
 	void DetachCamera(void);
 
+	void SetRotationInfo(const Vector3& rotator);
+	Vector3 GetRotationInfo();
+
+	CWeaponInfo* getPrimaryWeapon();
+	CWeaponInfo* getSecondaryWeapon();
+	CWeaponInfo* getWeaponHeld();
+
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
+	Vector3 rotationInfo;
 	Vector3 position, target, up;
 	Vector3 maxBoundary, minBoundary;
 	GroundEntity* m_pTerrain;
@@ -117,4 +125,5 @@ private:
 
 	CWeaponInfo* primaryWeapon;
 	CWeaponInfo* secondaryWeapon;
+	CWeaponInfo* weaponHeld;
 };

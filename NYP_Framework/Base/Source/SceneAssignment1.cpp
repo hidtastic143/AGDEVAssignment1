@@ -158,8 +158,8 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GetMesh("GEO_GRASS_LIGHTGREEN")->textureID = LoadTGA("Image//grass_lightgreen.tga");
 
 	//Gun
-	//MeshBuilder::GetInstance()->GenerateOBJ("M4A4", "OBJ//M4A4.obj");
-	//MeshBuilder::GetInstance()->GetMesh("M4A4")->textureID = LoadTGA("Image//M4A4_Texture.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("M4A4", "OBJ//M4A4.obj");
+	MeshBuilder::GetInstance()->GetMesh("M4A4")->textureID = LoadTGA("Image//M4A4_Texture.tga");
 
 	//Bullet
 	MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(1.0f, 0.64f, 0.0f), 1.0f);
@@ -192,6 +192,8 @@ void SceneAssignment1::Init()
 
 	//Rifle = Create::Entity("M4A4");
 	//Rifle->SetPosition(Vector3(playerInfo->GetPos().x + 1.f, playerInfo->GetPos().y - 2.f, playerInfo->GetPos().z - 5));
+
+	playerInfo->getPrimaryWeapon()->SetMesh(MeshBuilder::GetInstance()->GetMesh("M4A4"));
 
 	enemy = new Enemy();
 	enemy->Init();
@@ -332,6 +334,8 @@ void SceneAssignment1::Render()
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 	theSkyBox->Render();
 	groundEntity->Render();
+	if (playerInfo->getWeaponHeld() == playerInfo->getPrimaryWeapon())
+		playerInfo->getPrimaryWeapon()->Render(&camera);
 	EntityManager::GetInstance()->Render();
 
 	// Setup 2D pipeline then render 2D

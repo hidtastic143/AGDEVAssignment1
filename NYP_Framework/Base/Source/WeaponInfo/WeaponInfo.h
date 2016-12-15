@@ -3,7 +3,9 @@
 #include "Vector3.h"
 #include "GraphicsManager.h"
 
+class Mesh;
 class CPlayerInfo;
+class FPSCamera;
 
 class CWeaponInfo
 {
@@ -11,6 +13,11 @@ public:
 	CWeaponInfo();
 	virtual ~CWeaponInfo();
 protected:
+	Vector3 pos;
+	Vector3 target;
+
+	// The mesh for Weapon
+	Mesh* mesh;
 	// The number of ammunition in a magazine for this weapon
 	int magRounds;
 	// The maximum number of ammunition for this magazine for this weapon
@@ -61,10 +68,15 @@ public:
 
 	// Initialise this instance to default values
 	virtual void Init(void);
+
 	// Update the elapsed time
 	virtual void Update(const double dt);
 	// Discharge this weapon
 	virtual void Discharge(Vector3 position, Vector3 target, CPlayerInfo* _source = NULL);
+
+	virtual void Render(FPSCamera* cameraInfo);
+
+	virtual void SetMesh(Mesh* mesh);
 	// Reload this weapon
 	void Reload(void);
 	// Add rounds

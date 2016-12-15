@@ -37,8 +37,8 @@ void FPSCamera::Update(double dt)
 	double mouse_diff_x, mouse_diff_y;
 	MouseController::GetInstance()->GetMouseDelta(mouse_diff_x, mouse_diff_y);
 
-	double camera_yaw = mouse_diff_x * 0.0174555555555556;		// 3.142 / 180.0
-	double camera_pitch = mouse_diff_y * 0.0174555555555556;	// 3.142 / 180.0
+	double camera_yaw = mouse_diff_x * 0.05;		// 3.142 / 180.0
+	double camera_pitch = mouse_diff_y * 0.05;	// 3.142 / 180.0
 
 	if(KeyboardController::GetInstance()->IsKeyDown('A'))
 	{

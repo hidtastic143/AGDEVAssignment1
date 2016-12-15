@@ -1,37 +1,7 @@
-﻿Build started 15/12/2016 3:02:17 AM.
+﻿Build started 15/12/2016 8:23:44 AM.
      1>Project "C:\Users\Terence\Desktop\AGdev\NYP_Framework\Base\Base.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Terence\Desktop\AGdev\NYP_Framework\/Common/Source /IC:\Users\Terence\Desktop\AGdev\NYP_Framework\/glfw/include /IC:\Users\Terence\Desktop\AGdev\NYP_Framework\/glew/include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\Enemy\Enemy.cpp Source\EntityManager.cpp Source\GenericEntity.cpp Source\GroundEntity.cpp Source\Projectile\Grenade.cpp Source\Projectile\Laser.cpp Source\Projectile\Projectile.cpp Source\SceneAssignment1.cpp Source\SceneGraph\SceneGraph.cpp Source\SceneGraph\SceneNode.cpp Source\SceneText.cpp Source\SkyBox\SkyBoxEntity.cpp Source\SpriteEntity.cpp Source\TextEntity.cpp Source\WeaponInfo\LaserBlaster.cpp
-         EntityManager.cpp
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(16): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(19): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(22): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(29): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(33): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(37): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-         Generating Code...
-         Compiling...
-         TextEntity.cpp
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(16): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(19): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(22): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(29): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(33): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(37): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-         SpriteEntity.cpp
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(16): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(19): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(22): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(29): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(33): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(37): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-         SceneText.cpp
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(16): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(19): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(22): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(29): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(33): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(37): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Terence\Desktop\AGdev\NYP_Framework\/Common/Source /IC:\Users\Terence\Desktop\AGdev\NYP_Framework\/glfw/include /IC:\Users\Terence\Desktop\AGdev\NYP_Framework\/glew/include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\SceneAssignment1.cpp
          SceneAssignment1.cpp
      1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(16): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
      1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(19): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
@@ -39,46 +9,6 @@
      1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(29): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
      1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(33): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
      1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(37): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-         Projectile.cpp
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(16): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(19): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(22): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(29): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(33): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(37): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-         Laser.cpp
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(16): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(19): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(22): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(29): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(33): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(37): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-         Grenade.cpp
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(16): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(19): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(22): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(29): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(33): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(37): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\base\source\projectile\grenade.cpp(54): warning C4018: '<' : signed/unsigned mismatch
-     1>c:\users\terence\desktop\agdev\nyp_framework\base\source\projectile\grenade.cpp(71): warning C4244: '+=' : conversion from 'double' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\base\source\projectile\grenade.cpp(75): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
-         GenericEntity.cpp
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(16): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(19): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(22): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(29): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(33): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(37): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>c:\users\terence\desktop\agdev\nyp_framework\base\source\genericentity.cpp(89): warning C4244: 'argument' : conversion from 'int' to 'const float', possible loss of data
-         Generating Code...
-         Skipping... (no relevant changes detected)
-         LaserBlaster.cpp
-         SkyBoxEntity.cpp
-         SceneNode.cpp
-         SceneGraph.cpp
-         GroundEntity.cpp
-         Enemy.cpp
        Link:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\Terence\Desktop\AGdev\NYP_Framework\Debug\Base.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:C:\Users\Terence\Desktop\AGdev\NYP_Framework\Debug /LIBPATH:"C:\Users\Terence\Desktop\AGdev\NYP_Framework\/glfw/lib-msvc100" /LIBPATH:C:\Users\Terence\Desktop\AGdev\NYP_Framework\/glew/lib Common.lib winmm.lib opengl32.lib glu32.lib glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\Terence\Desktop\AGdev\NYP_Framework\Debug\Base.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\Terence\Desktop\AGdev\NYP_Framework\Debug\Base.lib" /MACHINE:X86 Debug\Application.obj
          Debug\Enemy.obj
@@ -117,4 +47,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:16.22
+Time Elapsed 00:00:08.99
