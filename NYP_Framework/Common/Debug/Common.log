@@ -1,4 +1,4 @@
-﻿Build started 13/12/2016 11:25:23 PM.
+﻿Build started 15/12/2016 2:58:10 AM.
      1>Project "C:\Users\Terence\Desktop\AGdev\NYP_Framework\Common\Common.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /IC:\Users\Terence\Desktop\AGdev\NYP_Framework\/glew/include /IC:\Users\Terence\Desktop\AGdev\NYP_Framework\/glfw/include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\EntityBase.cpp
@@ -9,7 +9,6 @@
      1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(29): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
      1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(33): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
      1>c:\users\terence\desktop\agdev\nyp_framework\common\source\entitybase.h(37): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
-     1>cl : Command line warning D9028: minimal rebuild failure, reverting to normal build
        Lib:
          C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\Lib.exe /OUT:"C:\Users\Terence\Desktop\AGdev\NYP_Framework\Debug\Common.lib" /NOLOGO Debug\CameraBase.obj
          Debug\Collider.obj
@@ -38,4 +37,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:10.30
+Time Elapsed 00:00:02.71

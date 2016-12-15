@@ -56,6 +56,12 @@ public:
 	// Get the flag, bLaser
 	virtual bool GetIsLaser(void) const;
 
+	virtual void SetIsZombie(const bool isZombie);
+	virtual bool GetIsZombie(void) const;
+
+	virtual void SetIsProjectile(const bool isProjectile);
+	virtual bool GetIsProjectile(void) const;
+
 protected:
 	Vector3 position;
 	Vector3 scale;
@@ -66,6 +72,8 @@ protected:
 	bool isDone;
 	bool m_bCollider;
 	bool bLaser;
+	bool isZombie;
+	bool isProjectile;
 };
 
 #endif // ENTITY_BASE_H

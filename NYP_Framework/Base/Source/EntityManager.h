@@ -26,6 +26,8 @@ public:
 private:
 	EntityManager();
 	virtual ~EntityManager();
+	int health;
+
 
 	// Check for overlap
 	bool CheckOverlap(Vector3 thisMinAABB, Vector3 thisMaxAABB, Vector3 thatMinAABB, Vector3 thatMaxAABB);

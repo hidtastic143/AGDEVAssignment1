@@ -48,6 +48,7 @@ void Rifle::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _source)
 				5.0f,
 				500.0f,
 				_source);
+			aProjectile->SetIsProjectile(true);
 			aProjectile->SetCollider(true);
 			aProjectile->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
 			bFire = false;

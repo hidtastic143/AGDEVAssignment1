@@ -139,6 +139,13 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 0.5f);
 	MeshBuilder::GetInstance()->GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
 
+	MeshBuilder::GetInstance()->GenerateCube("Zhead", Color(0, 1, 0), 1.f);
+	MeshBuilder::GetInstance()->GenerateCube("Zbody", Color(0, 0, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateCube("Zlhand", Color(0, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateCube("Zrhand", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateCube("Zlleg", Color(1, 1, 0), 1.f);
+	MeshBuilder::GetInstance()->GenerateCube("Zrleg", Color(1, 0, 0), 1.f);
+
 	MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("cube2", Color(0.0f, 1.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("cube3", Color(1.0f, 0.0f, 0.0f), 1.0f);
@@ -151,8 +158,8 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GetMesh("GEO_GRASS_LIGHTGREEN")->textureID = LoadTGA("Image//grass_lightgreen.tga");
 
 	//Gun
-	MeshBuilder::GetInstance()->GenerateOBJ("M4A4", "OBJ//M4A4.obj");
-	MeshBuilder::GetInstance()->GetMesh("M4A4")->textureID = LoadTGA("Image//M4A4_Texture.tga");
+	//MeshBuilder::GetInstance()->GenerateOBJ("M4A4", "OBJ//M4A4.obj");
+	//MeshBuilder::GetInstance()->GetMesh("M4A4")->textureID = LoadTGA("Image//M4A4_Texture.tga");
 
 	//Bullet
 	MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(1.0f, 0.64f, 0.0f), 1.0f);
@@ -182,25 +189,9 @@ void SceneAssignment1::Init()
 	EntityManager::GetInstance()->SetSpatialPartition(CSpatialPartition::GetInstance());
 
 	// Create entities into the scene
-	//Create::Entity("reference"/*, Vector3(0.0f, 0.0f, 0.0f)*/); // Reference
-	//Create::Entity("lightball"/*, Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)*/); // Lightball
-	GenericEntity* aCube = Create::Entity("cube");
-	aCube->SetCollider(true);
-	aCube->SetAABB(aCube->GetScale(), -aCube->GetScale());
-	aCube->InitLOD("cube", "sphere", "cubeSG");
 
-	GenericEntity* aCube2 = Create::Entity("cube2");
-	aCube2->SetCollider(true);
-	aCube2->SetAABB(aCube2->GetScale(), -aCube2->GetScale());
-	aCube2->InitLOD("cube2", "sphere", "cubeSG");
-
-	GenericEntity* aCube3 = Create::Entity("cube3");
-		aCube3->SetCollider(true);
-	aCube3->SetAABB(aCube3->GetScale(), -aCube3->GetScale());
-	aCube3->InitLOD("cube3", "sphere", "cubeSG");
-
-	Rifle = Create::Entity("M4A4");
-	Rifle->SetPosition(Vector3(playerInfo->GetPos().x + 1.f, playerInfo->GetPos().y - 2.f, playerInfo->GetPos().z - 5));
+	//Rifle = Create::Entity("M4A4");
+	//Rifle->SetPosition(Vector3(playerInfo->GetPos().x + 1.f, playerInfo->GetPos().y - 2.f, playerInfo->GetPos().z - 5));
 
 	enemy = new Enemy();
 	enemy->Init();
@@ -220,7 +211,7 @@ void SceneAssignment1::Init()
 	groundEntity->SetScale(Vector3(100.0f, 100.0f, 100.0f));
 	groundEntity->SetGrids(Vector3(10.0f, 1.0f, 10.0f));
 	playerInfo->SetTerrain(groundEntity);
-	enemy->setTerrain(groundEntity);
+	//enemy->setTerrain(groundEntity);
 
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
@@ -342,7 +333,6 @@ void SceneAssignment1::Render()
 	theSkyBox->Render();
 	groundEntity->Render();
 	EntityManager::GetInstance()->Render();
-	
 
 	// Setup 2D pipeline then render 2D
 	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;

@@ -3,6 +3,9 @@
 
 #include "../GenericEntity.h"
 #include "../GroundEntity.h"
+#include "../SceneGraph/SceneNode.h"
+#include "../SceneGraph/SceneGraph.h"
+#include "MeshBuilder.h"
 
 class Mesh;
 
@@ -19,6 +22,7 @@ protected:
 
 public:
 	Enemy();
+	Enemy(Mesh* _modelMesh);
 	virtual ~Enemy();
 
 	void Init();

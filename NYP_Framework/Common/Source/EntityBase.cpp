@@ -1,11 +1,13 @@
 #include "EntityBase.h"
 
-EntityBase::EntityBase() 
+EntityBase::EntityBase()
 	: position(0.0f, 0.0f, 0.0f)
 	, scale(1.0f, 1.0f, 1.0f)
 	, isDone(false)
 	, m_bCollider(false)
 	, bLaser(false)
+	, isZombie(false)
+	, isProjectile(false)
 {
 }
 
@@ -57,4 +59,24 @@ void EntityBase::SetIsLaser(const bool bLaser)
 bool EntityBase::GetIsLaser(void) const
 {
 	return bLaser;
+}
+
+void EntityBase::SetIsZombie(const bool isZombie)
+{
+	this->isZombie = isZombie;
+}
+
+bool EntityBase::GetIsZombie(void) const
+{
+	return isZombie;
+}
+
+void EntityBase::SetIsProjectile(const bool isProjectile)
+{
+	this->isProjectile = isProjectile;
+}
+
+bool EntityBase::GetIsProjectile(void) const
+{
+	return isProjectile;
 }
