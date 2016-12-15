@@ -21,11 +21,15 @@ public:
 	virtual void SetCameraTarget(Vector3 pos);
 	virtual Vector3 GetCameraUp() const;
 	virtual void SetCameraUp(Vector3 pos);
+	virtual Vector3 GetCameraRotation() const;
+	virtual void AddRotation(Vector3 newVector);
 
 private:
 	Vector3 position;
 	Vector3 target;
 	Vector3 up;
+
+	Vector3 rotation;
 
 	Vector3 defaultPosition;
 	Vector3 defaultTarget;

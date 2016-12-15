@@ -97,7 +97,14 @@ public:
 	void DetachCamera(void);
 
 	void SetRotationInfo(const Vector3& rotator);
+	void AddRotationInfo(const Vector3& rotator);
 	Vector3 GetRotationInfo();
+
+	void SetRight(const Vector3& newRight);
+	Vector3 GetRight();
+
+	void SetPitchPitch(const float& newPitchPitch);
+	float GetPitchPitch();
 
 	CWeaponInfo* getPrimaryWeapon();
 	CWeaponInfo* getSecondaryWeapon();
@@ -107,6 +114,8 @@ private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 rotationInfo;
 	Vector3 position, target, up;
+	float pitchpitch;
+	Vector3 right;
 	Vector3 maxBoundary, minBoundary;
 	GroundEntity* m_pTerrain;
 

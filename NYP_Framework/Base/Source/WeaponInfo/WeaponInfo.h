@@ -74,7 +74,7 @@ public:
 	// Discharge this weapon
 	virtual void Discharge(Vector3 position, Vector3 target, CPlayerInfo* _source = NULL);
 
-	virtual void Render(FPSCamera* cameraInfo);
+	virtual void Render(CPlayerInfo* cameraInfo);
 
 	virtual void SetMesh(Mesh* mesh);
 	// Reload this weapon

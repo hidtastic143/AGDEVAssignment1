@@ -1,6 +1,7 @@
 #include "WeaponInfo.h"
 #include "RenderHelper.h"
 #include "../FPSCamera.h"
+#include "../PlayerInfo/PlayerInfo.h"
 #include "../Projectile/Projectile.h"
 
 #include <iostream>
@@ -222,37 +223,40 @@ void CWeaponInfo::SetMesh(Mesh* mesh)
 	this->mesh = mesh;
 }
 
-void CWeaponInfo::Render(FPSCamera* cameraInfo)
+void CWeaponInfo::Render(CPlayerInfo* cameraInfo)
 {
 	Vector3 directionV1, directionV2;
+
 	float temp2, temp, temp3, temp4;
 
-	directionV1 = (cameraInfo->GetCameraTarget() - cameraInfo->GetCameraPos()).Normalized();
-	directionV2 = (target - pos).Normalized();
+	//directionV1 = (cameraInfo->GetCameraTarget() - cameraInfo->GetCameraPos()).Normalized();
+	//directionV2 = (target - pos).Normalized();
 
-	// temp2 is determinant, temp is dot product
-	temp2 = directionV2.x * directionV1.z + directionV1.x * directionV2.z;
-	temp3 = directionV2.y * directionV1.z + directionV1.y * directionV2.z;
-	temp4 = directionV2.x * directionV1.y + directionV1.x * directionV2.y;
+	//// temp2 is determinant, temp is dot product
+	//temp2 = directionV2.x * directionV1.z + directionV1.x * directionV2.z;
+	//temp3 = directionV2.y * directionV1.z + directionV1.y * directionV2.z;
+	//temp4 = directionV2.x * directionV1.y + directionV1.x * directionV2.y;
 
-	temp = directionV2.Dot(directionV1);
+	//temp = directionV2.Dot(directionV1);
 
-	float tempAngle = Math::RadianToDegree(acos(temp));
+	//float tempAngle = Math::RadianToDegree(acos(temp));
 
-	float angleY, angleX, angleZ;
-	angleY = Math::RadianToDegree(atan2(temp2, temp));
-	angleX = Math::RadianToDegree(atan2(temp3, temp));
-	angleZ = Math::RadianToDegree(atan2(temp4, temp));
+	//float angleY, angleX, angleZ;
+	//angleY = Math::RadianToDegree(atan2(temp2, temp));
+	//angleX = Math::RadianToDegree(atan2(-temp3, temp));
+	//angleZ = Math::RadianToDegree(atan2(temp4, temp));
 
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
-	modelStack.Translate(cameraInfo->GetCameraPos().x, cameraInfo->GetCameraPos().y, cameraInfo->GetCameraPos().z);
-	modelStack.Rotate(angleY, 0, 1, 0);
-	modelStack.Rotate(angleX, 1, 0, 0);
-	//modelStack.Rotate(tempAngle, 0, 0, 1);
-	modelStack.PushMatrix();
-	modelStack.Translate(1.0f, -2.5f, -5);
+	modelStack.Translate(cameraInfo->GetPos().x, cameraInfo->GetPos().y, cameraInfo->GetPos().z);
+	modelStack.Rotate(cameraInfo->GetPitchPitch(), cameraInfo->GetRight().x, cameraInfo->GetRight().y, cameraInfo->GetRight().z);
+	modelStack.Rotate(cameraInfo->GetRotationInfo().y, 0, 1, 0);
+	/*modelStack.Rotate(cameraInfo->GetRotationInfo().y, 0, 1, 0);
+	modelStack.Rotate(cameraInfo->GetRotationInfo().x, 1, 0, 0);
+	modelStack.Rotate(cameraInfo->GetRotationInfo().z, 0, 0, 1);*/
+	//modelStack.PushMatrix();
+	//modelStack.Translate(1.0f, -2.5f, -5);
 	RenderHelper::RenderMesh(mesh);
 	modelStack.PopMatrix();
-	modelStack.PopMatrix();
+	//modelStack.PopMatrix();
 }

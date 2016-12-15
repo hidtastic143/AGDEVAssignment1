@@ -23,6 +23,7 @@ void FPSCamera::Init(const Vector3& pos, const Vector3& target, const Vector3& u
 {
 	this->position = defaultPosition = pos;
 	this->target = defaultTarget = target;
+	rotation.SetZero();
 	Vector3 view = (target - position).Normalized();
 	Vector3 right = view.Cross(up);
 	right.y = 0;
@@ -129,6 +130,7 @@ void FPSCamera::Update(double dt)
 		float yaw = (float)(-CAMERA_SPEED * camera_yaw * (float)dt);
 		Mtx44 rotation;
 		rotation.SetToRotation(yaw, 0, 1, 0);
+		AddRotation(Vector3(0, yaw, 0));
 		view = rotation * view;
 		target = position + view;
 		Vector3 right = view.Cross(up);
@@ -145,6 +147,7 @@ void FPSCamera::Update(double dt)
 		up = right.Cross(view).Normalized();
 		Mtx44 rotation;
 		rotation.SetToRotation(pitch, right.x, right.y, right.z);
+		AddRotation(Vector3(pitch*right.x, 0, pitch*right.z));
 		view = rotation * view;
 		target = position + view;
 	}
@@ -185,4 +188,14 @@ void FPSCamera::Reset()
 	position = defaultPosition;
 	target = defaultTarget;
 	up = defaultUp;
+}
+
+void FPSCamera::AddRotation(Vector3 newVector)
+{
+	rotation += newVector;
+}
+
+Vector3 FPSCamera::GetCameraRotation() const
+{
+	return rotation;
 }

@@ -1,4 +1,4 @@
-﻿Build started 14/12/2016 22:25:21.
+﻿Build started 15/12/2016 23:48:31.
      1>Project "D:\School\Sem4\AGdev\Ass1\NYP_Framework\Common\Common.vcxproj" on node 2 (Build target(s)).
      1>Lib:
          Common.vcxproj -> D:\School\Sem4\AGdev\Ass1\NYP_Framework\Debug\Common.lib
@@ -6,4 +6,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:00.03
+Time Elapsed 00:00:00.77

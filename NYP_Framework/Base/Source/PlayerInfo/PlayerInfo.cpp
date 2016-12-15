@@ -48,15 +48,20 @@ CPlayerInfo::~CPlayerInfo(void)
 // Initialise this class instance
 void CPlayerInfo::Init(void)
 {
-	// Set the default values
-	defaultPosition.Set(0,0,10);
-	defaultTarget.Set(0,0,0);
-	defaultUp.Set(0,1,0);
 
 	// Set the current values
-	position.Set(0, 0, 10);
-	target.Set(0, 0, 0);
+	position.Set(0, 0, 470);
+	target.Set(0, 0, 460);
 	up.Set(0, 1, 0);
+
+	// Set the default values
+	defaultPosition.Set(position.x, position.y, position.z);
+	defaultTarget.Set(target.x, target.y, target.z);
+	defaultUp.Set(up.x, up.y, up.z);
+	
+	pitchpitch = 0;
+
+	rotationInfo.SetZero();
 
 	// Set Boundary
 	maxBoundary.Set(1,1,1);
@@ -388,6 +393,7 @@ void CPlayerInfo::Update(double dt)
 			float yaw = (float)(-m_dSpeed * camera_yaw * (float)dt);
 			Mtx44 rotation;
 			rotation.SetToRotation(yaw, 0, 1, 0);
+			AddRotationInfo(Vector3(0, yaw, 0));
 			viewUV = rotation * viewUV;
 			target = position + viewUV;
 			rightUV = viewUV.Cross(up);
@@ -404,8 +410,20 @@ void CPlayerInfo::Update(double dt)
 			Mtx44 rotation;
 			rotation.SetToRotation(pitch, rightUV.x, rightUV.y, rightUV.z);
 			viewUV = rotation * viewUV;
-			target = position + viewUV;
-		}
+
+			if (position.y + viewUV.y < 0.70f && position.y + viewUV.y > -0.70f)
+			{
+				target.y = position.y + viewUV.y;
+				pitchpitch += pitch;
+			}
+			target.x = position.x + viewUV.x;
+			target.z = position.z + viewUV.z;
+		}/*
+			if (target.y > 0.70f)
+				target.y = 0.70f;
+			else if (target.y < -0.70f)
+				target.y = -0.70f;*/
+		right = rightUV;
 	}
 
 	// If the user presses SPACEBAR, then make him jump
@@ -538,4 +556,49 @@ void CPlayerInfo::SetRotationInfo(const Vector3& rotator)
 Vector3 CPlayerInfo::GetRotationInfo()
 {
 	return rotationInfo;
+}
+
+void CPlayerInfo::AddRotationInfo(const Vector3& rotator)
+{
+	rotationInfo += rotator;
+	//if (rotationInfo.x < 180)
+	//	rotationInfo.x = 180;
+	//else if (rotationInfo.x > 360)
+	//	rotationInfo.x = 360;
+	///*else if ()*/
+
+
+
+	//if (rotationInfo.y > 360)
+	//	rotationInfo.y = 0;
+	//else if (rotationInfo.y < 0)
+	//	rotationInfo.y = 360;
+
+
+
+
+	//if (rotationInfo.z > 90)
+	//	rotationInfo.z = -90;
+	//else if (rotationInfo.z < -90)
+	//	rotationInfo.z = 90;
+}
+
+void CPlayerInfo::SetPitchPitch(const float& newPitch)
+{
+	pitchpitch = newPitch;
+}
+
+float CPlayerInfo::GetPitchPitch()
+{
+	return pitchpitch;
+}
+
+void CPlayerInfo::SetRight(const Vector3& newRight)
+{
+	right = newRight;
+}
+
+Vector3 CPlayerInfo::GetRight()
+{
+	return right;
 }

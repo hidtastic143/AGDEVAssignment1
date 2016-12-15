@@ -154,6 +154,23 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("M4A4", "OBJ//M4A4.obj");
 	MeshBuilder::GetInstance()->GetMesh("M4A4")->textureID = LoadTGA("Image//M4A4_Texture.tga");
 
+	MeshBuilder::GetInstance()->GenerateOBJ("Barricade1", "OBJ//Barricade.obj");
+	MeshBuilder::GetInstance()->GetMesh("Barricade1")->textureID = LoadTGA("Image//Barricade_Texture.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("Barricade2", "OBJ//Barricade.obj");
+	MeshBuilder::GetInstance()->GetMesh("Barricade2")->textureID = LoadTGA("Image//Barricade_Texture.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("Barricade3", "OBJ//Barricade.obj");
+	MeshBuilder::GetInstance()->GetMesh("Barricade3")->textureID = LoadTGA("Image//Barricade_Texture.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("Barricade4", "OBJ//Barricade.obj");
+	MeshBuilder::GetInstance()->GetMesh("Barricade4")->textureID = LoadTGA("Image//Barricade_Texture.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("Barricade5", "OBJ//Barricade.obj");
+	MeshBuilder::GetInstance()->GetMesh("Barricade5")->textureID = LoadTGA("Image//Barricade_Texture.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("Barricade6", "OBJ//Barricade.obj");
+	MeshBuilder::GetInstance()->GetMesh("Barricade6")->textureID = LoadTGA("Image//Barricade_Texture.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("Barricade7", "OBJ//Barricade.obj");
+	MeshBuilder::GetInstance()->GetMesh("Barricade7")->textureID = LoadTGA("Image//Barricade_Texture.tga");
+
+
+
 	//Bullet
 	MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(1.0f, 0.64f, 0.0f), 1.0f);
 
@@ -198,6 +215,21 @@ void SceneAssignment1::Init()
 	aCube3->SetCollider(true);
 	aCube3->SetAABB(aCube3->GetScale(), -aCube3->GetScale());
 	aCube3->InitLOD("cube3", "sphere", "cubeSG");
+
+	GenericEntity* Barricade = Create::Entity("Barricade1");
+	Barricade->SetAABB(Barricade->GetScale(), -Barricade->GetScale());
+	GenericEntity* Barricade2 = Create::Entity("Barricade2");
+	Barricade->SetAABB(Barricade2->GetScale(), -Barricade2->GetScale());
+	GenericEntity* Barricade3 = Create::Entity("Barricade3");
+	Barricade->SetAABB(Barricade3->GetScale(), -Barricade3->GetScale());
+	GenericEntity* Barricade4 = Create::Entity("Barricade4");
+	Barricade->SetAABB(Barricade4->GetScale(), -Barricade4->GetScale());
+	GenericEntity* Barricade5 = Create::Entity("Barricade5");
+	Barricade->SetAABB(Barricade5->GetScale(), -Barricade5->GetScale());
+	GenericEntity* Barricade6 = Create::Entity("Barricade6");
+	Barricade->SetAABB(Barricade6->GetScale(), -Barricade6->GetScale());
+	GenericEntity* Barricade7 = Create::Entity("Barricade7");
+	Barricade->SetAABB(Barricade7->GetScale(), -Barricade7->GetScale());
 
 	playerInfo->getPrimaryWeapon()->SetMesh(MeshBuilder::GetInstance()->GetMesh("M4A4"));
 
@@ -340,10 +372,12 @@ void SceneAssignment1::Render()
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 	theSkyBox->Render();
 	groundEntity->Render();
-	if (playerInfo->getWeaponHeld() == playerInfo->getPrimaryWeapon())
-		playerInfo->getPrimaryWeapon()->Render(&camera);
 	EntityManager::GetInstance()->Render();
 	
+	if (playerInfo->getWeaponHeld() == playerInfo->getPrimaryWeapon())
+		playerInfo->getPrimaryWeapon()->Render(playerInfo);
+	else if (playerInfo->getWeaponHeld() == playerInfo->getSecondaryWeapon())
+		playerInfo->getSecondaryWeapon()->Render(playerInfo);
 
 	// Setup 2D pipeline then render 2D
 	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
