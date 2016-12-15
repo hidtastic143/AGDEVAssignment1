@@ -50,6 +50,7 @@ void Rifle::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _source)
 				_source);
 			aProjectile->SetIsProjectile(true);
 			aProjectile->SetCollider(true);
+			aProjectile->InitLOD("cube", "sphere", "cubeSG");
 			aProjectile->SetAABB(Vector3(0.05f, 0.05f, 0.05f), Vector3(-0.05f, -0.05f, -0.05f));
 			bFire = false;
 			magRounds--;

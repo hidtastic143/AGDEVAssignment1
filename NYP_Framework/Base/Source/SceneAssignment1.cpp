@@ -139,10 +139,14 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 0.5f);
 	MeshBuilder::GetInstance()->GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
 
-	MeshBuilder::GetInstance()->GenerateCube("Zhead", Color(0, 1, 0), 1.f);
-	MeshBuilder::GetInstance()->GenerateCube("Zbody", Color(0, 0, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateOBJ("Zhead", "OBJ//cube.obj");
+	MeshBuilder::GetInstance()->GetMesh("Zhead")->textureID = LoadTGA("Image//head.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("Zbody", "OBJ//cube.obj");
+	MeshBuilder::GetInstance()->GetMesh("Zbody")->textureID = LoadTGA("Image//body.tga");
 	MeshBuilder::GetInstance()->GenerateCube("Zlhand", Color(0, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("Zlhand")->textureID = LoadTGA("Image//arm.tga");
 	MeshBuilder::GetInstance()->GenerateCube("Zrhand", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("Zrhand")->textureID = LoadTGA("Image//arm.tga");
 	MeshBuilder::GetInstance()->GenerateCube("Zlleg", Color(1, 1, 0), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("Zlleg")->textureID = LoadTGA("Image//Legs.tga");
 	MeshBuilder::GetInstance()->GenerateCube("Zrleg", Color(1, 0, 0), 1.f);
@@ -181,8 +185,6 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("Barricade7", "OBJ//Barricade.obj");
 	MeshBuilder::GetInstance()->GetMesh("Barricade7")->textureID = LoadTGA("Image//Barricade_Texture.tga");
 
-
-
 	//Bullet
 	MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(1.0f, 0.64f, 0.0f), 1.0f);
 
@@ -207,11 +209,10 @@ void SceneAssignment1::Init()
 	CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);
 	CSpatialPartition::GetInstance()->SetMesh("GRIDMESH");
 	CSpatialPartition::GetInstance()->SetCamera(&camera);
-	CSpatialPartition::GetInstance()->SetLevelOfDetails(40000.0f, 160000.0f);
+	CSpatialPartition::GetInstance()->SetLevelOfDetails(1.0f, 100.0f);
 	EntityManager::GetInstance()->SetSpatialPartition(CSpatialPartition::GetInstance());
 
-	// Create entities into the scene
-	//GenericEntity* car = Create::Entity("car");
+	// Create entities into the scen
 
 	//Rifle = Create::Entity("M4A4");
 	//Rifle->SetPosition(Vector3(playerInfo->GetPos().x + 1.f, playerInfo->GetPos().y - 2.f, playerInfo->GetPos().z - 5));

@@ -156,8 +156,8 @@ CProjectile* Create::Projectiles(const std::string& _meshName,
 	result->Set(_position, _direction, m_fLifetime, m_fSpeed);
 	result->SetStatus(true);
 	result->SetCollider(true);
+	result->InitLOD("cube", "sphere", "cubeSG");
 	EntityManager::GetInstance()->AddEntity(result);
-
 	return result;
 }
 
@@ -178,6 +178,7 @@ CProjectile* Create::Projectile(const std::string& _meshName,
 	result->SetStatus(true);
 	result->SetCollider(true);
 	result->SetSource(_source);
+	result->InitLOD("cube", "sphere", "cubeSG");
 	EntityManager::GetInstance()->AddEntity(result);
 
 	return result;

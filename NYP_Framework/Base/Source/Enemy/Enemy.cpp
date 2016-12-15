@@ -190,14 +190,10 @@ void Enemy::AttackPlayer(Vector3 position, Vector3 target)
 {
 	if (Fire)
 	{
-		CProjectile* Car = Create::Projectiles("car",
-			position,
-			(target-position).Normalized(),
-			5.0f,
-			200.f);
-
+		CProjectile* Car = Create::Projectiles("car",position,(target-position).Normalized(),5.0f,200.f);
 		//Car->SetCollider(true);
 		//Car->SetAABB()
+		//Car->InitLOD("car", "sphere", "cube3");
 		Fire = false;
 	}
 }
