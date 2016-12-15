@@ -22,6 +22,7 @@
 #include "SkyBox/SkyBoxEntity.h"
 #include "SceneGraph\SceneGraph.h"
 #include "SpatialPartition\SpatialPartition.h"
+#include "RenderHelper.h"
 
 #include <iostream>
 using namespace std;
@@ -188,6 +189,10 @@ void SceneAssignment1::Init()
 	//Bullet
 	MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(1.0f, 0.64f, 0.0f), 1.0f);
 
+	//LoseScreen
+	MeshBuilder::GetInstance()->GenerateQuad("Lose", Color(0.f, 0.f, 0.f), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("Lose")->textureID = LoadTGA("Image//LoseScreen.tga");
+
 	//Skybox
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_FRONT", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BACK", Color(1, 1, 1), 1.f);
@@ -244,7 +249,6 @@ void SceneAssignment1::Init()
 	theSkyBox = Create::SkyBox("SKYBOX_FRONT", "SKYBOX_BACK",
 		"SKYBOX_LEFT", "SKYBOX_RIGHT",
 		"SKYBOX_TOP", "SKYBOX_BOTTOM");
-
 
 	// Customise the ground entity
 	groundEntity->SetPosition(Vector3(0, -10, 0));
@@ -376,29 +380,43 @@ void SceneAssignment1::Render()
 	GraphicsManager::GetInstance()->UpdateLightUniforms();
 
 	// Setup 3D pipeline then render 3D
+	
 	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
-	theSkyBox->Render();
-	groundEntity->Render();
 	
-	if (playerInfo->getWeaponHeld() == playerInfo->getPrimaryWeapon())
-		playerInfo->getPrimaryWeapon()->Render(playerInfo);
-	else if (playerInfo->getWeaponHeld() == playerInfo->getSecondaryWeapon())
-		playerInfo->getSecondaryWeapon()->Render(playerInfo);
+
+	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
+	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+
+	int WindowWidth = Application::GetInstance().GetWindowWidth();
+	int WindowHeight = Application::GetInstance().GetWindowHeight();
 
 	if (EntityManager::GetInstance()->Health > 0)
 	{
 		EntityManager::GetInstance()->Render();
 
+		
+		theSkyBox->Render();
+		groundEntity->Render();
+
+		if (playerInfo->getWeaponHeld() == playerInfo->getPrimaryWeapon())
+			playerInfo->getPrimaryWeapon()->Render(playerInfo);
+		else if (playerInfo->getWeaponHeld() == playerInfo->getSecondaryWeapon())
+			playerInfo->getSecondaryWeapon()->Render(playerInfo);
+
 		// Setup 2D pipeline then render 2D
-		int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
-		int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+		
 		GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 		GraphicsManager::GetInstance()->DetachCamera();
 		EntityManager::GetInstance()->RenderUI();
 	}
-
-	
+	else
+	{
+		GenericEntity* background = Create::Asset("Lose");
+		background->SetPosition(playerInfo->GetPos());
+		background->SetScale(Vector3(WindowWidth, WindowHeight, 1));
+		
+	}
 }
 
 void SceneAssignment1::Exit()

@@ -37,6 +37,9 @@
     <Filter Include="Enemy">
       <UniqueIdentifier>{9d41c162-bd69-41f8-92ef-603cc7dbcc37}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Audio">
+      <UniqueIdentifier>{f9806241-e525-439e-a5a9-54b41ce1fae2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Application.cpp">
@@ -129,6 +132,9 @@
     <ClCompile Include="Source\WeaponInfo\Rifle.cpp">
       <Filter>WeaponInfo</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Sound.cpp">
+      <Filter>Audio</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -217,6 +223,9 @@
     </ClInclude>
     <ClInclude Include="Source\WeaponInfo\Rifle.h">
       <Filter>WeaponInfo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Sound.h">
+      <Filter>Audio</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

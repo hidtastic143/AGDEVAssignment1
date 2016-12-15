@@ -5,6 +5,7 @@
 #include "SceneGraph\SceneGraph.h"
 #include "RenderHelper.h"
 #include "GraphicsManager.h"
+#include "../Source/Sound.h"
 #include <iostream>
 using namespace std;
 
@@ -391,6 +392,7 @@ bool EntityManager::CheckForCollision(void)
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{
 							Health -= 1000;
+							DamageBoss();
 							thisEntity->SetIsDone(true);
 							CSceneGraph::GetInstance()->DeleteNode((*colliderThis));
 							//CSceneGraph::GetInstance()->DeleteNode((*colliderThat));
@@ -402,6 +404,7 @@ bool EntityManager::CheckForCollision(void)
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{
 							Health -= 250;
+							DamageBoss();
 							thisEntity->SetIsDone(true);
 							//thatEntity->SetIsDone(true);
 							CSceneGraph::GetInstance()->DeleteNode((*colliderThis));
@@ -413,6 +416,7 @@ bool EntityManager::CheckForCollision(void)
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{
 							Health -= 100;
+							DamageBoss();
 							thisEntity->SetIsDone(true);
 							//thatEntity->SetIsDone(true);
 							CSceneGraph::GetInstance()->DeleteNode((*colliderThis));
@@ -424,6 +428,7 @@ bool EntityManager::CheckForCollision(void)
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{						
 							Health -= 100;
+							DamageBoss();
 							thisEntity->SetIsDone(true);
 							//thatEntity->SetIsDone(true);
 							CSceneGraph::GetInstance()->DeleteNode((*colliderThis));

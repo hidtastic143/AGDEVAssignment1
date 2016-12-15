@@ -1,4 +1,5 @@
 #include "Rifle.h"
+#include "../Sound.h"
 #include "../Projectile/Projectile.h"
 
 Rifle::Rifle()
@@ -54,10 +55,11 @@ void Rifle::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _source)
 			aProjectile->SetAABB(Vector3(0.05f, 0.05f, 0.05f), Vector3(-0.05f, -0.05f, -0.05f));
 			bFire = false;
 			magRounds--;
+			PlayGun();
 		}
-	}
-	else
-	{
-		int a = 0;
+		else if (magRounds <= 0)
+		{
+			DryFire();
+		}
 	}
 }
