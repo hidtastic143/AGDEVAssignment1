@@ -106,6 +106,7 @@ void Application::Init()
 
 	// Init systems
 	GraphicsManager::GetInstance()->Init();
+	StartUP();
 }
 
 void Application::Run()
@@ -133,6 +134,7 @@ void Application::Run()
 
 void Application::Exit()
 {
+	DeleteEngine();
 	//Close OpenGL window and terminate GLFW
 	glfwDestroyWindow(m_window);
 	//Finalize and clean up GLFW

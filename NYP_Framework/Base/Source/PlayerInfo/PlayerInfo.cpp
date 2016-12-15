@@ -1,4 +1,5 @@
 #include "PlayerInfo.h"
+#include "../Sound.h"
 #include <iostream>
 
 #include "MouseController.h"
@@ -457,7 +458,9 @@ void CPlayerInfo::Update(double dt)
 	if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
 	{
 		if (weaponHeld == primaryWeapon)
+		{
 			primaryWeapon->Discharge(position, target, this);
+		}
 		else if (weaponHeld == secondaryWeapon)
 			secondaryWeapon->Discharge(position, target, this);
 	}

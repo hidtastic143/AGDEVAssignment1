@@ -1,4 +1,4 @@
-﻿Build started 15/12/2016 23:56:51.
+﻿Build started 16/12/2016 01:13:52.
      1>Project "D:\School\Sem4\AGdev\Ass1\NYP_Framework\Common\Common.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
          D:\VS13\VC\bin\CL.exe /c /ID:\School\Sem4\AGdev\Ass1\NYP_Framework\/glew/include /ID:\School\Sem4\AGdev\Ass1\NYP_Framework\/glfw/include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _LIB /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\CameraBase.cpp Source\Collider\Collider.cpp Source\EntityBase.cpp Source\GraphicsManager.cpp Source\KeyboardController.cpp Source\LightBase.cpp Source\LoadOBJ.cpp Source\LoadTGA.cpp Source\MathUtility.cpp Source\MatrixStack.cpp Source\Mesh.cpp Source\MeshBuilder.cpp Source\MouseController.cpp Source\Mtx44.cpp Source\RenderHelper.cpp Source\SceneManager.cpp Source\ShaderProgram.cpp Source\timer.cpp Source\Utility.cpp Source\Vector2.cpp Source\Vector3.cpp Source\Win32Input.cpp
@@ -61,4 +61,4 @@
 
 Build succeeded.
 
-Time Elapsed 00:00:09.13
+Time Elapsed 00:00:08.30
