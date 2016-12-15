@@ -36,7 +36,7 @@ private:
 	GroundEntity* groundEntity;
 	SkyBoxEntity* theSkyBox;
 	FPSCamera camera;
-	TextEntity* textObj[3];
+	TextEntity* textObj[5];
 	Light* lights[2];
 
 	GenericEntity* theCube;

@@ -2,6 +2,7 @@
 #include "../EntityManager.h"
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
+#include "../Projectile/Projectile.h"
 
 Enemy::Enemy()
 	: GenericEntity(NULL)
@@ -36,68 +37,48 @@ Enemy::~Enemy()
 
 void Enemy::Init()
 {
-	//// Set the default values
-	//defaultPos.Set(0, 0, 10);
-	//defaultTarget.Set(0, 0, 0);
-	//defaultUp.Set(0, 1, 0);
-	//// Set the current values
-	//position.Set(10.0f, 0.0f, 0.0f);
-	//target.Set(10.0f, 0.0f, 450.0f);
-	//up.Set(0.0f, 1.0f, 0.0f);
-	//// Set Boundary
-	//maxBoundary.Set(1, 1, 1);
-	//minBoundary.Set(-1, -1, -1);
-	//// Set speed
-	//m_dSpeed = 1.0;
-	//// Initialise the LOD meshes
-	//InitLOD("Zhead", "sphere", "cubeSG");
-	//// Initialise the Collider
-	//this->SetCollider(true);
-	//this->SetAABB(Vector3(1, 1, 1), Vector3(-1, -1, -1));
-	//// Add to EntityManager
-	//EntityManager::GetInstance()->AddEntity(this, true);
-
 	GenericEntity* Zbody = Create::Entity("Zbody");
-	Zbody->SetIsZombie(true);
-	Zbody->SetCollider(true);
-	Zbody->SetAABB(Zbody->GetScale(), -Zbody->GetScale());
+	Zbody->SetIsZombieBody(true);
+	//Zbody->SetCollider(true);
+	Zbody->SetAABB(Zbody->GetScale() - Vector3(15, 20, 15), -Zbody->GetScale() - Vector3(-15, -20, -15));
 	//Zbody->InitLOD("Zbody", "sphere", "cubeSG");
 	CSceneNode* parent = CSceneGraph::GetInstance()->AddNode(Zbody);
 
 	GenericEntity* Zhead = Create::Entity("Zhead");
-	Zhead->SetIsZombie(true);
+	Zhead->SetIsZombieHead(true);
+	Zhead->SetCollider(true);
+	Zhead->SetAABB(Zhead->GetScale() - Vector3(10, 10, 10), -Zhead->GetScale() - Vector3(-10, -10, -10));
 	CSceneNode* childHead = parent->AddChild(Zhead);
-	childHead->ApplyTranslate(0.f, 5.f, 0.f);
 
 	GenericEntity* Zlhand = Create::Entity("Zlhand");
-	//Zlhand->SetCollider(true);
-	//Zlhand->SetAABB(Zlhand->GetScale(), -Zlhand->GetScale());
-	Zlhand->SetIsZombie(true);
+	Zlhand->SetAABB(Zlhand->GetScale() - Vector3(5, 5, 5), -Zlhand->GetScale() - Vector3(-5, -5, -5));
+	Zlhand->SetIsZombieHand(true);
 	CSceneNode* childLeftHand = parent->AddChild(Zlhand);
-	childLeftHand->ApplyRotate(90, 1, 0, 0);
-	childLeftHand->ApplyTranslate(3.5f, 2.f, -	2.f);
+	///childLeftHand->ApplyRotate(90, 1, 0, 0);
+	////childLeftHand->ApplyTranslate(3.5f, 2.f, -	2.f);
 
-	GenericEntity* Zrhand = Create::Entity("Zrhand");
-	//Zrhand->SetCollider(true);
-	//Zrhand->SetAABB(Zrhand->GetScale(), -Zrhand->GetScale());
-	Zrhand->SetIsZombie(true);
+	Zrhand = Create::Entity("Zrhand");
+	Zrhand->SetAABB(Zrhand->GetScale() - Vector3(5, 5, 5), -Zrhand->GetScale() - Vector3(-5, -5, -5));
+	Zrhand->SetIsZombieHand(true);
 	CSceneNode* childRightHand = parent->AddChild(Zrhand);
-	childRightHand->ApplyRotate(90, 1, 0, 0);
-	childRightHand->ApplyTranslate(-3.5f, 2.f, -2.f);
+	//childRightHand->ApplyRotate(90, 1, 0, 0);
+	//childRightHand->ApplyTranslate(-3.5f, 2.f, -2.f);
 
 	GenericEntity* Zlleg = Create::Entity("Zlleg");
-	//Zlleg->SetCollider(true);
-	//Zlleg->SetAABB(Zlleg->GetScale(), -Zlleg->GetScale());
-	Zlleg->SetIsZombie(true);
+	Zlleg->SetAABB(Zlleg->GetScale(), -Zlleg->GetScale());
+	Zlleg->SetIsZombieLeg(true);
 	CSceneNode* childLeftLeg = parent->AddChild(Zlleg);
-	childLeftLeg->ApplyTranslate(1.f, -5.f, 0.f);
+	//childLeftLeg->ApplyTranslate(1.f, -5.f, 0.f);
 
 	GenericEntity* Zrleg = Create::Entity("Zrleg");
-	//Zrleg->SetCollider(true);
-	//Zrleg->SetAABB(Zrleg->GetScale(), -Zrleg->GetScale());
-	Zrleg->SetIsZombie(true);
+	Zrleg->SetAABB(Zrleg->GetScale(), -Zrleg->GetScale());
+	Zrleg->SetIsZombieLeg(true);
 	CSceneNode* childRightLeg = parent->AddChild(Zrleg);
-	childRightLeg->ApplyTranslate(-1.f, -5.f, 0.f);
+	//childRightLeg->ApplyTranslate(-1.f, -5.f, 0.f);
+
+	Fire = false;
+	Timer = 0;
+	Health = 55555;
 }
 
 void Enemy::Reset()
@@ -159,10 +140,17 @@ GroundEntity* Enemy::getTerrain()
 
 void Enemy::Update(double dt)
 {
-	Vector3 view = (target - position).Normalized();
-	position += view * (float)m_dSpeed * (float)dt;
+	//Vector3 view = (target - position).Normalized();
+	//position += view * (float)m_dSpeed * (float)dt;
 
 	Constrain();
+
+	Timer+=dt;
+	if (Timer > 10 && !Fire)
+	{
+		Fire = true;
+		Timer = 0;
+	}
 
 	//Movement(Update the way you want)
 }
@@ -182,7 +170,7 @@ void Enemy::Constrain()
 		position.y = m_pTerrain->GetTerrainHeight(position);
 }
 
-void Enemy::Render()
+void Enemy::Render(Mesh* _mesh)
 {
 	MS& modelStack = GraphicsManager::GetInstance()->GetModelStack();
 	modelStack.PushMatrix();
@@ -196,4 +184,20 @@ void Enemy::Render()
 		}
 	}
 	modelStack.PopMatrix();
+}
+
+void Enemy::AttackPlayer(Vector3 position, Vector3 target)
+{
+	if (Fire)
+	{
+		CProjectile* Car = Create::Projectiles("car",
+			position,
+			(target-position).Normalized(),
+			5.0f,
+			200.f);
+
+		//Car->SetCollider(true);
+		//Car->SetAABB()
+		Fire = false;
+	}
 }

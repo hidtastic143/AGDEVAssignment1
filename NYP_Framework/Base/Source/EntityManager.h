@@ -23,10 +23,11 @@ public:
 	void SetSpatialPartition(CSpatialPartition* theSpatialPartition);
 	void SetCamera(FPSCamera* assigningCamera);
 
+	float Health;
+
 private:
 	EntityManager();
 	virtual ~EntityManager();
-	int health;
 
 
 	// Check for overlap
@@ -44,7 +45,7 @@ private:
 	// Check two positions are within a box region
 	bool InBox(Vector3 Hit, Vector3 B1, Vector3 B2, const int Axis);
 	// Check if any Collider is colliding with another Collider
-	bool CheckForCollision(void);
+	bool CheckForCollision();
 
 	std::list<EntityBase*> entityList;
 	FPSCamera* cameraInfo;

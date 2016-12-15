@@ -6,6 +6,7 @@
 #include "../SceneGraph/SceneNode.h"
 #include "../SceneGraph/SceneGraph.h"
 #include "MeshBuilder.h"
+#include "../WeaponInfo/WeaponInfo.h"
 
 class Mesh;
 
@@ -40,6 +41,8 @@ public:
 	// Setting terrain to enemy info
 	void setTerrain(GroundEntity* newTerrain);
 
+	void AttackPlayer(Vector3 position, Vector3 target);
+
 	// Get Position
 	Vector3 getPos() const;
 	// Get Target
@@ -54,7 +57,12 @@ public:
 	// Constrain the position
 	void Constrain();
 	//Render
-	void Render();
+	void Render(Mesh* _mesh);
+
+	bool Fire;
+	float Timer;
+	GenericEntity* Zrhand;
+	float Health;
 
 };
 

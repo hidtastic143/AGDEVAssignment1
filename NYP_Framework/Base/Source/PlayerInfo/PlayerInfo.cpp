@@ -9,6 +9,7 @@
 #include "../WeaponInfo/Pistol.h"
 #include "../WeaponInfo/LaserBlaster.h"
 #include "../WeaponInfo/GrenadeThrow.h"
+#include "../Enemy/Enemy.h"
 
 // Allocating and initializing CPlayerInfo's static data member.  
 // The pointer is allocated but not the object's constructor.

@@ -6,7 +6,10 @@ EntityBase::EntityBase()
 	, isDone(false)
 	, m_bCollider(false)
 	, bLaser(false)
-	, isZombie(false)
+	, isZombieHead(false)
+	, isZombieBody(false)
+	, isZombieHand(false)
+	, isZombieLeg(false)
 	, isProjectile(false)
 {
 }
@@ -61,14 +64,43 @@ bool EntityBase::GetIsLaser(void) const
 	return bLaser;
 }
 
-void EntityBase::SetIsZombie(const bool isZombie)
+void EntityBase::SetIsZombieHead(const bool isZombieHead)
 {
-	this->isZombie = isZombie;
+	this->isZombieHead = isZombieHead;
 }
 
-bool EntityBase::GetIsZombie(void) const
+bool EntityBase::GetIsZombieHead(void) const
 {
-	return isZombie;
+	return isZombieHead;
+}
+
+void EntityBase::SetIsZombieBody(const bool isZombieBody)
+{
+	this->isZombieBody = isZombieBody;
+}
+
+bool EntityBase::GetIsZombieBody(void) const
+{
+	return isZombieBody;
+}
+void EntityBase::SetIsZombieHand(const bool isZombieHand)
+{
+	this->isZombieHand = isZombieHand;
+}
+
+bool EntityBase::GetIsZombieHand(void) const
+{
+	return isZombieHand;
+}
+
+void EntityBase::SetIsZombieLeg(const bool isZombieLeg)
+{
+	this->isZombieLeg = isZombieLeg;
+}
+
+bool EntityBase::GetIsZombieLeg(void) const
+{
+	return isZombieLeg;
 }
 
 void EntityBase::SetIsProjectile(const bool isProjectile)

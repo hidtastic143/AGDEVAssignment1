@@ -3,6 +3,7 @@
 #include "../FPSCamera.h"
 #include "../GroundEntity.h"
 #include "../WeaponInfo/WeaponInfo.h"
+#include "../Enemy/Enemy.h"
 
 class CPlayerInfo
 {
@@ -126,4 +127,6 @@ private:
 	CWeaponInfo* primaryWeapon;
 	CWeaponInfo* secondaryWeapon;
 	CWeaponInfo* weaponHeld;
+
+	Enemy* enemy;
 };

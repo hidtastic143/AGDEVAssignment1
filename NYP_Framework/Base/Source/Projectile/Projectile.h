@@ -59,11 +59,19 @@ protected:
 
 namespace Create
 {
+	CProjectile* Projectiles(const std::string& _meshName,
+		const Vector3& _position,
+		const Vector3& _direction,
+		const float m_fLifetime,
+		const float m_fSpeed);
+
 	CProjectile* Projectile(const std::string& _meshName, 
 							const Vector3& _position, 
 							const Vector3& _direction, 
 							const float m_fLifetime, 
 							const float m_fSpeed,
 							CPlayerInfo* _source=NULL);
+
+	
 };
 

@@ -247,7 +247,7 @@ void SceneText::Init()
 void SceneText::Update(double dt)
 {
 	// Update our entities
-	EntityManager::GetInstance()->Update(dt);
+	//EntityManager::GetInstance()->Update(dt);
 
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
 	if(KeyboardController::GetInstance()->IsKeyDown('1'))

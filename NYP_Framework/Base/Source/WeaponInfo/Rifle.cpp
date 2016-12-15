@@ -46,11 +46,11 @@ void Rifle::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _source)
 				position,
 				(target - position).Normalized(),
 				5.0f,
-				500.0f,
+				50.0f,
 				_source);
 			aProjectile->SetIsProjectile(true);
 			aProjectile->SetCollider(true);
-			aProjectile->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
+			aProjectile->SetAABB(Vector3(0.05f, 0.05f, 0.05f), Vector3(-0.05f, -0.05f, -0.05f));
 			bFire = false;
 			magRounds--;
 		}
