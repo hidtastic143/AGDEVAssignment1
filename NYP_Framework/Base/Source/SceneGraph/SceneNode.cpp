@@ -377,7 +377,7 @@ void CSceneNode::Render(void)
 			cout << "======================================================================" << endl;
 			*/
 
-
+			
 			// Render the entity
 			theEntity->Render();
 		}

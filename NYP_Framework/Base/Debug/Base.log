@@ -1,9 +1,50 @@
-﻿Build started 15/12/2016 23:48:32.
+﻿Build started 16/12/2016 00:02:07.
      1>Project "D:\School\Sem4\AGdev\Ass1\NYP_Framework\Base\Base.vcxproj" on node 2 (Build target(s)).
-     1>Link:
+     1>ClCompile:
+         D:\VS13\VC\bin\CL.exe /c /ID:\School\Sem4\AGdev\Ass1\NYP_Framework\/Common/Source /ID:\School\Sem4\AGdev\Ass1\NYP_Framework\/glfw/include /ID:\School\Sem4\AGdev\Ass1\NYP_Framework\/glew/include /ZI /nologo /W3 /WX- /Od /Oy- /D _VARIADIC_MAX=10 /D WIN32 /D _DEBUG /D _CONSOLE /D _MBCS /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Source\WeaponInfo\Rifle.cpp
+         Rifle.cpp
+     1>d:\school\sem4\agdev\ass1\nyp_framework\common\source\entitybase.h(16): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
+     1>d:\school\sem4\agdev\ass1\nyp_framework\common\source\entitybase.h(19): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
+     1>d:\school\sem4\agdev\ass1\nyp_framework\common\source\entitybase.h(22): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
+     1>d:\school\sem4\agdev\ass1\nyp_framework\common\source\entitybase.h(29): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
+     1>d:\school\sem4\agdev\ass1\nyp_framework\common\source\entitybase.h(33): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
+     1>d:\school\sem4\agdev\ass1\nyp_framework\common\source\entitybase.h(37): warning C4244: '=' : conversion from 'const int' to 'float', possible loss of data
+       Link:
+         D:\VS13\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"D:\School\Sem4\AGdev\Ass1\NYP_Framework\Debug\Base.exe" /INCREMENTAL:NO /NOLOGO /LIBPATH:D:\School\Sem4\AGdev\Ass1\NYP_Framework\Debug /LIBPATH:"D:\School\Sem4\AGdev\Ass1\NYP_Framework\/glfw/lib-msvc100" /LIBPATH:D:\School\Sem4\AGdev\Ass1\NYP_Framework\/glew/lib Common.lib winmm.lib opengl32.lib glu32.lib glew32.lib glfw3.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"D:\School\Sem4\AGdev\Ass1\NYP_Framework\Debug\Base.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"D:\School\Sem4\AGdev\Ass1\NYP_Framework\Debug\Base.lib" /MACHINE:X86 Debug\Application.obj
+         Debug\Enemy.obj
+         Debug\EntityManager.obj
+         Debug\FPSCamera.obj
+         Debug\GenericEntity.obj
+         Debug\GroundEntity.obj
+         Debug\LevelOfDetails.obj
+         Debug\Light.obj
+         Debug\main.obj
+         Debug\OBJMesh.obj
+         Debug\PlayerInfo.obj
+         Debug\Grenade.obj
+         Debug\Laser.obj
+         Debug\Projectile.obj
+         Debug\SceneAssignment1.obj
+         Debug\SceneGraph.obj
+         Debug\SceneNode.obj
+         Debug\Transform.obj
+         Debug\UpdateTransformation.obj
+         Debug\SceneText.obj
+         Debug\SkyBoxEntity.obj
+         Debug\Grid.obj
+         Debug\SpatialPartition.obj
+         Debug\SpriteEntity.obj
+         Debug\TextEntity.obj
+         Debug\GrenadeThrow.obj
+         Debug\LaserBlaster.obj
+         Debug\Pistol.obj
+         Debug\Rifle.obj
+         Debug\WeaponInfo.obj
+     1>Application.obj : warning LNK4075: ignoring '/EDITANDCONTINUE' due to '/OPT:LBR' specification
+     1>LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
          Base.vcxproj -> D:\School\Sem4\AGdev\Ass1\NYP_Framework\Debug\Base.exe
      1>Done Building Project "D:\School\Sem4\AGdev\Ass1\NYP_Framework\Base\Base.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:00.07
+Time Elapsed 00:00:01.14

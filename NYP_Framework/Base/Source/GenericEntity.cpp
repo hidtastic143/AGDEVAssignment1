@@ -124,21 +124,14 @@ GenericEntity* Create::Entity(const string& _meshName)
 	return result;
 }
 
-GenericEntity* Create::Asset(	const std::string& _meshName/*,
-								const Vector3& _position,
-								const Vector3& _scale*/,
-								const float _rotation)
+GenericEntity* Create::Asset(	const std::string& _meshName)
 {
 	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
 	if (modelMesh == nullptr)
 		return nullptr;
 
 	GenericEntity* result = new GenericEntity(modelMesh);
-	/*result->SetPositionX(_position.x);
-	result->SetPositionY(_position.y);
-	result->SetPositionZ(_position.z);
-	result->SetScale(_scale);*/
-	result->SetRotation(_rotation);
+	result->ReadFile(_meshName, "Source//CSV//File.csv");
 	result->SetCollider(false);
 	return result;
 }

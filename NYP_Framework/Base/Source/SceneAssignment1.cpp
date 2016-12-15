@@ -139,9 +139,21 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 0.5f);
 	MeshBuilder::GetInstance()->GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
 
+	MeshBuilder::GetInstance()->GenerateCube("Zhead", Color(0, 1, 0), 1.f);
+	MeshBuilder::GetInstance()->GenerateCube("Zbody", Color(0, 0, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateCube("Zlhand", Color(0, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateCube("Zrhand", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateCube("Zlleg", Color(1, 1, 0), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("Zlleg")->textureID = LoadTGA("Image//Legs.tga");
+	MeshBuilder::GetInstance()->GenerateCube("Zrleg", Color(1, 0, 0), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("Zrleg")->textureID = LoadTGA("Image//Legs.tga");
+
 	MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("cube2", Color(0.0f, 1.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("cube3", Color(1.0f, 0.0f, 0.0f), 1.0f);
+
+	MeshBuilder::GetInstance()->GenerateOBJ("car", "OBJ//Car.obj");
+	MeshBuilder::GetInstance()->GetMesh("car")->textureID = LoadTGA("Image//carTexture.tga");
 
 	MeshBuilder::GetInstance()->GetMesh("cone")->material.kDiffuse.Set(0.99f, 0.99f, 0.99f);
 	MeshBuilder::GetInstance()->GetMesh("cone")->material.kSpecular.Set(0.f, 0.f, 0.f);
@@ -199,22 +211,10 @@ void SceneAssignment1::Init()
 	EntityManager::GetInstance()->SetSpatialPartition(CSpatialPartition::GetInstance());
 
 	// Create entities into the scene
-	//Create::Entity("reference"/*, Vector3(0.0f, 0.0f, 0.0f)*/); // Reference
-	//Create::Entity("lightball"/*, Vector3(lights[0]->position.x, lights[0]->position.y, lights[0]->position.z)*/); // Lightball
-	GenericEntity* aCube = Create::Entity("cube");
-	aCube->SetCollider(true);
-	aCube->SetAABB(aCube->GetScale(), -aCube->GetScale());
-	aCube->InitLOD("cube", "sphere", "cubeSG");
+	//GenericEntity* car = Create::Entity("car");
 
-	GenericEntity* aCube2 = Create::Entity("cube2");
-	aCube2->SetCollider(true);
-	aCube2->SetAABB(aCube2->GetScale(), -aCube2->GetScale());
-	aCube2->InitLOD("cube2", "sphere", "cubeSG");
-
-	GenericEntity* aCube3 = Create::Entity("cube3");
-	aCube3->SetCollider(true);
-	aCube3->SetAABB(aCube3->GetScale(), -aCube3->GetScale());
-	aCube3->InitLOD("cube3", "sphere", "cubeSG");
+	//Rifle = Create::Entity("M4A4");
+	//Rifle->SetPosition(Vector3(playerInfo->GetPos().x + 1.f, playerInfo->GetPos().y - 2.f, playerInfo->GetPos().z - 5));
 
 	GenericEntity* Barricade = Create::Entity("Barricade1");
 	Barricade->SetAABB(Barricade->GetScale(), -Barricade->GetScale());
@@ -236,7 +236,6 @@ void SceneAssignment1::Init()
 	enemy = new Enemy();
 	enemy->Init();
 
-
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
 	//	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
 	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f));
@@ -251,14 +250,14 @@ void SceneAssignment1::Init()
 	groundEntity->SetScale(Vector3(100.0f, 100.0f, 100.0f));
 	groundEntity->SetGrids(Vector3(10.0f, 1.0f, 10.0f));
 	playerInfo->SetTerrain(groundEntity);
-	enemy->setTerrain(groundEntity);
+	//enemy->setTerrain(groundEntity);
 
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	float fontSize = 25.0f;
 	float halfFontSize = fontSize / 2.0f;
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < 4; ++i)
 	{
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f, 1.0f, 0.0f));
 	}
@@ -342,7 +341,8 @@ void SceneAssignment1::Update(double dt)
 
 	// Update the player position and other details based on keyboard and mouse inputs
 	playerInfo->Update(dt);
-
+	enemy->Update(dt);
+	enemy->AttackPlayer(enemy->Zrhand->GetPosition(), playerInfo->GetPos());
 	//camera.Update(dt); // Can put the camera into an entity rather than here (Then we don't have to write this)
 
 	GraphicsManager::GetInstance()->UpdateLights(dt);
@@ -359,11 +359,18 @@ void SceneAssignment1::Update(double dt)
 	ss1.precision(4);
 	ss1 << "Player:" << playerInfo->GetPos();
 	textObj[2]->SetText(ss1.str());
+
+	std::ostringstream ss2;
+	ss2.precision(13);
+	ss2 << "Boss HP:" << EntityManager::GetInstance()->Health;
+	textObj[3]->SetText(ss2.str());
 }
 
 void SceneAssignment1::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
 
 	GraphicsManager::GetInstance()->UpdateLightUniforms();
 
@@ -372,19 +379,25 @@ void SceneAssignment1::Render()
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
 	theSkyBox->Render();
 	groundEntity->Render();
-	EntityManager::GetInstance()->Render();
 	
 	if (playerInfo->getWeaponHeld() == playerInfo->getPrimaryWeapon())
 		playerInfo->getPrimaryWeapon()->Render(playerInfo);
 	else if (playerInfo->getWeaponHeld() == playerInfo->getSecondaryWeapon())
 		playerInfo->getSecondaryWeapon()->Render(playerInfo);
 
-	// Setup 2D pipeline then render 2D
-	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
-	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
-	GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
-	GraphicsManager::GetInstance()->DetachCamera();
-	EntityManager::GetInstance()->RenderUI();
+	if (EntityManager::GetInstance()->Health > 0)
+	{
+		EntityManager::GetInstance()->Render();
+
+		// Setup 2D pipeline then render 2D
+		int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
+		int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+		GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
+		GraphicsManager::GetInstance()->DetachCamera();
+		EntityManager::GetInstance()->RenderUI();
+	}
+
+	
 }
 
 void SceneAssignment1::Exit()

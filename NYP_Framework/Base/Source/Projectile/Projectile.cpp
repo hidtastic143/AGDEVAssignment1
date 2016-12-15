@@ -119,7 +119,7 @@ void CProjectile::Update(double dt)
 
 	// Update Position
 	position.Set(	position.x + (float)(theDirection.x * dt * m_fSpeed),
-					position.y + (float)(theDirection.y * dt * m_fSpeed),
+	 			    position.y + (float)(theDirection.y * dt * m_fSpeed),
 					position.z + (float)(theDirection.z * dt * m_fSpeed));
 }
 
@@ -139,6 +139,26 @@ void CProjectile::Render(void)
 	//modelStack.Scale(scale.x, scale.y, scale.z);
 	RenderHelper::RenderMesh(modelMesh);
 	modelStack.PopMatrix();
+}
+
+
+CProjectile* Create::Projectiles(const std::string& _meshName,
+	const Vector3& _position,
+	const Vector3& _direction,
+	const float m_fLifetime,
+	const float m_fSpeed)
+{
+	Mesh* modelMesh = MeshBuilder::GetInstance()->GetMesh(_meshName);
+	if (modelMesh == nullptr)
+		return nullptr;
+
+	CProjectile* result = new CProjectile(modelMesh);
+	result->Set(_position, _direction, m_fLifetime, m_fSpeed);
+	result->SetStatus(true);
+	result->SetCollider(true);
+	EntityManager::GetInstance()->AddEntity(result);
+
+	return result;
 }
 
 // Create a projectile and add it into EntityManager
@@ -162,3 +182,4 @@ CProjectile* Create::Projectile(const std::string& _meshName,
 
 	return result;
 }
+

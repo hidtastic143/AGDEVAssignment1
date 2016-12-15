@@ -3,7 +3,8 @@
 #include "Collider/Collider.h"
 #include "Projectile/Laser.h"
 #include "SceneGraph\SceneGraph.h"
-
+#include "RenderHelper.h"
+#include "GraphicsManager.h"
 #include <iostream>
 using namespace std;
 
@@ -56,8 +57,14 @@ void EntityManager::Render()
 	for (it = entityList.begin(); it != end; ++it)
 	{
 		// This needs to be edited
-		//if (((cameraInfo->GetCameraTarget() - cameraInfo->GetCameraPos()).Dot((*it)->GetPosition() * (*it)->GetScale().x - cameraInfo->GetCameraPos())) > Math::EPSILON)
+		if (CSceneGraph::GetInstance()->GetNode(*it) != NULL)
+		{
+
+		}
+		else/*if (((cameraInfo->GetCameraTarget() - cameraInfo->GetCameraPos()).Dot((*it)->GetPosition() * (*it)->GetScale().x - cameraInfo->GetCameraPos())) > Math::EPSILON)*/
+		{
 			(*it)->Render();
+		}
 	}
 
 	// Render the Scene Graph
@@ -145,6 +152,7 @@ void EntityManager::SetSpatialPartition(CSpatialPartition* theSpatialPartition)
 // Constructor
 EntityManager::EntityManager()
 	: theSpatialPartition(NULL)
+	, Health(55555)
 {
 }
 
@@ -162,15 +170,7 @@ EntityManager::~EntityManager()
 bool EntityManager::CheckOverlap(Vector3 thisMinAABB, Vector3 thisMaxAABB, Vector3 thatMinAABB, Vector3 thatMaxAABB)
 {	
 	// Check if this object is overlapping that object
-	/*
-	if (((thatMinAABB.x >= thisMinAABB.x) && (thatMinAABB.x <= thisMaxAABB.x) &&
-	(thatMinAABB.y >= thisMinAABB.y) && (thatMinAABB.y <= thisMaxAABB.y) &&
-	(thatMinAABB.z >= thisMinAABB.z) && (thatMinAABB.z <= thisMaxAABB.z))
-	||
-	((thatMaxAABB.x >= thisMinAABB.x) && (thatMaxAABB.x <= thisMaxAABB.x) &&
-	(thatMaxAABB.y >= thisMinAABB.y) && (thatMaxAABB.y <= thisMaxAABB.y) &&
-	(thatMaxAABB.z >= thisMinAABB.z) && (thatMaxAABB.z <= thisMaxAABB.z)))
-	*/
+
 	if (((thatMinAABB >= thisMinAABB) && (thatMinAABB <= thisMaxAABB))
 		||
 		((thatMaxAABB >= thisMinAABB) && (thatMaxAABB <= thisMaxAABB)))
@@ -178,16 +178,8 @@ bool EntityManager::CheckOverlap(Vector3 thisMinAABB, Vector3 thisMaxAABB, Vecto
 		return true;
 	}
 
-	// Check if that object is overlapping this object
-	/*
-	if (((thisMinAABB.x >= thatMinAABB.x) && (thisMinAABB.x <= thatMaxAABB.x) &&
-	(thisMinAABB.y >= thatMinAABB.y) && (thisMinAABB.y <= thatMaxAABB.y) &&
-	(thisMinAABB.z >= thatMinAABB.z) && (thisMinAABB.z <= thatMaxAABB.z))
-	||
-	((thisMaxAABB.x >= thatMinAABB.x) && (thisMaxAABB.x <= thatMaxAABB.x) &&
-	(thisMaxAABB.y >= thatMinAABB.y) && (thisMaxAABB.y <= thatMaxAABB.y) &&
-	(thisMaxAABB.z >= thatMinAABB.z) && (thisMaxAABB.z <= thatMaxAABB.z)))
-	*/
+	//// Check if that object is overlapping this object
+	//
 	if (((thisMinAABB >= thatMinAABB) && (thisMinAABB <= thatMaxAABB))
 		||
 		((thisMaxAABB >= thatMinAABB) && (thisMaxAABB <= thatMaxAABB)))
@@ -195,35 +187,33 @@ bool EntityManager::CheckOverlap(Vector3 thisMinAABB, Vector3 thisMaxAABB, Vecto
 		return true;
 	}
 
-	// Check if this object is within that object
-	/*
-	if (((thisMinAABB.x >= thatMinAABB.x) && (thisMaxAABB.x <= thatMaxAABB.x) &&
-	(thisMinAABB.y >= thatMinAABB.y) && (thisMaxAABB.y <= thatMaxAABB.y) &&
-	(thisMinAABB.z >= thatMinAABB.z) && (thisMaxAABB.z <= thatMaxAABB.z))
-	&&
-	((thisMaxAABB.x >= thatMinAABB.x) && (thisMaxAABB.x <= thatMaxAABB.x) &&
-	(thisMaxAABB.y >= thatMinAABB.y) && (thisMaxAABB.y <= thatMaxAABB.y) &&
-	(thisMaxAABB.z >= thatMinAABB.z) && (thisMaxAABB.z <= thatMaxAABB.z)))
-	*/
+	//// Check if this object is within that object
+	//
 	if (((thisMinAABB >= thatMinAABB) && (thisMaxAABB <= thatMaxAABB))
 		&&
 		((thisMaxAABB >= thatMinAABB) && (thisMaxAABB <= thatMaxAABB)))
 		return true;
 
-	// Check if that object is within this object
-	/*
-	if (((thatMinAABB.x >= thisMinAABB.x) && (thatMinAABB.x <= thisMaxAABB.x) &&
-	(thatMinAABB.y >= thisMinAABB.y) && (thatMinAABB.y <= thisMaxAABB.y) &&
-	(thatMinAABB.z >= thisMinAABB.z) && (thatMinAABB.z <= thisMaxAABB.z))
-	&&
-	((thatMaxAABB.x >= thisMinAABB.x) && (thatMaxAABB.x <= thisMaxAABB.x) &&
-	(thatMaxAABB.y >= thisMinAABB.y) && (thatMaxAABB.y <= thisMaxAABB.y) &&
-	(thatMaxAABB.z >= thisMinAABB.z) && (thatMaxAABB.z <= thisMaxAABB.z)))
-	*/
+	//// Check if that object is within this object
+	//
 	if (((thatMinAABB >= thisMinAABB) && (thatMinAABB <= thisMaxAABB))
 		&&
 		((thatMaxAABB >= thisMinAABB) && (thatMaxAABB <= thisMaxAABB)))
 		return true;
+
+	/*if (thatMaxAABB.x > thisMaxAABB.x && thatMinAABB.x <= thisMaxAABB.x)
+		return true;
+	if (thatMaxAABB.x >= thisMinAABB.x && thatMinAABB.x < thisMinAABB.x)
+		return true;
+	if (thatMaxAABB.z > thisMaxAABB.z && thatMinAABB.z <= thisMaxAABB.z)
+		return true;
+	if (thatMaxAABB.z >= thisMinAABB.z && thatMinAABB.z < thisMinAABB.z)
+		return true;
+	if (thatMaxAABB.y > thisMaxAABB.y && thatMinAABB.y <= thisMaxAABB.y)
+		return true;
+	if (thatMaxAABB.y >= thisMinAABB.y && thatMinAABB.y < thisMinAABB.y)
+		return true;*/
+
 
 	return false;
 }
@@ -265,7 +255,7 @@ bool EntityManager::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatE
 	Vector3 thisMaxAABB = ThisEntity->GetPosition() + thisCollider->GetMaxAABB();
 	Vector3 thatMinAABB = ThatEntity->GetPosition() + thatCollider->GetMinAABB();
 	Vector3 thatMaxAABB = ThatEntity->GetPosition() + thatCollider->GetMaxAABB();
-
+		
 	// Check for overlap
 	if (CheckOverlap(thisMinAABB, thisMaxAABB, thatMinAABB, thatMaxAABB))
 		return true;
@@ -359,10 +349,10 @@ bool EntityManager::CheckForCollision(void)
 					Vector3 thatMinAABB = (*colliderThat)->GetPosition() + thatCollider->GetMinAABB();
 					Vector3 thatMaxAABB = (*colliderThat)->GetPosition() + thatCollider->GetMaxAABB();
 
-					if (CheckLineSegmentPlane(	thisEntity->GetPosition(), 
-												thisEntity->GetPosition() - thisEntity->GetDirection() * thisEntity->GetLength(),
-												thatMinAABB, thatMaxAABB,
-												hitPosition) == true)
+					if (CheckLineSegmentPlane(thisEntity->GetPosition(),
+						thisEntity->GetPosition() - thisEntity->GetDirection() * thisEntity->GetLength(),
+						thatMinAABB, thatMaxAABB,
+						hitPosition) == true)
 					{
 						(*colliderThis)->SetIsDone(true);
 						(*colliderThat)->SetIsDone(true);
@@ -382,43 +372,92 @@ bool EntityManager::CheckForCollision(void)
 				}
 			}
 		}
-		else if ((*colliderThis)->HasCollider())
+		else if ((*colliderThis)->GetIsProjectile())
 		{
-			// This object was derived from a CCollider class, then it will have Collision Detection methods
-			//CCollider *thisCollider = dynamic_cast<CCollider*>(*colliderThis);
 			EntityBase *thisEntity = dynamic_cast<EntityBase*>(*colliderThis);
-
-			// Check for collision with another collider class
 			colliderThatEnd = entityList.end();
 			int counter = 0;
 			for (colliderThat = entityList.begin(); colliderThat != colliderThatEnd; ++colliderThat)
 			{
+				EntityBase *thatEntity = dynamic_cast<EntityBase*>(*colliderThat);
+
 				if (colliderThat == colliderThis)
 					continue;
 
-				if ((*colliderThat)->HasCollider())
+				if (Health > 0)
 				{
-					EntityBase *thatEntity = dynamic_cast<EntityBase*>(*colliderThat);
-					if (CheckSphereCollision(thisEntity, thatEntity))
+					if ((*colliderThat)->GetIsZombieHead())
 					{
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{
+							Health -= 1000;
 							thisEntity->SetIsDone(true);
-							thatEntity->SetIsDone(true);
-							// Remove from Scene Graph
-							if (CSceneGraph::GetInstance()->DeleteNode((*colliderThis)))
-							{
-								cout << "*** This Entity removed ***" << endl;
-							}
-							// Remove from Scene Graph
-							if (CSceneGraph::GetInstance()->DeleteNode((*colliderThat)))
-							{
-								cout << "*** That Entity removed ***" << endl;
-							}
+							CSceneGraph::GetInstance()->DeleteNode((*colliderThis));
+							//CSceneGraph::GetInstance()->DeleteNode((*colliderThat));
 						}
 
 					}
+					if ((*colliderThat)->GetIsZombieBody())
+					{
+						if (CheckAABBCollision(thisEntity, thatEntity))
+						{
+							Health -= 250;
+							thisEntity->SetIsDone(true);
+							//thatEntity->SetIsDone(true);
+							CSceneGraph::GetInstance()->DeleteNode((*colliderThis));
+							//CSceneGraph::GetInstance()->DeleteNode((*colliderThat));
+						}
+					}
+					if ((*colliderThat)->GetIsZombieHand())
+					{
+						if (CheckAABBCollision(thisEntity, thatEntity))
+						{
+							Health -= 100;
+							thisEntity->SetIsDone(true);
+							//thatEntity->SetIsDone(true);
+							CSceneGraph::GetInstance()->DeleteNode((*colliderThis));
+							//CSceneGraph::GetInstance()->DeleteNode((*colliderThat));
+						}
+					}
+					if ((*colliderThat)->GetIsZombieLeg())
+					{
+						if (CheckAABBCollision(thisEntity, thatEntity))
+						{						
+							Health -= 100;
+							thisEntity->SetIsDone(true);
+							//thatEntity->SetIsDone(true);
+							CSceneGraph::GetInstance()->DeleteNode((*colliderThis));
+							//CSceneGraph::GetInstance()->DeleteNode((*colliderThat));
+
+						}
+					}
 				}
+				else if (Health <= 0)
+				{
+					if ((*colliderThat)->GetIsZombieHead())
+					{
+						thatEntity->SetIsDone(true);
+						CSceneGraph::GetInstance()->DeleteNode((*colliderThat));
+					}
+					if ((*colliderThat)->GetIsZombieBody())
+					{
+						thatEntity->SetIsDone(true);
+						CSceneGraph::GetInstance()->DeleteNode((*colliderThat));
+					}
+					if ((*colliderThat)->GetIsZombieHand())
+					{
+						thatEntity->SetIsDone(true);
+						CSceneGraph::GetInstance()->DeleteNode((*colliderThat));
+					}
+					if ((*colliderThat)->GetIsZombieLeg())
+					{
+						thatEntity->SetIsDone(true);
+						CSceneGraph::GetInstance()->DeleteNode((*colliderThat));
+					}
+
+					
+				}
+				
 			}
 		}
 	}
