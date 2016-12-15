@@ -65,9 +65,14 @@ void CPlayerInfo::Init(void)
 
 	rotationInfo.SetZero();
 
+	MinAABB = Vector3(position.x - 10, position.y - 7, position.z - 10);
+	MaxAABB = Vector3(position.x + 10, position.y + 7, position.z + 10);
+
 	// Set Boundary
 	maxBoundary.Set(1,1,1);
 	minBoundary.Set(-1, -1, -1);
+
+	health = 100;
 
 	// Set the pistol as the primary weapon
 	primaryWeapon = new Rifle();
@@ -458,9 +463,7 @@ void CPlayerInfo::Update(double dt)
 	if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
 	{
 		if (weaponHeld == primaryWeapon)
-		{
 			primaryWeapon->Discharge(position, target, this);
-		}
 		else if (weaponHeld == secondaryWeapon)
 			secondaryWeapon->Discharge(position, target, this);
 	}
@@ -605,4 +608,23 @@ void CPlayerInfo::SetRight(const Vector3& newRight)
 Vector3 CPlayerInfo::GetRight()
 {
 	return right;
+}
+
+Vector3 CPlayerInfo::GetMinAABB()const
+{
+	return MinAABB;
+}
+Vector3 CPlayerInfo::GetMaxAABB()const
+{
+	return MaxAABB;
+}
+
+void CPlayerInfo::SetHP(const int& newHP)
+{
+	health = newHP;
+}
+
+int CPlayerInfo::GetHP()const
+{
+	return health;
 }

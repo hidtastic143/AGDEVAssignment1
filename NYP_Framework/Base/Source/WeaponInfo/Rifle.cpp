@@ -47,7 +47,7 @@ void Rifle::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _source)
 				position,
 				(target - position).Normalized(),
 				5.0f,
-				500.0f,
+				300.0f,
 				_source);
 			aProjectile->SetIsProjectile(true);
 			aProjectile->SetCollider(true);

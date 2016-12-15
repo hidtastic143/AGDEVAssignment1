@@ -21,6 +21,7 @@
 #include "Light.h"
 #include "SkyBox/SkyBoxEntity.h"
 #include "SceneGraph\SceneGraph.h"
+#include "Enemy\Spaceship.h"
 #include "SpatialPartition\SpatialPartition.h"
 
 #include <iostream>
@@ -181,7 +182,11 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("Barricade7", "OBJ//Barricade.obj");
 	MeshBuilder::GetInstance()->GetMesh("Barricade7")->textureID = LoadTGA("Image//Barricade_Texture.tga");
 
+	MeshBuilder::GetInstance()->GenerateOBJ("Spaceship", "OBJ//SpaceShip.obj");
+	MeshBuilder::GetInstance()->GetMesh("Spaceship")->textureID = LoadTGA("Image//SpaceShip_Texture.tga");
 
+	MeshBuilder::GetInstance()->GenerateQuad("Spaceship2", Color(1.0f, 1.0f, 0.0f), 10.0f);
+	MeshBuilder::GetInstance()->GetMesh("Spaceship2")->textureID = LoadTGA("Image//SpaceShip2D.tga");
 
 	//Bullet
 	MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(1.0f, 0.64f, 0.0f), 1.0f);
@@ -207,7 +212,7 @@ void SceneAssignment1::Init()
 	CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);
 	CSpatialPartition::GetInstance()->SetMesh("GRIDMESH");
 	CSpatialPartition::GetInstance()->SetCamera(&camera);
-	CSpatialPartition::GetInstance()->SetLevelOfDetails(40000.0f, 160000.0f);
+	CSpatialPartition::GetInstance()->SetLevelOfDetails(4000.0f, 16000.0f);
 	EntityManager::GetInstance()->SetSpatialPartition(CSpatialPartition::GetInstance());
 
 	// Create entities into the scene
@@ -236,6 +241,14 @@ void SceneAssignment1::Init()
 	enemy = new Enemy();
 	enemy->Init();
 
+	for (int i = 0; i < 20; i++)
+	{
+		spaceShip = new SpaceShip();
+		spaceShip->Init(playerInfo);
+		spaceVec.push_back(spaceShip);
+	}
+	//enemy->InitLOD("Spaceship", "Spaceship", "Spaceship2");
+
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
 	//	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
 	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f));
@@ -250,7 +263,9 @@ void SceneAssignment1::Init()
 	groundEntity->SetScale(Vector3(100.0f, 100.0f, 100.0f));
 	groundEntity->SetGrids(Vector3(10.0f, 1.0f, 10.0f));
 	playerInfo->SetTerrain(groundEntity);
-	//enemy->setTerrain(groundEntity);
+	enemy->setTerrain(groundEntity);
+
+	playerInfo->SetBoundary(Vector3(24.f, 40.f, 500.f), Vector3(-24.f, 40.f, 450.f));
 
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
@@ -267,7 +282,27 @@ void SceneAssignment1::Init()
 void SceneAssignment1::Update(double dt)
 {
 	// Update our entities
-	EntityManager::GetInstance()->Update(dt);
+	static float stopwatchSpawner = 0.f;
+	stopwatchSpawner += 2 * dt;
+
+	for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
+	{
+		if (stopwatchSpawner > 2.6f)
+		{
+			if (!(*it)->GetReady())
+			{
+				(*it)->SetReady(true);
+				(*it)->velocity = (playerInfo->GetPos() - (*it)->getPos()).Normalized() * (*it)->m_dSpeed;
+				stopwatchSpawner = false;
+			}
+		}
+
+		if ((*it)->GetReady())
+		{
+			(*it)->Update(dt);
+		}
+	}
+	EntityManager::GetInstance()->Update(dt, playerInfo, spaceVec);
 
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
 	if (KeyboardController::GetInstance()->IsKeyDown('1'))
@@ -370,8 +405,6 @@ void SceneAssignment1::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-
-
 	GraphicsManager::GetInstance()->UpdateLightUniforms();
 
 	// Setup 3D pipeline then render 3D
@@ -385,6 +418,16 @@ void SceneAssignment1::Render()
 	else if (playerInfo->getWeaponHeld() == playerInfo->getSecondaryWeapon())
 		playerInfo->getSecondaryWeapon()->Render(playerInfo);
 
+	//spaceShip->Render();
+
+	for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
+	{
+		if ((*it)->GetReady() && !(*it)->isDead)
+		{
+			(*it)->Render();
+		}
+	}
+
 	if (EntityManager::GetInstance()->Health > 0)
 	{
 		EntityManager::GetInstance()->Render();
@@ -397,7 +440,6 @@ void SceneAssignment1::Render()
 		EntityManager::GetInstance()->RenderUI();
 	}
 
-	
 }
 
 void SceneAssignment1::Exit()
