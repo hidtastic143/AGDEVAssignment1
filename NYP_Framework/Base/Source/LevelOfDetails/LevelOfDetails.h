@@ -24,6 +24,8 @@ public:
 	bool InitLOD(	const std::string& _meshName_High, 
 					const std::string& _meshName_Mid, 
 					const std::string& _meshName_Low);
+	bool InitLOD(const std::string& _meshName_High,
+		const std::string& _meshName_Mid);
 	bool DestroyLOD(void);
 
 	void SetLODStatus(const bool bActive);
