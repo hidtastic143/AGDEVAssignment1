@@ -200,8 +200,17 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(1.0f, 0.64f, 0.0f), 1.0f);
 
 	//LoseScreen
-	MeshBuilder::GetInstance()->GenerateQuad("Lose", Color(0.f, 0.f, 0.f), 10.f);
+	MeshBuilder::GetInstance()->GenerateQuad("Lose", Color(0.f, 0.f, 0.f), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("Lose")->textureID = LoadTGA("Image//LoseScreen.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("Win", Color(0.f, 0.f, 0.f), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("Win")->textureID = LoadTGA("Image//WinScreen.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("Shuttle", "OBJ//Shuttle.obj");
+	MeshBuilder::GetInstance()->GetMesh("Shuttle")->textureID = LoadTGA("Image//Shuttle_Texture.tga");
+
+	MeshBuilder::GetInstance()->GenerateOBJ("Floor", "OBJ//Floor.obj");
+	MeshBuilder::GetInstance()->GetMesh("Floor")->textureID = LoadTGA("Image//Floor_Texture.tga");
 
 	//Skybox
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_FRONT", Color(1, 1, 1), 1.f);
@@ -232,6 +241,8 @@ void SceneAssignment1::Init()
 	//Rifle = Create::Entity("M4A4");
 	//Rifle->SetPosition(Vector3(playerInfo->GetPos().x + 1.f, playerInfo->GetPos().y - 2.f, playerInfo->GetPos().z - 5));
 
+	GenericEntity* Shuttle = Create::Entity("Shuttle");
+
 	GenericEntity* Barricade = Create::Entity("Barricade1");
 	Barricade->SetAABB(Barricade->GetScale(), -Barricade->GetScale());
 	GenericEntity* Barricade2 = Create::Entity("Barricade2");
@@ -247,7 +258,10 @@ void SceneAssignment1::Init()
 	GenericEntity* Barricade7 = Create::Entity("Barricade7");
 	Barricade->SetAABB(Barricade7->GetScale(), -Barricade7->GetScale());
 
-	background = Create::Asset("Lose");
+	GenericEntity* Floor = Create::Entity("Floor");
+
+	background = Create::Entity("Lose");
+	bg = Create::Entity("Win");
 
 	playerInfo->getPrimaryWeapon()->SetMesh(MeshBuilder::GetInstance()->GetMesh("M4A4"));
 	playerInfo->getSecondaryWeapon()->SetMesh(MeshBuilder::GetInstance()->GetMesh("SecondWeapon"));
@@ -255,7 +269,7 @@ void SceneAssignment1::Init()
 	enemy = new Enemy();
 	enemy->Init();
 
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 50; i++)
 	{
 		spaceShip = new SpaceShip();
 		spaceShip->Init(playerInfo);
@@ -280,12 +294,17 @@ void SceneAssignment1::Init()
 
 	playerInfo->SetBoundary(Vector3(24.f, 40.f, 500.f), Vector3(-24.f, 40.f, 450.f));
 
+	win = false;
+
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	float fontSize = 25.0f;
 	float halfFontSize = fontSize / 2.0f;
-	for (int i = 0; i < 4; ++i)
+
+
+
+	for (int i = 0; i < 5; ++i)
 	{
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f, 1.0f, 0.0f));
 	}
@@ -298,23 +317,7 @@ void SceneAssignment1::Update(double dt)
 	static float stopwatchSpawner = 0.f;
 	stopwatchSpawner += 2 * dt;
 
-	for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
-	{
-		if (stopwatchSpawner > 2.6f)
-		{
-			if (!(*it)->GetReady())
-			{
-				(*it)->SetReady(true);
-				(*it)->velocity = (playerInfo->GetPos() - (*it)->getPos()).Normalized() * (*it)->m_dSpeed;
-				stopwatchSpawner = false;
-			}
-		}
-
-		if ((*it)->GetReady())
-		{
-			(*it)->Update(dt);
-		}
-	}
+	
 	EntityManager::GetInstance()->Update(dt, playerInfo, spaceVec);
 
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
@@ -389,9 +392,54 @@ void SceneAssignment1::Update(double dt)
 
 	// Update the player position and other details based on keyboard and mouse inputs
 	playerInfo->Update(dt);
-	enemy->Update(dt);
-	enemy->AttackPlayer(enemy->Zrhand->GetPosition(), playerInfo->GetPos());
+
+	if (EntityManager::GetInstance()->Health < 0 && playerInfo->GetHP() > 0)
+	{
+		//bg->SetPositionY(background->GetPositionY() + dt);
+		playerInfo->SetTerrain(groundEntity);
+		for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
+		{
+			(*it)->isDead = true;
+		}
+		bg->SetPositionY(bg->GetPositionY() + dt);
+		win = true;
+	}
+
+	if (playerInfo->GetHP() > 0 && EntityManager::GetInstance()->Health > 0)
+	{
+		enemy->Update(dt);
+		enemy->AttackPlayer(enemy->Zrhand->GetPosition(), playerInfo->GetPos());
+		for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
+		{
+			if (stopwatchSpawner > 2.6f)
+			{
+				if (!(*it)->GetReady())
+				{
+					(*it)->SetReady(true);
+					(*it)->velocity = (playerInfo->GetPos() - (*it)->getPos()).Normalized() * (*it)->m_dSpeed;
+					stopwatchSpawner = false;
+				}
+			}
+
+			if ((*it)->GetReady())
+			{
+				(*it)->Update(dt);
+			}
+		}
+
+	}
+	else if (playerInfo->GetHP() <= 0)
+	{
+		for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
+		{
+			(*it)->isDead = true;
+		}
+		background->SetPositionY(background->GetPositionY() + dt);
+		playerInfo->SetTerrain(groundEntity);
+	}
+	
 	//camera.Update(dt); // Can put the camera into an entity rather than here (Then we don't have to write this)
+
 
 	GraphicsManager::GetInstance()->UpdateLights(dt);
 
@@ -412,6 +460,11 @@ void SceneAssignment1::Update(double dt)
 	ss2.precision(13);
 	ss2 << "Boss HP:" << EntityManager::GetInstance()->Health;
 	textObj[3]->SetText(ss2.str());
+
+	std::ostringstream ss3;
+	ss3.precision(13);
+	ss3 << "Your HP:" << playerInfo->GetHP();
+	textObj[4]->SetText(ss3.str());
 }
 
 void SceneAssignment1::Render()
@@ -433,25 +486,30 @@ void SceneAssignment1::Render()
 	int WindowHeight = Application::GetInstance().GetWindowHeight();
 
 	//spaceShip->Render();
-
-	for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
-	{
-		if ((*it)->GetReady() && !(*it)->isDead)
-		{
-			(*it)->Render();
-		}
-	}
-
-		EntityManager::GetInstance()->Render();
-
 		
-		theSkyBox->Render();
-		groundEntity->Render();
+	theSkyBox->Render();
+	groundEntity->Render();
 
+	if (playerInfo->GetHP() <= 0 )
+	{
+		background->Render();
+		EntityManager::GetInstance()->Health = 0;
+	}
+	else if (playerInfo->GetHP() > 0 && EntityManager::GetInstance()->Health > 0)
+	{
 		if (playerInfo->getWeaponHeld() == playerInfo->getPrimaryWeapon())
 			playerInfo->getPrimaryWeapon()->Render(playerInfo);
 		else if (playerInfo->getWeaponHeld() == playerInfo->getSecondaryWeapon())
 			playerInfo->getSecondaryWeapon()->Render(playerInfo);
+		for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
+		{
+			if ((*it)->GetReady() && !(*it)->isDead)
+			{
+				(*it)->Render();
+			}
+		}
+		EntityManager::GetInstance()->Render();
+	}
 	if (EntityManager::GetInstance()->Health > 0)
 	{
 
@@ -461,10 +519,11 @@ void SceneAssignment1::Render()
 		GraphicsManager::GetInstance()->DetachCamera();
 		EntityManager::GetInstance()->RenderUI();
 	}
-	if (playerInfo->GetHP() <= 0 )
+	if (win)
 	{
-		background->Render();
+		bg->Render();
 	}
+
 		
 }
 

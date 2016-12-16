@@ -78,7 +78,7 @@ void Enemy::Init()
 
 	Fire = false;
 	Timer = 0;
-	Health = 55555;
+	Health = 25000;
 }
 
 void Enemy::Reset()

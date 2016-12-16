@@ -42,9 +42,11 @@ private:
 	GenericEntity* theCube;
 	GenericEntity* Rifle;
 	GenericEntity* background;
+	GenericEntity* bg;
 	Enemy* enemy;
 	SpaceShip* spaceShip;
 
+	bool win;
 
 	std::vector<SpaceShip*> spaceVec;
 

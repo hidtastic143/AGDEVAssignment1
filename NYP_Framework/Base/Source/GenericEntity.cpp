@@ -118,7 +118,7 @@ GenericEntity* Create::Entity(const string& _meshName)
 		return nullptr;
 
 	GenericEntity* result = new GenericEntity(modelMesh);
-	result->ReadFile(_meshName, "Source//CSV//File.csv");
+	result->ReadFile(_meshName, "CSV//File.csv");
 	result->SetCollider(false);
 	EntityManager::GetInstance()->AddEntity(result, true);
 	return result;
@@ -131,7 +131,7 @@ GenericEntity* Create::Asset(	const std::string& _meshName)
 		return nullptr;
 
 	GenericEntity* result = new GenericEntity(modelMesh);
-	result->ReadFile(_meshName, "Source//CSV//File.csv");
+	result->ReadFile(_meshName, "CSV//File.csv");
 	result->SetCollider(false);
 	return result;
 }
