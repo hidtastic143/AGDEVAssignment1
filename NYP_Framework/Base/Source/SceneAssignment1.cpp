@@ -172,6 +172,9 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("M4A4", "OBJ//M4A4.obj");
 	MeshBuilder::GetInstance()->GetMesh("M4A4")->textureID = LoadTGA("Image//M4A4_Texture.tga");
 
+	MeshBuilder::GetInstance()->GenerateOBJ("SecondWeapon", "OBJ//Pistol.obj");
+	MeshBuilder::GetInstance()->GetMesh("SecondWeapon")->textureID = LoadTGA("Image//Pistol_Texture.tga");
+
 	MeshBuilder::GetInstance()->GenerateOBJ("Barricade1", "OBJ//Barricade.obj");
 	MeshBuilder::GetInstance()->GetMesh("Barricade1")->textureID = LoadTGA("Image//Barricade_Texture.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Barricade2", "OBJ//Barricade.obj");
@@ -247,6 +250,7 @@ void SceneAssignment1::Init()
 	background = Create::Asset("Lose");
 
 	playerInfo->getPrimaryWeapon()->SetMesh(MeshBuilder::GetInstance()->GetMesh("M4A4"));
+	playerInfo->getSecondaryWeapon()->SetMesh(MeshBuilder::GetInstance()->GetMesh("SecondWeapon"));
 
 	enemy = new Enemy();
 	enemy->Init();

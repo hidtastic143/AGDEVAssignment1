@@ -1,4 +1,5 @@
 #include "Pistol.h"
+#include "../Sound.h"
 #include "../Projectile/Projectile.h"
 
 
@@ -49,11 +50,15 @@ void CPistol::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _source)
 				5.0f,
 				200.0f,
 				_source);
+			aProjectile->SetIsProjectile(true);
 			aProjectile->SetCollider(true);
 			aProjectile->SetAABB(Vector3(0.5f, 0.5f, 0.5f), Vector3(-0.5f, -0.5f, -0.5f));
 			bFire = false;
 			magRounds--;
+			PlayGun();
+			return;
 		}
+		DryFire();
 	}
 	else
 	{
