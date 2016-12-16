@@ -111,6 +111,12 @@ public:
 	CWeaponInfo* getSecondaryWeapon();
 	CWeaponInfo* getWeaponHeld();
 
+	Vector3 GetMinAABB()const;
+	Vector3 GetMaxAABB()const;
+
+	void SetHP(const int& newHP);
+	int GetHP() const;
+
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 rotationInfo;
@@ -120,8 +126,12 @@ private:
 	Vector3 maxBoundary, minBoundary;
 	GroundEntity* m_pTerrain;
 
+	Vector3 MinAABB, MaxAABB;
+
 	double m_dSpeed;
 	double m_dAcceleration;
+
+	int health;
 
 	bool m_bJumpUpwards;
 	double m_dJumpSpeed;

@@ -18,9 +18,9 @@ void Rifle::Init(void)
 	CWeaponInfo::Init();
 
 	// The number of ammunition in a magazine for this weapon
-	magRounds = 30;
+	magRounds = 15;
 	// The maximum number of ammunition for this magazine for this weapon
-	maxMagRounds = 30;
+	maxMagRounds = 15;
 	// The current total number of rounds currently carried by this player
 	totalRounds = 210;
 	// The max total number of rounds currently carried by this player
@@ -47,7 +47,7 @@ void Rifle::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _source)
 				position,
 				(target - position).Normalized(),
 				5.0f,
-				500.0f,
+				300.0f,
 				_source);
 			aProjectile->SetIsProjectile(true);
 			aProjectile->SetCollider(true);

@@ -23,10 +23,10 @@ void ReloadGun()
 
 void DamageBoss()
 {
-	if (engine->isCurrentlyPlaying("Audio/hurt1.wav"))
+	if (engine->isCurrentlyPlaying("Audio/Hurt.wav"))
 		return;
 	engine->setSoundVolume(0.5f);
-	engine->play2D("Audio/hurt1.wav", false);
+	engine->play2D("Audio/Hurt.wav", false);
 	engine->setSoundVolume(1.f);
 }
 
@@ -39,11 +39,8 @@ void DryFire()
 
 void Blast()
 {
-	if (engine->isCurrentlyPlaying("Audio/Blast.wav"))
-		return;
-	engine->setSoundVolume(0.5f);
+	engine->setSoundVolume(0.3f);
 	engine->play2D("Audio/Blast.wav", false);
-	engine->setSoundVolume(1.f);
 }
 
 void DeleteEngine()

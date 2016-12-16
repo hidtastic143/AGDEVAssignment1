@@ -175,7 +175,7 @@ void CWeaponInfo::Reload(void)
 {
 	if (magRounds < maxMagRounds)
 	{
-		if (maxMagRounds - magRounds <= totalRounds)
+		/*if (maxMagRounds - magRounds <= totalRounds)
 		{
 			totalRounds -= maxMagRounds - magRounds;
 			magRounds = maxMagRounds;
@@ -184,7 +184,8 @@ void CWeaponInfo::Reload(void)
 		{
 			magRounds += totalRounds;
 			totalRounds = 0;
-		}
+		}*/
+		magRounds = maxMagRounds;
 	}
 }
 

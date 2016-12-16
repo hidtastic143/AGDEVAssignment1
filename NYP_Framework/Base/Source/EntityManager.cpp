@@ -3,14 +3,16 @@
 #include "Collider/Collider.h"
 #include "Projectile/Laser.h"
 #include "SceneGraph\SceneGraph.h"
+#include "PlayerInfo\PlayerInfo.h"
 #include "RenderHelper.h"
 #include "GraphicsManager.h"
+#include "Enemy\Spaceship.h"
 #include "../Source/Sound.h"
 #include <iostream>
 using namespace std;
 
 // Update all entities
-void EntityManager::Update(double _dt)
+void EntityManager::Update(double _dt, CPlayerInfo* playerInfo, std::vector<SpaceShip*> spaceVec)
 {
 	// Update all entities
 	std::list<EntityBase*>::iterator it, end;
@@ -28,7 +30,7 @@ void EntityManager::Update(double _dt)
 		theSpatialPartition->Update();
 
 	// Check for Collision amongst entities with collider properties
-	CheckForCollision();
+	CheckForCollision(playerInfo, spaceVec);
 
 	// Clean up entities that are done
 	it = entityList.begin();
@@ -244,36 +246,7 @@ bool EntityManager::CheckSphereCollision(EntityBase *ThisEntity, EntityBase *Tha
 	return false;
 }
 
-// Check if this entity collided with another entity, but both must have collider
-bool EntityManager::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEntity)
-{
-	// Get the colliders for the 2 entities
-	CCollider *thisCollider = dynamic_cast<CCollider*>(ThisEntity);
-	CCollider *thatCollider = dynamic_cast<CCollider*>(ThatEntity);
 
-	// Get the minAABB and maxAABB for each entity
-	Vector3 thisMinAABB = ThisEntity->GetPosition() + thisCollider->GetMinAABB();
-	Vector3 thisMaxAABB = ThisEntity->GetPosition() + thisCollider->GetMaxAABB();
-	Vector3 thatMinAABB = ThatEntity->GetPosition() + thatCollider->GetMinAABB();
-	Vector3 thatMaxAABB = ThatEntity->GetPosition() + thatCollider->GetMaxAABB();
-		
-	// Check for overlap
-	if (CheckOverlap(thisMinAABB, thisMaxAABB, thatMinAABB, thatMaxAABB))
-		return true;
-
-	// if AABB collision check fails, then we need to check the other corners of the bounding boxes to 
-	// Do more collision checks with other points on each bounding box
-	Vector3 altThisMinAABB = Vector3(thisMinAABB.x, thisMinAABB.y, thisMaxAABB.z);
-	Vector3 altThisMaxAABB = Vector3(thisMaxAABB.x, thisMaxAABB.y, thisMinAABB.z);
-//	Vector3 altThatMinAABB = Vector3(thatMinAABB.x, thatMinAABB.y, thatMaxAABB.z);
-//	Vector3 altThatMaxAABB = Vector3(thatMaxAABB.x, thatMaxAABB.y, thatMinAABB.z);
-
-	// Check for overlap
-	if (CheckOverlap(altThisMinAABB, altThisMaxAABB, thatMinAABB, thatMaxAABB))
-		return true;
-
-	return false;
-}
 
 // Check where a line segment between two positions intersects a plane
 bool EntityManager::GetIntersection(const float fDst1, const float fDst2, Vector3 P1, Vector3 P2, Vector3 &Hit)
@@ -318,7 +291,7 @@ bool EntityManager::CheckLineSegmentPlane(	Vector3 line_start, Vector3 line_end,
 }
 
 // Check if any Collider is colliding with another Collider
-bool EntityManager::CheckForCollision(void)
+bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<SpaceShip*> spaceVec)
 {
 	// Check for Collision
 	std::list<EntityBase*>::iterator colliderThis, colliderThisEnd;
@@ -378,6 +351,32 @@ bool EntityManager::CheckForCollision(void)
 			EntityBase *thisEntity = dynamic_cast<EntityBase*>(*colliderThis);
 			colliderThatEnd = entityList.end();
 			int counter = 0;
+
+			/*if (CheckAABBCollision(thisEntity, playerInfo))
+			{
+				thisEntity->SetIsDone(true);
+				playerInfo->SetHP(playerInfo->GetHP() - 5);
+				std::cout << "HP : " << playerInfo->GetHP() << std::endl;
+			}*/
+
+			if ((thisEntity->GetPosition() - playerInfo->GetPos()).LengthSquared() <= 3.f )
+			{
+				thisEntity->SetIsDone(true);
+				playerInfo->SetHP(playerInfo->GetHP() - 5);
+				std::cout << "HP : " << playerInfo->GetHP() << std::endl;
+				Blast();
+			}
+
+			for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
+			{
+				if (((*it)->position - thisEntity->GetPosition()).LengthSquared() <= 25.f)
+				{
+					(*it)->isDead = true;
+					thisEntity->SetIsDone(true);
+				}
+			}
+
+
 			for (colliderThat = entityList.begin(); colliderThat != colliderThatEnd; ++colliderThat)
 			{
 				EntityBase *thatEntity = dynamic_cast<EntityBase*>(*colliderThat);
@@ -466,10 +465,82 @@ bool EntityManager::CheckForCollision(void)
 			}
 		}
 	}
+	for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
+	{
+		if (((*it)->position - playerInfo->GetPos()).LengthSquared() <= 3.f)
+		{
+			if (!(*it)->isDead)
+			{
+				(*it)->isDead = true;
+				std::cout << "DERENDERED" << std::endl;
+				Blast();
+				playerInfo->SetHP(playerInfo->GetHP() - 5);
+			}
+		}
+	}
 	return false;
 }
 
 void EntityManager::SetCamera(FPSCamera* assigningCamera)
 {
 	cameraInfo = assigningCamera;
+}
+
+bool EntityManager::CheckAABBCollision(EntityBase* ThisEntity, CPlayerInfo* playerInfo)
+{
+	// Get the colliders for the 2 entities
+	CCollider *thisCollider = dynamic_cast<CCollider*>(ThisEntity);
+
+	// Get the minAABB and maxAABB for each entity
+	Vector3 thisMinAABB = ThisEntity->GetPosition() + thisCollider->GetMinAABB();
+	Vector3 thisMaxAABB = ThisEntity->GetPosition() + thisCollider->GetMaxAABB();
+	Vector3 thatMinAABB = playerInfo->GetPos() + playerInfo->GetMinAABB();
+	Vector3 thatMaxAABB = playerInfo->GetPos() + playerInfo->GetMaxAABB();
+
+	// Check for overlap
+	if (CheckOverlap(thisMinAABB, thisMaxAABB, thatMinAABB, thatMaxAABB))
+		return true;
+
+	// if AABB collision check fails, then we need to check the other corners of the bounding boxes to 
+	// Do more collision checks with other points on each bounding box
+	Vector3 altThisMinAABB = Vector3(thisMinAABB.x, thisMinAABB.y, thisMaxAABB.z);
+	Vector3 altThisMaxAABB = Vector3(thisMaxAABB.x, thisMaxAABB.y, thisMinAABB.z);
+	//	Vector3 altThatMinAABB = Vector3(thatMinAABB.x, thatMinAABB.y, thatMaxAABB.z);
+	//	Vector3 altThatMaxAABB = Vector3(thatMaxAABB.x, thatMaxAABB.y, thatMinAABB.z);
+
+	// Check for overlap
+	if (CheckOverlap(altThisMinAABB, altThisMaxAABB, thatMinAABB, thatMaxAABB))
+		return true;
+
+	return false;
+}
+// Check if this entity collided with another entity, but both must have collider
+bool EntityManager::CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEntity)
+{
+	// Get the colliders for the 2 entities
+	CCollider *thisCollider = dynamic_cast<CCollider*>(ThisEntity);
+	CCollider *thatCollider = dynamic_cast<CCollider*>(ThatEntity);
+
+	// Get the minAABB and maxAABB for each entity
+	Vector3 thisMinAABB = ThisEntity->GetPosition() + thisCollider->GetMinAABB();
+	Vector3 thisMaxAABB = ThisEntity->GetPosition() + thisCollider->GetMaxAABB();
+	Vector3 thatMinAABB = ThatEntity->GetPosition() + thatCollider->GetMinAABB();
+	Vector3 thatMaxAABB = ThatEntity->GetPosition() + thatCollider->GetMaxAABB();
+
+	// Check for overlap
+	if (CheckOverlap(thisMinAABB, thisMaxAABB, thatMinAABB, thatMaxAABB))
+		return true;
+
+	// if AABB collision check fails, then we need to check the other corners of the bounding boxes to 
+	// Do more collision checks with other points on each bounding box
+	Vector3 altThisMinAABB = Vector3(thisMinAABB.x, thisMinAABB.y, thisMaxAABB.z);
+	Vector3 altThisMaxAABB = Vector3(thisMaxAABB.x, thisMaxAABB.y, thisMinAABB.z);
+	//	Vector3 altThatMinAABB = Vector3(thatMinAABB.x, thatMinAABB.y, thatMaxAABB.z);
+	//	Vector3 altThatMaxAABB = Vector3(thatMaxAABB.x, thatMaxAABB.y, thatMinAABB.z);
+
+	// Check for overlap
+	if (CheckOverlap(altThisMinAABB, altThisMaxAABB, thatMinAABB, thatMaxAABB))
+		return true;
+
+	return false;
 }

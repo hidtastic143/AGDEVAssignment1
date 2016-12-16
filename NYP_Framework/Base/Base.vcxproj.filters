@@ -135,6 +135,9 @@
     <ClCompile Include="Source\Sound.cpp">
       <Filter>Audio</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Enemy\Spaceship.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -226,6 +229,9 @@
     </ClInclude>
     <ClInclude Include="Source\Sound.h">
       <Filter>Audio</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Spaceship.h">
+      <Filter>Enemy</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

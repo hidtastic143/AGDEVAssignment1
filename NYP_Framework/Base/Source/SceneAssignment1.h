@@ -12,8 +12,7 @@
 #include "GenericEntity.h"
 #include "SceneGraph/UpdateTransformation.h"
 #include "Enemy\Enemy.h"
-
-
+#include "Enemy\Spaceship.h"
 class ShaderProgram;
 class SceneManager;
 class TextEntity;
@@ -42,7 +41,12 @@ private:
 
 	GenericEntity* theCube;
 	GenericEntity* Rifle;
+	GenericEntity* background;
 	Enemy* enemy;
+	SpaceShip* spaceShip;
+
+
+	std::vector<SpaceShip*> spaceVec;
 
 	static SceneAssignment1* sInstance; // The pointer to the object that gets registered
 };

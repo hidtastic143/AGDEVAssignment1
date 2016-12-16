@@ -7,12 +7,14 @@
 #include "SpatialPartition\SpatialPartition.h"
 
 class EntityBase;
+class CPlayerInfo;
+class SpaceShip;
 
 class EntityManager : public Singleton<EntityManager>
 {
 	friend Singleton<EntityManager>;
 public:
-	void Update(double _dt);
+	void Update(double _dt, CPlayerInfo* playerInfo, std::vector<SpaceShip*> cool);
 	void Render();
 	void RenderUI();
 
@@ -36,6 +38,9 @@ private:
 	bool CheckSphereCollision(EntityBase *ThisEntity, EntityBase *ThatEntity);
 	// Check if this entity collided with another entity, but both must have collider
 	bool CheckAABBCollision(EntityBase *ThisEntity, EntityBase *ThatEntity);
+
+	bool CheckAABBCollision(EntityBase *ThisEntity, CPlayerInfo* playerInfo);
+
 	// Check for intersection between a line segment and a plane
 	bool GetIntersection(const float fDst1, const float fDst2, Vector3 P1, Vector3 P2, Vector3 &Hit);
 	// Check for intersection between a line segment and a plane
@@ -45,7 +50,7 @@ private:
 	// Check two positions are within a box region
 	bool InBox(Vector3 Hit, Vector3 B1, Vector3 B2, const int Axis);
 	// Check if any Collider is colliding with another Collider
-	bool CheckForCollision();
+	bool CheckForCollision(CPlayerInfo* playerInfo, std::vector<SpaceShip*> spaceVec);
 
 	std::list<EntityBase*> entityList;
 	FPSCamera* cameraInfo;

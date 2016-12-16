@@ -151,7 +151,7 @@ void Enemy::Update(double dt)
 	Constrain();
 
 	Timer+=dt;
-	if (Timer > 10 && !Fire)
+	if (Timer > 5 && !Fire)
 	{
 		Fire = true;
 		Timer = 0;
@@ -195,7 +195,16 @@ void Enemy::AttackPlayer(Vector3 position, Vector3 target)
 {
 	if (Fire)
 	{
-		CProjectile* Car = Create::Projectiles("car",position,(target-position).Normalized(),5.0f,200.f);
+		CProjectile* Car = Create::Projectiles("car",
+			Vector3(position.x, position.y, position.z + 20),
+			(target - Vector3(position.x, position.y, position.z + 20)).Normalized(),
+			5.0f,
+			200.f);
+
+		
+		Car->SetIsProjectile(true);
+		Car->SetCollider(true);
+		Car->SetAABB(Vector3(2, 2, 2), Vector3(-2, -2, -2));
 		//Car->SetCollider(true);
 		//Car->SetAABB()
 		Car->InitLOD("car", "sphere", "cube3");

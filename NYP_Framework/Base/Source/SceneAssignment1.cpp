@@ -22,6 +22,7 @@
 #include "Light.h"
 #include "SkyBox/SkyBoxEntity.h"
 #include "SceneGraph\SceneGraph.h"
+#include "Enemy\Spaceship.h"
 #include "SpatialPartition\SpatialPartition.h"
 #include "RenderHelper.h"
 
@@ -195,6 +196,9 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("M4A4", "OBJ//M4A4.obj");
 	MeshBuilder::GetInstance()->GetMesh("M4A4")->textureID = LoadTGA("Image//M4A4_Texture.tga");
 
+	MeshBuilder::GetInstance()->GenerateOBJ("SecondWeapon", "OBJ//Pistol.obj");
+	MeshBuilder::GetInstance()->GetMesh("SecondWeapon")->textureID = LoadTGA("Image//Pistol_Texture.tga");
+
 	MeshBuilder::GetInstance()->GenerateOBJ("Barricade1", "OBJ//Barricade.obj");
 	MeshBuilder::GetInstance()->GetMesh("Barricade1")->textureID = LoadTGA("Image//Barricade_Texture.tga");
 	MeshBuilder::GetInstance()->GenerateOBJ("Barricade2", "OBJ//Barricade.obj");
@@ -210,11 +214,17 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("Barricade7", "OBJ//Barricade.obj");
 	MeshBuilder::GetInstance()->GetMesh("Barricade7")->textureID = LoadTGA("Image//Barricade_Texture.tga");
 
+	MeshBuilder::GetInstance()->GenerateOBJ("Spaceship", "OBJ//SpaceShip.obj");
+	MeshBuilder::GetInstance()->GetMesh("Spaceship")->textureID = LoadTGA("Image//SpaceShip_Texture.tga");
+
+	MeshBuilder::GetInstance()->GenerateQuad("Spaceship2", Color(1.0f, 1.0f, 0.0f), 10.0f);
+	MeshBuilder::GetInstance()->GetMesh("Spaceship2")->textureID = LoadTGA("Image//SpaceShip2D.tga");
+
 	//Bullet
 	MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(1.0f, 0.64f, 0.0f), 1.0f);
 
 	//LoseScreen
-	MeshBuilder::GetInstance()->GenerateQuad("Lose", Color(0.f, 0.f, 0.f), 1.f);
+	MeshBuilder::GetInstance()->GenerateQuad("Lose", Color(0.f, 0.f, 0.f), 10.f);
 	MeshBuilder::GetInstance()->GetMesh("Lose")->textureID = LoadTGA("Image//LoseScreen.tga");
 
 	//Skybox
@@ -238,7 +248,7 @@ void SceneAssignment1::Init()
 	CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);
 	CSpatialPartition::GetInstance()->SetMesh("GRIDMESH");
 	CSpatialPartition::GetInstance()->SetCamera(&camera);
-	CSpatialPartition::GetInstance()->SetLevelOfDetails(40000.0f, 100000.0f);
+	CSpatialPartition::GetInstance()->SetLevelOfDetails(4000.0f, 16000.0f);
 	EntityManager::GetInstance()->SetSpatialPartition(CSpatialPartition::GetInstance());
 	CProjectile::GetInstance()->SetSpatialPartition(CSpatialPartition::GetInstance());
 	// Create entities into the scen
@@ -261,10 +271,21 @@ void SceneAssignment1::Init()
 	GenericEntity* Barricade7 = Create::Entity("Barricade7");
 	Barricade->SetAABB(Barricade7->GetScale(), -Barricade7->GetScale());
 
+	background = Create::Asset("Lose");
+
 	playerInfo->getPrimaryWeapon()->SetMesh(MeshBuilder::GetInstance()->GetMesh("M4A4"));
+	playerInfo->getSecondaryWeapon()->SetMesh(MeshBuilder::GetInstance()->GetMesh("SecondWeapon"));
 
 	enemy = new Enemy();
 	enemy->Init();
+
+	for (int i = 0; i < 20; i++)
+	{
+		spaceShip = new SpaceShip();
+		spaceShip->Init(playerInfo);
+		spaceVec.push_back(spaceShip);
+	}
+	//enemy->InitLOD("Spaceship", "Spaceship", "Spaceship2");
 
 	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
 	//	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
@@ -290,13 +311,14 @@ void SceneAssignment1::Init()
 
 	GenericEntity* WholeDish = Create::Entity("WholeDish");
 
-
 	// Customise the ground entity
 	groundEntity->SetPosition(Vector3(0, -10, 0));
 	groundEntity->SetScale(Vector3(100.0f, 100.0f, 100.0f));
 	groundEntity->SetGrids(Vector3(10.0f, 1.0f, 10.0f));
 	playerInfo->SetTerrain(groundEntity);
-	//enemy->setTerrain(groundEntity);
+	enemy->setTerrain(groundEntity);
+
+	playerInfo->SetBoundary(Vector3(24.f, 40.f, 500.f), Vector3(-24.f, 40.f, 450.f));
 
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
@@ -313,8 +335,29 @@ void SceneAssignment1::Init()
 void SceneAssignment1::Update(double dt)
 {
 	// Update our entities
-	EntityManager::GetInstance()->Update(dt);
 	CSpatialPartition::GetInstance()->Update();
+
+	static float stopwatchSpawner = 0.f;
+	stopwatchSpawner += 2 * dt;
+
+	for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
+	{
+		if (stopwatchSpawner > 2.6f)
+		{
+			if (!(*it)->GetReady())
+			{
+				(*it)->SetReady(true);
+				(*it)->velocity = (playerInfo->GetPos() - (*it)->getPos()).Normalized() * (*it)->m_dSpeed;
+				stopwatchSpawner = false;
+			}
+		}
+
+		if ((*it)->GetReady())
+		{
+			(*it)->Update(dt);
+		}
+	}
+	EntityManager::GetInstance()->Update(dt, playerInfo, spaceVec);
 
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
 	if (KeyboardController::GetInstance()->IsKeyDown('1'))
@@ -416,7 +459,7 @@ void SceneAssignment1::Update(double dt)
 void SceneAssignment1::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
+	GraphicsManager::GetInstance()->UpdateLightUniforms();
 
 	// Setup 3D pipeline then render 3D
 	
@@ -427,25 +470,39 @@ void SceneAssignment1::Render()
 	int WindowWidth = Application::GetInstance().GetWindowWidth();
 	int WindowHeight = Application::GetInstance().GetWindowHeight();
 
+	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+	GraphicsManager::GetInstance()->AttachCamera(&camera);
+
+	theSkyBox->Render();
+	groundEntity->Render();
+
 	if (EntityManager::GetInstance()->Health > 0)
 	{
-		GraphicsManager::GetInstance()->UpdateLightUniforms();
-		GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-		GraphicsManager::GetInstance()->AttachCamera(&camera);
+
+		// Setup 2D pipeline then render 2D
+		
 		EntityManager::GetInstance()->Render();
-		theSkyBox->Render();
-		groundEntity->Render();
+		//spaceShip->Render();
+		for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
+		{
+			if ((*it)->GetReady() && !(*it)->isDead)
+			{
+				(*it)->Render();
+			}
+		}
 
 		if (playerInfo->getWeaponHeld() == playerInfo->getPrimaryWeapon())
 			playerInfo->getPrimaryWeapon()->Render(playerInfo);
 		else if (playerInfo->getWeaponHeld() == playerInfo->getSecondaryWeapon())
 			playerInfo->getSecondaryWeapon()->Render(playerInfo);
 
-		// Setup 2D pipeline then render 2D
-		
 		GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 		GraphicsManager::GetInstance()->DetachCamera();
 		EntityManager::GetInstance()->RenderUI();
+	}
+	if (playerInfo->GetHP() <= 0 )
+	{
+		background->Render();
 	}
 }
 
