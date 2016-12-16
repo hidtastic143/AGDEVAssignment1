@@ -9,4 +9,9 @@ void StartUP();
 void DeleteEngine();
 
 void PlayGun();
+void ReloadGun();
+void DamageBoss();
+void DryFire();
+void Blast();
+
 #endif

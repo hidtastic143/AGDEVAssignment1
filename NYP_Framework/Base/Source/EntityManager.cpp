@@ -7,6 +7,7 @@
 #include "RenderHelper.h"
 #include "GraphicsManager.h"
 #include "Enemy\Spaceship.h"
+#include "../Source/Sound.h"
 #include <iostream>
 using namespace std;
 
@@ -363,6 +364,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 				thisEntity->SetIsDone(true);
 				playerInfo->SetHP(playerInfo->GetHP() - 5);
 				std::cout << "HP : " << playerInfo->GetHP() << std::endl;
+				Blast();
 			}
 
 			for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
@@ -389,6 +391,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{
 							Health -= 1000;
+							DamageBoss();
 							thisEntity->SetIsDone(true);
 							CSceneGraph::GetInstance()->DeleteNode((*colliderThis));
 							//CSceneGraph::GetInstance()->DeleteNode((*colliderThat));
@@ -400,6 +403,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{
 							Health -= 250;
+							DamageBoss();
 							thisEntity->SetIsDone(true);
 							//thatEntity->SetIsDone(true);
 							CSceneGraph::GetInstance()->DeleteNode((*colliderThis));
@@ -411,6 +415,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{
 							Health -= 100;
+							DamageBoss();
 							thisEntity->SetIsDone(true);
 							//thatEntity->SetIsDone(true);
 							CSceneGraph::GetInstance()->DeleteNode((*colliderThis));
@@ -422,6 +427,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{						
 							Health -= 100;
+							DamageBoss();
 							thisEntity->SetIsDone(true);
 							//thatEntity->SetIsDone(true);
 							CSceneGraph::GetInstance()->DeleteNode((*colliderThis));
@@ -467,6 +473,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 			{
 				(*it)->isDead = true;
 				std::cout << "DERENDERED" << std::endl;
+				Blast();
 				playerInfo->SetHP(playerInfo->GetHP() - 5);
 			}
 		}

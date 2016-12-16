@@ -2,11 +2,12 @@
 #include "EntityBase.h"
 #include "Vector3.h"
 #include "Collider/Collider.h"
+#include "../LevelOfDetails/LevelOfDetails.h"
 
 class Mesh;
 class CPlayerInfo;
 
-class CProjectile : public EntityBase, public CCollider
+class CProjectile : public EntityBase, public CCollider, public CLevelOfDetails
 {
 public:
 	CProjectile(void);

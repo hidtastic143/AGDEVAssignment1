@@ -18,9 +18,9 @@ void Rifle::Init(void)
 	CWeaponInfo::Init();
 
 	// The number of ammunition in a magazine for this weapon
-	magRounds = 30;
+	magRounds = 15;
 	// The maximum number of ammunition for this magazine for this weapon
-	maxMagRounds = 30;
+	maxMagRounds = 15;
 	// The current total number of rounds currently carried by this player
 	totalRounds = 210;
 	// The max total number of rounds currently carried by this player
@@ -51,14 +51,15 @@ void Rifle::Discharge(Vector3 position, Vector3 target, CPlayerInfo* _source)
 				_source);
 			aProjectile->SetIsProjectile(true);
 			aProjectile->SetCollider(true);
+			aProjectile->InitLOD("cube", "sphere", "cubeSG");
 			aProjectile->SetAABB(Vector3(0.05f, 0.05f, 0.05f), Vector3(-0.05f, -0.05f, -0.05f));
 			bFire = false;
 			magRounds--;
 			PlayGun();
 		}
-	}
-	else
-	{
-		int a = 0;
+		else if (magRounds <= 0)
+		{
+			DryFire();
+		}
 	}
 }

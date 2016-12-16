@@ -23,6 +23,7 @@
 #include "SceneGraph\SceneGraph.h"
 #include "Enemy\Spaceship.h"
 #include "SpatialPartition\SpatialPartition.h"
+#include "RenderHelper.h"
 
 #include <iostream>
 using namespace std;
@@ -140,10 +141,14 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateSphere("sphere", Color(1, 0, 0), 18, 36, 0.5f);
 	MeshBuilder::GetInstance()->GenerateCone("cone", Color(0.5f, 1, 0.3f), 36, 10.f, 10.f);
 
-	MeshBuilder::GetInstance()->GenerateCube("Zhead", Color(0, 1, 0), 1.f);
-	MeshBuilder::GetInstance()->GenerateCube("Zbody", Color(0, 0, 1), 1.f);
+	MeshBuilder::GetInstance()->GenerateOBJ("Zhead", "OBJ//cube.obj");
+	MeshBuilder::GetInstance()->GetMesh("Zhead")->textureID = LoadTGA("Image//head.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("Zbody", "OBJ//cube.obj");
+	MeshBuilder::GetInstance()->GetMesh("Zbody")->textureID = LoadTGA("Image//body.tga");
 	MeshBuilder::GetInstance()->GenerateCube("Zlhand", Color(0, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("Zlhand")->textureID = LoadTGA("Image//arm.tga");
 	MeshBuilder::GetInstance()->GenerateCube("Zrhand", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("Zrhand")->textureID = LoadTGA("Image//arm.tga");
 	MeshBuilder::GetInstance()->GenerateCube("Zlleg", Color(1, 1, 0), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("Zlleg")->textureID = LoadTGA("Image//Legs.tga");
 	MeshBuilder::GetInstance()->GenerateCube("Zrleg", Color(1, 0, 0), 1.f);
@@ -191,6 +196,10 @@ void SceneAssignment1::Init()
 	//Bullet
 	MeshBuilder::GetInstance()->GenerateCube("cubeSG", Color(1.0f, 0.64f, 0.0f), 1.0f);
 
+	//LoseScreen
+	MeshBuilder::GetInstance()->GenerateQuad("Lose", Color(0.f, 0.f, 0.f), 10.f);
+	MeshBuilder::GetInstance()->GetMesh("Lose")->textureID = LoadTGA("Image//LoseScreen.tga");
+
 	//Skybox
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_FRONT", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BACK", Color(1, 1, 1), 1.f);
@@ -215,8 +224,7 @@ void SceneAssignment1::Init()
 	CSpatialPartition::GetInstance()->SetLevelOfDetails(4000.0f, 16000.0f);
 	EntityManager::GetInstance()->SetSpatialPartition(CSpatialPartition::GetInstance());
 
-	// Create entities into the scene
-	//GenericEntity* car = Create::Entity("car");
+	// Create entities into the scen
 
 	//Rifle = Create::Entity("M4A4");
 	//Rifle->SetPosition(Vector3(playerInfo->GetPos().x + 1.f, playerInfo->GetPos().y - 2.f, playerInfo->GetPos().z - 5));
@@ -235,6 +243,8 @@ void SceneAssignment1::Init()
 	Barricade->SetAABB(Barricade6->GetScale(), -Barricade6->GetScale());
 	GenericEntity* Barricade7 = Create::Entity("Barricade7");
 	Barricade->SetAABB(Barricade7->GetScale(), -Barricade7->GetScale());
+
+	background = Create::Asset("Lose");
 
 	playerInfo->getPrimaryWeapon()->SetMesh(MeshBuilder::GetInstance()->GetMesh("M4A4"));
 
@@ -256,7 +266,6 @@ void SceneAssignment1::Init()
 	theSkyBox = Create::SkyBox("SKYBOX_FRONT", "SKYBOX_BACK",
 		"SKYBOX_LEFT", "SKYBOX_RIGHT",
 		"SKYBOX_TOP", "SKYBOX_BOTTOM");
-
 
 	// Customise the ground entity
 	groundEntity->SetPosition(Vector3(0, -10, 0));
@@ -408,15 +417,16 @@ void SceneAssignment1::Render()
 	GraphicsManager::GetInstance()->UpdateLightUniforms();
 
 	// Setup 3D pipeline then render 3D
+	
 	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
 	GraphicsManager::GetInstance()->AttachCamera(&camera);
-	theSkyBox->Render();
-	groundEntity->Render();
 	
-	if (playerInfo->getWeaponHeld() == playerInfo->getPrimaryWeapon())
-		playerInfo->getPrimaryWeapon()->Render(playerInfo);
-	else if (playerInfo->getWeaponHeld() == playerInfo->getSecondaryWeapon())
-		playerInfo->getSecondaryWeapon()->Render(playerInfo);
+
+	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
+	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+
+	int WindowWidth = Application::GetInstance().GetWindowWidth();
+	int WindowHeight = Application::GetInstance().GetWindowHeight();
 
 	//spaceShip->Render();
 
@@ -428,18 +438,30 @@ void SceneAssignment1::Render()
 		}
 	}
 
-	if (EntityManager::GetInstance()->Health > 0)
-	{
 		EntityManager::GetInstance()->Render();
 
+		
+		theSkyBox->Render();
+		groundEntity->Render();
+
+		if (playerInfo->getWeaponHeld() == playerInfo->getPrimaryWeapon())
+			playerInfo->getPrimaryWeapon()->Render(playerInfo);
+		else if (playerInfo->getWeaponHeld() == playerInfo->getSecondaryWeapon())
+			playerInfo->getSecondaryWeapon()->Render(playerInfo);
+	if (EntityManager::GetInstance()->Health > 0)
+	{
+
 		// Setup 2D pipeline then render 2D
-		int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
-		int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
+		
 		GraphicsManager::GetInstance()->SetOrthographicProjection(-halfWindowWidth, halfWindowWidth, -halfWindowHeight, halfWindowHeight, -10, 10);
 		GraphicsManager::GetInstance()->DetachCamera();
 		EntityManager::GetInstance()->RenderUI();
 	}
-
+	if (playerInfo->GetHP() <= 0 )
+	{
+		background->Render();
+	}
+		
 }
 
 void SceneAssignment1::Exit()

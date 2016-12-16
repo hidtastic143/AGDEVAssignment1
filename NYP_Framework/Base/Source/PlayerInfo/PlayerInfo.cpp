@@ -446,6 +446,7 @@ void CPlayerInfo::Update(double dt)
 		if (primaryWeapon)
 		{
 			primaryWeapon->Reload();
+			ReloadGun();
 			//primaryWeapon->PrintSelf();
 		}
 		if (secondaryWeapon)
@@ -460,7 +461,7 @@ void CPlayerInfo::Update(double dt)
 		secondaryWeapon->Update(dt);
 
 	// if Mouse Buttons were activated, then act on them
-	if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB))
+	if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB) && !KeyboardController::GetInstance()->IsKeyReleased('R'))
 	{
 		if (weaponHeld == primaryWeapon)
 			primaryWeapon->Discharge(position, target, this);

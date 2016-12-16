@@ -200,7 +200,9 @@ void Enemy::AttackPlayer(Vector3 position, Vector3 target)
 		Car->SetIsProjectile(true);
 		Car->SetCollider(true);
 		Car->SetAABB(Vector3(2, 2, 2), Vector3(-2, -2, -2));
-		
+		//Car->SetCollider(true);
+		//Car->SetAABB()
+		//Car->InitLOD("car", "sphere", "cube3");
 		Fire = false;
 	}
 }

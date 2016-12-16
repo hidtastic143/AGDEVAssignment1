@@ -37,7 +37,7 @@ SpaceShip::~SpaceShip()
 void SpaceShip::Init(CPlayerInfo* playerInfo)
 {
 	position.Set(Math::RandFloatMinMax(-40, 40), Math::RandFloatMinMax(0, 10), Math::RandFloatMinMax(100, 200));
-	m_dSpeed = 40.f;
+	m_dSpeed = 35.f;
 	InitLOD("Spaceship", "cube", "Spaceship2");
 	isReady = false;
 	isDead = false;
