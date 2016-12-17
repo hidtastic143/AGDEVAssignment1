@@ -362,7 +362,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 			if ((thisEntity->GetPosition() - playerInfo->GetPos()).LengthSquared() <= 3.f )
 			{
 				thisEntity->SetIsDone(true);
-				playerInfo->SetHP(playerInfo->GetHP() - 5);
+				playerInfo->SetHP(playerInfo->GetHP() - 10);
 				std::cout << "HP : " << playerInfo->GetHP() << std::endl;
 				Blast();
 			}
@@ -464,10 +464,24 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 				
 			}
 		}
+		else if ((*colliderThis)->GetIsCar())
+		{
+			EntityBase *thisEntity = dynamic_cast<EntityBase*>(*colliderThis);
+			colliderThatEnd = entityList.end();
+			int counter = 0;
+
+			if ((thisEntity->GetPosition() - playerInfo->GetPos()).LengthSquared() <= 5.f)
+			{
+				thisEntity->SetIsDone(true);
+				playerInfo->SetHP(playerInfo->GetHP() - 25);
+				std::cout << "HP : " << playerInfo->GetHP() << std::endl;
+				Blast();
+			}
+		}
 	}
 	for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
 	{
-		if (((*it)->position - playerInfo->GetPos()).LengthSquared() <= 3.f)
+		if (((*it)->position - playerInfo->GetPos()).LengthSquared() <= 5.f)
 		{
 			if (!(*it)->isDead)
 			{

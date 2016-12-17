@@ -41,18 +41,20 @@ void Enemy::Init()
 	Zbody->SetIsZombieBody(true);
 	//Zbody->SetCollider(true);
 	Zbody->SetAABB(Zbody->GetScale() - Vector3(15, 20, 15), -Zbody->GetScale() - Vector3(-15, -20, -15));
-	//Zbody->InitLOD("Zbody", "sphere", "cubeSG");
+	Zbody->InitLOD("sphere", "Zbody", "ZbodyQ");
 	CSceneNode* parent = CSceneGraph::GetInstance()->AddNode(Zbody);
 
 	GenericEntity* Zhead = Create::Entity("Zhead");
 	Zhead->SetIsZombieHead(true);
 	Zhead->SetCollider(true);
 	Zhead->SetAABB(Zhead->GetScale() - Vector3(10, 10, 10), -Zhead->GetScale() - Vector3(-10, -10, -10));
+	Zhead->InitLOD("sphere","Zhead", "ZheadQ");
 	CSceneNode* childHead = parent->AddChild(Zhead);
 
 	GenericEntity* Zlhand = Create::Entity("Zlhand");
 	Zlhand->SetAABB(Zlhand->GetScale() - Vector3(5, 5, 5), -Zlhand->GetScale() - Vector3(-5, -5, -5));
 	Zlhand->SetIsZombieHand(true);
+	Zlhand->InitLOD("sphere", "Zlhand", "ZlhandQ");
 	CSceneNode* childLeftHand = parent->AddChild(Zlhand);
 	///childLeftHand->ApplyRotate(90, 1, 0, 0);
 	////childLeftHand->ApplyTranslate(3.5f, 2.f, -	2.f);
@@ -60,6 +62,7 @@ void Enemy::Init()
 	Zrhand = Create::Entity("Zrhand");
 	Zrhand->SetAABB(Zrhand->GetScale() - Vector3(5, 5, 5), -Zrhand->GetScale() - Vector3(-5, -5, -5));
 	Zrhand->SetIsZombieHand(true);
+	Zrhand->InitLOD("sphere", "Zrhand", "ZrhandQ");
 	CSceneNode* childRightHand = parent->AddChild(Zrhand);
 	//childRightHand->ApplyRotate(90, 1, 0, 0);
 	//childRightHand->ApplyTranslate(-3.5f, 2.f, -2.f);
@@ -67,12 +70,14 @@ void Enemy::Init()
 	GenericEntity* Zlleg = Create::Entity("Zlleg");
 	Zlleg->SetAABB(Zlleg->GetScale(), -Zlleg->GetScale());
 	Zlleg->SetIsZombieLeg(true);
+	Zlleg->InitLOD("sphere", "Zlleg", "ZllegQ");
 	CSceneNode* childLeftLeg = parent->AddChild(Zlleg);
 	//childLeftLeg->ApplyTranslate(1.f, -5.f, 0.f);
 
 	GenericEntity* Zrleg = Create::Entity("Zrleg");
 	Zrleg->SetAABB(Zrleg->GetScale(), -Zrleg->GetScale());
 	Zrleg->SetIsZombieLeg(true);
+	Zrleg->InitLOD("sphere", "Zlleg", "Zrleg");
 	CSceneNode* childRightLeg = parent->AddChild(Zrleg);
 	//childRightLeg->ApplyTranslate(-1.f, -5.f, 0.f);
 
@@ -197,12 +202,11 @@ void Enemy::AttackPlayer(Vector3 position, Vector3 target)
 			200.f);
 
 		
-		Car->SetIsProjectile(true);
-		Car->SetCollider(true);
-		Car->SetAABB(Vector3(2, 2, 2), Vector3(-2, -2, -2));
+		//Car->SetIsProjectile(true);
 		//Car->SetCollider(true);
-		//Car->SetAABB()
-		//Car->InitLOD("car", "sphere", "cube3");
+		Car->SetIsCar(true);
+		Car->SetAABB(Vector3(5, 5, 5), Vector3(-5, -5, -5));
+		Car->InitLOD("car", "sphere", "cube3");
 		Fire = false;
 	}
 }

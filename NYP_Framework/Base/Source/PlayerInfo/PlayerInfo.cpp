@@ -461,7 +461,7 @@ void CPlayerInfo::Update(double dt)
 		secondaryWeapon->Update(dt);
 
 	// if Mouse Buttons were activated, then act on them
-	if (MouseController::GetInstance()->IsButtonPressed(MouseController::LMB) && !KeyboardController::GetInstance()->IsKeyReleased('R'))
+	if (MouseController::GetInstance()->IsButtonDown(MouseController::LMB) && !KeyboardController::GetInstance()->IsKeyReleased('R'))
 	{
 		if (weaponHeld == primaryWeapon)
 			primaryWeapon->Discharge(position, target, this);

@@ -11,6 +11,7 @@ EntityBase::EntityBase()
 	, isZombieHand(false)
 	, isZombieLeg(false)
 	, isProjectile(false)
+	, isCar(false)
 {
 }
 
@@ -111,4 +112,14 @@ void EntityBase::SetIsProjectile(const bool isProjectile)
 bool EntityBase::GetIsProjectile(void) const
 {
 	return isProjectile;
+}
+
+void EntityBase::SetIsCar(const bool isCar)
+{
+	this->isCar = isCar;
+}
+
+bool EntityBase::GetIsCar(void) const
+{
+	return isCar;
 }

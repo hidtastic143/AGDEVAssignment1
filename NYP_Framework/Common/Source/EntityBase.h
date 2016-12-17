@@ -71,6 +71,9 @@ public:
 	virtual void SetIsProjectile(const bool isProjectile);
 	virtual bool GetIsProjectile(void) const;
 
+	virtual void SetIsCar(const bool isCar);
+	virtual bool GetIsCar(void) const;
+
 protected:
 	Vector3 position;
 	Vector3 scale;
@@ -91,6 +94,7 @@ protected:
 
 
 	bool isProjectile;
+	bool isCar;
 };
 
 #endif // ENTITY_BASE_H

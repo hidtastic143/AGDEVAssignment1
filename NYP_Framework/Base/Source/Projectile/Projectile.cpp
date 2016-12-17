@@ -5,6 +5,8 @@
 #include "GraphicsManager.h"
 #include "RenderHelper.h"
 
+CProjectile *CProjectile::sp_instance = 0;
+
 CProjectile::CProjectile(void)
 	: modelMesh(NULL)
 	, m_bStatus(false)
@@ -12,6 +14,7 @@ CProjectile::CProjectile(void)
 	, m_fLifetime(-1.0f)
 	, m_fSpeed(10.0f)
 	, theSource(NULL)
+	, theSpatialPartition(NULL)
 {
 }
 
@@ -22,6 +25,7 @@ CProjectile::CProjectile(Mesh* _modelMesh)
 	, m_fLifetime(-1)
 	, m_fSpeed(10.0f)
 	, theSource(NULL)
+	, theSpatialPartition(NULL)
 {
 }
 
@@ -117,6 +121,9 @@ void CProjectile::Update(double dt)
 		return;
 	}
 
+
+
+
 	// Update Position
 	position.Set(	position.x + (float)(theDirection.x * dt * m_fSpeed),
 	 			    position.y + (float)(theDirection.y * dt * m_fSpeed),
@@ -137,10 +144,20 @@ void CProjectile::Render(void)
 	modelStack.PushMatrix();
 	modelStack.Translate(position.x, position.y, position.z);
 	//modelStack.Scale(scale.x, scale.y, scale.z);
-	RenderHelper::RenderMesh(modelMesh);
+	if (GetLODStatus())
+	{
+		if (theDetailLevel != NO_DETAILS)
+		{
+			RenderHelper::RenderMesh(GetLODMesh());
+		}
+	}
 	modelStack.PopMatrix();
 }
 
+void CProjectile::SetSpatialPartition(CSpatialPartition* theSpatialPartition)
+{
+	this->theSpatialPartition = theSpatialPartition;
+}
 
 CProjectile* Create::Projectiles(const std::string& _meshName,
 	const Vector3& _position,
@@ -156,7 +173,7 @@ CProjectile* Create::Projectiles(const std::string& _meshName,
 	result->Set(_position, _direction, m_fLifetime, m_fSpeed);
 	result->SetStatus(true);
 	result->SetCollider(true);
-	result->InitLOD("cube", "sphere", "cubeSG");
+	result->InitLOD(_meshName, "cube", "sphere");
 	EntityManager::GetInstance()->AddEntity(result);
 	return result;
 }
@@ -178,7 +195,7 @@ CProjectile* Create::Projectile(const std::string& _meshName,
 	result->SetStatus(true);
 	result->SetCollider(true);
 	result->SetSource(_source);
-	result->InitLOD("cube", "sphere", "cubeSG");
+	result->InitLOD(_meshName, "cube", "sphere");
 	EntityManager::GetInstance()->AddEntity(result);
 
 	return result;

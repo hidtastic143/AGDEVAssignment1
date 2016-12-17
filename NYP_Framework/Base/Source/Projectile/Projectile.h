@@ -3,6 +3,7 @@
 #include "Vector3.h"
 #include "Collider/Collider.h"
 #include "../LevelOfDetails/LevelOfDetails.h"
+#include "../SpatialPartition/SpatialPartition.h"
 
 class Mesh;
 class CPlayerInfo;
@@ -14,6 +15,22 @@ public:
 	CProjectile(Mesh* _modelMesh);
 	~CProjectile(void);
 public:
+	static CProjectile *GetInstance()
+	{
+		if (!sp_instance)
+			sp_instance = new CProjectile;
+		return sp_instance;
+	}
+	static bool DropInstance()
+	{
+		if (sp_instance)
+		{
+			delete sp_instance;
+			sp_instance = NULL;
+			return true;
+		}
+		return false;
+	}
 	// Activate the projectile. true == active, false == inactive
 	void SetStatus(const bool m_bStatus);
 	// get status of the projectile. true == active, false == inactive
@@ -43,7 +60,11 @@ public:
 	virtual void Update(double dt = 0.0333f);
 	// Render this projectile
 	virtual void Render(void);
+
+	void SetSpatialPartition(CSpatialPartition* theSpatialPartition);
+
 protected:
+	static CProjectile *sp_instance;
 	// The model mesh for this projectile
 	Mesh* modelMesh;
 	// Boolean flag to indicate if this projectile is active. If not active, then do not compute/update
@@ -56,6 +77,8 @@ protected:
 	Vector3 theDirection;
 	// The character which fired this projectile
 	CPlayerInfo* theSource;
+
+	CSpatialPartition* theSpatialPartition;
 };
 
 namespace Create
