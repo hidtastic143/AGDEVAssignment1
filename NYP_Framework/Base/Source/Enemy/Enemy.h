@@ -41,7 +41,6 @@ public:
 	// Setting terrain to enemy info
 	void setTerrain(GroundEntity* newTerrain);
 
-	void AttackPlayer(Vector3 position, Vector3 target);
 
 	// Get Position
 	Vector3 getPos() const;

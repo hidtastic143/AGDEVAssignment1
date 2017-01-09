@@ -9,12 +9,13 @@
 class EntityBase;
 class CPlayerInfo;
 class SpaceShip;
+class Boss;
 
 class EntityManager : public Singleton<EntityManager>
 {
 	friend Singleton<EntityManager>;
 public:
-	void Update(double _dt, CPlayerInfo* playerInfo, std::vector<SpaceShip*> cool);
+	void Update(double _dt, CPlayerInfo* playerInfo, std::vector<SpaceShip*> cool, Boss* boss);
 	void Render();
 	void RenderUI();
 
@@ -50,7 +51,7 @@ private:
 	// Check two positions are within a box region
 	bool InBox(Vector3 Hit, Vector3 B1, Vector3 B2, const int Axis);
 	// Check if any Collider is colliding with another Collider
-	bool CheckForCollision(CPlayerInfo* playerInfo, std::vector<SpaceShip*> spaceVec);
+	bool CheckForCollision(CPlayerInfo* playerInfo, std::vector<SpaceShip*> spaceVec, Boss* boss);
 
 	std::list<EntityBase*> entityList;
 	FPSCamera* cameraInfo;

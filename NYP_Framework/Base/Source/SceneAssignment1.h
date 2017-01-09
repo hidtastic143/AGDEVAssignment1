@@ -13,6 +13,7 @@
 #include "SceneGraph/UpdateTransformation.h"
 #include "Enemy\Enemy.h"
 #include "Enemy\Spaceship.h"
+#include "Enemy\Boss.h"
 class ShaderProgram;
 class SceneManager;
 class TextEntity;
@@ -43,7 +44,7 @@ private:
 	GenericEntity* Rifle;
 	GenericEntity* background;
 	GenericEntity* bg;
-	Enemy* enemy;
+	Boss* boss;
 	SpaceShip* spaceShip;
 
 	bool win;

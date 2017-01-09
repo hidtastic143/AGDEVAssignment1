@@ -254,8 +254,10 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("GRIDMESH", Color(1, 1, 1), 10.f);
 
 	// Set up the Spatial Partition and pass it to the EntityManager to manage
+	MeshBuilder::GetInstance()->GenerateCube("Testing", Color(0, 0, 1));
+
 	CSpatialPartition::GetInstance()->Init(100, 100, 10, 10);
-	//CSpatialPartition::GetInstance()->SetMesh("GRIDMESH");
+	CSpatialPartition::GetInstance()->SetMesh("GRIDMESH");
 	CSpatialPartition::GetInstance()->SetCamera(&camera);
 	CSpatialPartition::GetInstance()->SetLevelOfDetails(4000.0f, 16000.0f);
 	EntityManager::GetInstance()->SetSpatialPartition(CSpatialPartition::GetInstance());
@@ -290,8 +292,8 @@ void SceneAssignment1::Init()
 	playerInfo->getPrimaryWeapon()->SetMesh(MeshBuilder::GetInstance()->GetMesh("M4A4"));
 	playerInfo->getSecondaryWeapon()->SetMesh(MeshBuilder::GetInstance()->GetMesh("SecondWeapon"));
 
-	enemy = new Enemy();
-	enemy->Init();
+	boss = new Boss();
+	boss->Init();
 
 	for (int i = 0; i < 50; i++)
 	{
@@ -312,11 +314,15 @@ void SceneAssignment1::Init()
 	
 	
 	GenericEntity* DishStand = Create::Entity("DishStand");
+	DishStand->SetCollider(true);
+	DishStand->SetAABB(Vector3(10, 10, 10), Vector3(-10, -10, -10));
 	CSceneNode* parent = CSceneGraph::GetInstance()->AddNode(DishStand);
 	parent->ApplyTranslate(250.f, -10.f, 150.f);
 	GenericEntity* DishNeck = Create::Entity("DishNeck");
 	CSceneNode* child = parent->AddChild(DishNeck);
 	GenericEntity* DishHead = Create::Entity("DishHead");
+	DishHead->SetCollider(true);
+	DishHead->SetAABB(Vector3(10, 10, 10), Vector3(-10, -10, -10));
 	CSceneNode* grandchild = child->AddChild(DishHead);
 	CUpdateTransformation* baseMtx = new CUpdateTransformation();
 	baseMtx->ApplyUpdate(1.f, 0.f, 1.f, 0.f);
@@ -330,7 +336,7 @@ void SceneAssignment1::Init()
 	groundEntity->SetScale(Vector3(100.0f, 100.0f, 100.0f));
 	groundEntity->SetGrids(Vector3(10.0f, 1.0f, 10.0f));
 	playerInfo->SetTerrain(groundEntity);
-	enemy->setTerrain(groundEntity);
+	boss->setTerrain(groundEntity);
 
 	playerInfo->SetBoundary(Vector3(24.f, 40.f, 500.f), Vector3(-24.f, 40.f, 450.f));
 
@@ -360,7 +366,7 @@ void SceneAssignment1::Update(double dt)
 	stopwatchSpawner += 2 * dt;
 
 	
-	EntityManager::GetInstance()->Update(dt, playerInfo, spaceVec);
+	EntityManager::GetInstance()->Update(dt, playerInfo, spaceVec, boss);
 
 	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
 	if (KeyboardController::GetInstance()->IsKeyDown('1'))
@@ -441,7 +447,7 @@ void SceneAssignment1::Update(double dt)
 	// Update the player position and other details based on keyboard and mouse inputs
 	playerInfo->Update(dt);
 
-	if (EntityManager::GetInstance()->Health < 0 && playerInfo->GetHP() > 0)
+	if (boss->GetHealth() <= 0 && playerInfo->GetHP() > 0)
 	{
 		//bg->SetPositionY(background->GetPositionY() + dt);
 		playerInfo->SetTerrain(groundEntity);
@@ -453,10 +459,9 @@ void SceneAssignment1::Update(double dt)
 		win = true;
 	}
 
-	if (playerInfo->GetHP() > 0 && EntityManager::GetInstance()->Health > 0)
+	if (playerInfo->GetHP() > 0 && boss->GetHealth() > 0)
 	{
-		enemy->Update(dt);
-		enemy->AttackPlayer(enemy->Zrhand->GetPosition(), playerInfo->GetPos());
+		boss->Update(dt);
 		for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
 		{
 			if (stopwatchSpawner > 2.6f)
@@ -506,7 +511,7 @@ void SceneAssignment1::Update(double dt)
 
 	std::ostringstream ss2;
 	ss2.precision(13);
-	ss2 << "Boss HP:" << EntityManager::GetInstance()->Health;
+	ss2 << "Boss HP:" << boss->GetHealth();
 	textObj[3]->SetText(ss2.str());
 
 	std::ostringstream ss3;
@@ -538,15 +543,10 @@ void SceneAssignment1::Render()
 	if (playerInfo->GetHP() <= 0)
 	{
 		background->Render();
-		EntityManager::GetInstance()->Health = 0;
+		boss->setHealth(0);
 	}
-	else if (playerInfo->GetHP() > 0 && EntityManager::GetInstance()->Health > 0)
+	else if (playerInfo->GetHP() > 0 && boss->GetHealth() > 0)
 	{
-		theSkyBox->Render();
-		groundEntity->Render();
-		if (EntityManager::GetInstance()->Health > 0)
-		{
-
 			// Setup 2D pipeline then render 2D
 			EntityManager::GetInstance()->Render();
 			if (playerInfo->getWeaponHeld() == playerInfo->getPrimaryWeapon())
@@ -564,16 +564,15 @@ void SceneAssignment1::Render()
 			GraphicsManager::GetInstance()->DetachCamera();
 			EntityManager::GetInstance()->RenderUI();
 			//EntityManager::GetInstance()->Render();
-		}
-		
 	}
-	else if (playerInfo->GetHP() > 0 && EntityManager::GetInstance()->Health < 0)
+	else if (playerInfo->GetHP() > 0 && boss->GetHealth() < 0)
 	{
 		if (win)
 		{
 			bg->Render();
 		}
 	}
+	
 }
 
 void SceneAssignment1::Exit()

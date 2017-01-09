@@ -138,6 +138,9 @@
     <ClCompile Include="Source\Enemy\Spaceship.cpp">
       <Filter>Enemy</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Enemy\Boss.cpp">
+      <Filter>Enemy</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Application.h">
@@ -231,6 +234,9 @@
       <Filter>Audio</Filter>
     </ClInclude>
     <ClInclude Include="Source\Enemy\Spaceship.h">
+      <Filter>Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Enemy\Boss.h">
       <Filter>Enemy</Filter>
     </ClInclude>
   </ItemGroup>

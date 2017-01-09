@@ -6,13 +6,14 @@
 #include "PlayerInfo\PlayerInfo.h"
 #include "RenderHelper.h"
 #include "GraphicsManager.h"
+#include "Enemy\Boss.h"
 #include "Enemy\Spaceship.h"
 #include "../Source/Sound.h"
 #include <iostream>
 using namespace std;
 
 // Update all entities
-void EntityManager::Update(double _dt, CPlayerInfo* playerInfo, std::vector<SpaceShip*> spaceVec)
+void EntityManager::Update(double _dt, CPlayerInfo* playerInfo, std::vector<SpaceShip*> spaceVec, Boss* boss)
 {
 	// Update all entities
 	std::list<EntityBase*>::iterator it, end;
@@ -30,7 +31,7 @@ void EntityManager::Update(double _dt, CPlayerInfo* playerInfo, std::vector<Spac
 		theSpatialPartition->Update();
 
 	// Check for Collision amongst entities with collider properties
-	CheckForCollision(playerInfo, spaceVec);
+	CheckForCollision(playerInfo, spaceVec, boss);
 
 	// Clean up entities that are done
 	it = entityList.begin();
@@ -291,7 +292,7 @@ bool EntityManager::CheckLineSegmentPlane(	Vector3 line_start, Vector3 line_end,
 }
 
 // Check if any Collider is colliding with another Collider
-bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<SpaceShip*> spaceVec)
+bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<SpaceShip*> spaceVec, Boss* boss)
 {
 	// Check for Collision
 	std::list<EntityBase*>::iterator colliderThis, colliderThisEnd;
@@ -384,13 +385,13 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 				if (colliderThat == colliderThis)
 					continue;
 
-				if (Health > 0)
+				if (boss->GetHealth() > 0)
 				{
 					if ((*colliderThat)->GetIsZombieHead())
 					{
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{
-							Health -= 1000;
+							boss->setHealth(boss->GetHealth() - 1000);
 							DamageBoss();
 							thisEntity->SetIsDone(true);
 							CSceneGraph::GetInstance()->DeleteNode((*colliderThis));
@@ -402,7 +403,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 					{
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{
-							Health -= 250;
+							boss->setHealth(boss->GetHealth() - 250);
 							DamageBoss();
 							thisEntity->SetIsDone(true);
 							//thatEntity->SetIsDone(true);
@@ -414,7 +415,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 					{
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{
-							Health -= 100;
+							boss->setHealth(boss->GetHealth() - 100);
 							DamageBoss();
 							thisEntity->SetIsDone(true);
 							//thatEntity->SetIsDone(true);
@@ -426,7 +427,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 					{
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{						
-							Health -= 100;
+							boss->setHealth(boss->GetHealth() - 100);
 							DamageBoss();
 							thisEntity->SetIsDone(true);
 							//thatEntity->SetIsDone(true);
@@ -436,7 +437,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 						}
 					}
 				}
-				else if (Health <= 0)
+				else if (boss->GetHealth() <= 0)
 				{
 					if ((*colliderThat)->GetIsZombieHead())
 					{
@@ -458,10 +459,26 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 						thatEntity->SetIsDone(true);
 						CSceneGraph::GetInstance()->DeleteNode((*colliderThat));
 					}
-
-					
 				}
-				
+				else
+				{
+					if (CheckAABBCollision(thisEntity, thatEntity))
+					{
+						(*colliderThis)->SetIsDone(true);
+						(*colliderThat)->SetIsDone(true);
+
+						// Remove from Scene Graph
+						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThis)))
+						{
+							cout << "*** This Entity removed ***" << endl;
+						}
+						// Remove from Scene Graph
+						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThat)))
+						{
+							cout << "*** That Entity removed ***" << endl;
+						}
+					}
+				}
 			}
 		}
 		else if ((*colliderThis)->GetIsCar())

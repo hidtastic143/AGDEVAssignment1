@@ -32,6 +32,8 @@ void DamageBoss()
 
 void DryFire()
 {
+	if (engine->isCurrentlyPlaying("Audio/DryFire.wav"))
+		return;
 	engine->setSoundVolume(0.5f);
 	engine->play2D("Audio/DryFire.wav", false);
 	engine->setSoundVolume(1.f);
