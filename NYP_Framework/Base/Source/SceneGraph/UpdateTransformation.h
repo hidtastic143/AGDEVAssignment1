@@ -17,7 +17,7 @@ public:
 	void Update(void);
 
 	// Apply a translation to the Update Transformation Matrix
-	void ApplyUpdate(const float dx, const float dy, const float dz);
+	void ApplyTranslate(const float dx, const float dy, const float dz);
 	// Apply a rotation to the Update Transformation Matrix
 	void ApplyUpdate(const float angle, const float rx, const float ry, const float rz);
 

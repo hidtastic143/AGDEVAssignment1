@@ -388,7 +388,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 					if ((*colliderThat)->GetIsZombieHead())
 					{
 						if (CheckAABBCollision(thisEntity, thatEntity))
-						{
+ 						{
 							boss->setHealth(boss->GetHealth() - 1000);
 							DamageBoss();
 							thisEntity->SetIsDone(true);
@@ -397,7 +397,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 						}
 
 					}
-					if ((*colliderThat)->GetIsZombieBody())
+					else if ((*colliderThat)->GetIsZombieBody())
 					{
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{
@@ -409,7 +409,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 							//CSceneGraph::GetInstance()->DeleteNode((*colliderThat));
 						}
 					}
-					if ((*colliderThat)->GetIsZombieHand())
+					else if ((*colliderThat)->GetIsZombieHand())
 					{
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{
@@ -421,7 +421,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 							//CSceneGraph::GetInstance()->DeleteNode((*colliderThat));
 						}
 					}
-					if ((*colliderThat)->GetIsZombieLeg())
+					else if ((*colliderThat)->GetIsZombieLeg())
 					{
 						if (CheckAABBCollision(thisEntity, thatEntity))
 						{						
@@ -432,6 +432,26 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 							CSceneGraph::GetInstance()->DeleteNode((*colliderThis));
 							//CSceneGraph::GetInstance()->DeleteNode((*colliderThat));
 
+						}
+					}
+
+					else if((*colliderThat)->HasCollider())
+					{
+						if (CheckAABBCollision(thisEntity, thatEntity))
+						{
+							(*colliderThis)->SetIsDone(true);
+							(*colliderThat)->SetIsDone(true);
+
+							// Remove from Scene Graph
+							if (CSceneGraph::GetInstance()->DeleteNode((*colliderThis)))
+							{
+								cout << "*** This Entity removed ***" << endl;
+							}
+							// Remove from Scene Graph
+							if (CSceneGraph::GetInstance()->DeleteNode((*colliderThat)))
+							{
+								cout << "*** That Entity removed ***" << endl;
+							}
 						}
 					}
 				}
@@ -458,25 +478,7 @@ bool EntityManager::CheckForCollision(CPlayerInfo* playerInfo, std::vector<Space
 						CSceneGraph::GetInstance()->DeleteNode((*colliderThat));
 					}
 				}
-				else
-				{
-					if (CheckAABBCollision(thisEntity, thatEntity))
-					{
-						(*colliderThis)->SetIsDone(true);
-						(*colliderThat)->SetIsDone(true);
-
-						// Remove from Scene Graph
-						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThis)))
-						{
-							cout << "*** This Entity removed ***" << endl;
-						}
-						// Remove from Scene Graph
-						if (CSceneGraph::GetInstance()->DeleteNode((*colliderThat)))
-						{
-							cout << "*** That Entity removed ***" << endl;
-						}
-					}
-				}
+				
 			}
 		}
 		else if ((*colliderThis)->GetIsCar())
