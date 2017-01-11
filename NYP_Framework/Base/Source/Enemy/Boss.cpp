@@ -45,7 +45,7 @@ void Boss::Init()
 
 	GenericEntity* Zhead = Create::Entity("Zhead");
 	Zhead->SetIsZombieHead(true);
-	Zhead->SetCollider(true);
+	//Zhead->SetCollider(true);
 	Zhead->SetAABB(Zhead->GetScale() - Vector3(10, 10, 10), -Zhead->GetScale() - Vector3(-10, -10, -10));
 	Zhead->InitLOD("sphere", "Zhead", "ZheadQ");
 	CSceneNode* childHead = parent->AddChild(Zhead);

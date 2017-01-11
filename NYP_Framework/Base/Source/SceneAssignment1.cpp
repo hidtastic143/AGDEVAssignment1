@@ -132,6 +132,7 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateCrossHair("crosshair");
 	MeshBuilder::GetInstance()->GenerateQuad("quad", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("quad")->textureID = LoadTGA("Image//calibri.tga");
+
 	MeshBuilder::GetInstance()->GenerateText("text", 16, 16);
 	MeshBuilder::GetInstance()->GetMesh("text")->textureID = LoadTGA("Image//calibri.tga");
 	MeshBuilder::GetInstance()->GetMesh("text")->material.kAmbient.Set(1, 0, 0);
@@ -230,6 +231,9 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("Win", Color(0.f, 0.f, 0.f), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("Win")->textureID = LoadTGA("Image//WinScreen.tga");
 
+	MeshBuilder::GetInstance()->GenerateQuad("MainMenu", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("MainMenu")->textureID = LoadTGA("Image//Mainmenu.tga");
+
 	MeshBuilder::GetInstance()->GenerateOBJ("Shuttle", "OBJ//Shuttle.obj");
 	MeshBuilder::GetInstance()->GetMesh("Shuttle")->textureID = LoadTGA("Image//Shuttle_Texture.tga");
 
@@ -243,12 +247,12 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_RIGHT", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_TOP", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GenerateQuad("SKYBOX_BOTTOM", Color(1, 1, 1), 1.f);
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_FRONT")->textureID = LoadTGA("Image//SkyBox//skybox_front.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_BACK")->textureID = LoadTGA("Image//SkyBox//skybox_back.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_LEFT")->textureID = LoadTGA("Image//SkyBox//skybox_left.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_RIGHT")->textureID = LoadTGA("Image//SkyBox//skybox_right.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_TOP")->textureID = LoadTGA("Image//SkyBox//skybox_top.tga");
-	MeshBuilder::GetInstance()->GetMesh("SKYBOX_BOTTOM")->textureID = LoadTGA("Image//SkyBox//skybox_bottom.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_FRONT")->textureID = LoadTGA("Image//SkyBox//FrontSpace.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_BACK")->textureID = LoadTGA("Image//SkyBox//BackSpace.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_LEFT")->textureID = LoadTGA("Image//SkyBox//LeftSpace.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_RIGHT")->textureID = LoadTGA("Image//SkyBox//RightSpace.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_TOP")->textureID = LoadTGA("Image//SkyBox//TopSpace.tga");
+	MeshBuilder::GetInstance()->GetMesh("SKYBOX_BOTTOM")->textureID = LoadTGA("Image//SkyBox//BottomSpace.tga");
 
 	MeshBuilder::GetInstance()->GenerateRay("laser", 10.0f);
 	MeshBuilder::GetInstance()->GenerateQuad("GRIDMESH", Color(1, 1, 1), 10.f);
@@ -286,9 +290,6 @@ void SceneAssignment1::Init()
 
 	GenericEntity* Floor = Create::Entity("Floor");
 
-	background = Create::Entity("Lose");
-	bg = Create::Entity("Win");
-
 	playerInfo->getPrimaryWeapon()->SetMesh(MeshBuilder::GetInstance()->GetMesh("M4A4"));
 	playerInfo->getSecondaryWeapon()->SetMesh(MeshBuilder::GetInstance()->GetMesh("SecondWeapon"));
 
@@ -318,8 +319,10 @@ void SceneAssignment1::Init()
 	DishStand->SetAABB(Vector3(10, 10, 10), Vector3(-10, -10, -10));
 	CSceneNode* parent = CSceneGraph::GetInstance()->AddNode(DishStand);
 	parent->ApplyTranslate(250.f, -10.f, 150.f);
+
 	GenericEntity* DishNeck = Create::Entity("DishNeck");
 	CSceneNode* child = parent->AddChild(DishNeck);
+
 	GenericEntity* DishHead = Create::Entity("DishHead");
 	DishHead->SetCollider(true);
 	DishHead->SetAABB(Vector3(10, 10, 10), Vector3(-10, -10, -10));
@@ -341,6 +344,9 @@ void SceneAssignment1::Init()
 	playerInfo->SetBoundary(Vector3(24.f, 40.f, 500.f), Vector3(-24.f, 40.f, 450.f));
 
 	win = false;
+	lose = false;
+	Mainmenu = true;
+	Credit = false;
 
 	// Setup the 2D entities
 	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
@@ -355,198 +361,252 @@ void SceneAssignment1::Init()
 		textObj[i] = Create::Text2DObject("text", Vector3(-halfWindowWidth, -halfWindowHeight + fontSize*i + halfFontSize, 0.0f), "", Vector3(fontSize, fontSize, fontSize), Color(0.0f, 1.0f, 0.0f));
 	}
 	textObj[0]->SetText("HELLO WORLD");
+
+
 }
 
 void SceneAssignment1::Update(double dt)
 {
-	// Update our entities
-	CSpatialPartition::GetInstance()->Update();
-
-	static float stopwatchSpawner = 0.f;
-	stopwatchSpawner += 2 * dt;
-
 	
-	EntityManager::GetInstance()->Update(dt, playerInfo, spaceVec, boss);
-
-	// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
-	if (KeyboardController::GetInstance()->IsKeyDown('1'))
-		glEnable(GL_CULL_FACE);
-	if (KeyboardController::GetInstance()->IsKeyDown('2'))
-		glDisable(GL_CULL_FACE);
-	if (KeyboardController::GetInstance()->IsKeyDown('3'))
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-	if (KeyboardController::GetInstance()->IsKeyDown('4'))
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	if (KeyboardController::GetInstance()->IsKeyDown('5'))
-	{
-		lights[0]->type = Light::LIGHT_POINT;
-	}
-	else if (KeyboardController::GetInstance()->IsKeyDown('6'))
-	{
-		lights[0]->type = Light::LIGHT_DIRECTIONAL;
-	}
-	else if (KeyboardController::GetInstance()->IsKeyDown('7'))
-	{
-		lights[0]->type = Light::LIGHT_SPOT;
-	}
-
-	if (KeyboardController::GetInstance()->IsKeyDown('I'))
-		lights[0]->position.z -= (float)(10.f * dt);
-	if (KeyboardController::GetInstance()->IsKeyDown('K'))
-		lights[0]->position.z += (float)(10.f * dt);
-	if (KeyboardController::GetInstance()->IsKeyDown('J'))
-		lights[0]->position.x -= (float)(10.f * dt);
-	if (KeyboardController::GetInstance()->IsKeyDown('L'))
-		lights[0]->position.x += (float)(10.f * dt);
-	if (KeyboardController::GetInstance()->IsKeyDown('O'))
-		lights[0]->position.y -= (float)(10.f * dt);
-	if (KeyboardController::GetInstance()->IsKeyDown('P'))
-		lights[0]->position.y += (float)(10.f * dt);
-
-	if (KeyboardController::GetInstance()->IsKeyPressed('Z'))
-		playerInfo->SetBoundary(Vector3(24.f, 40.f, 500.f), Vector3(-24.f, 40.f, 450.f));
-
-	if (KeyboardController::GetInstance()->IsKeyPressed('X'))
-		playerInfo->SetTerrain(groundEntity);
-
-	if (KeyboardController::GetInstance()->IsKeyReleased('M'))
-	{
-		CSceneNode* theNode = CSceneGraph::GetInstance()->GetNode(1);
-		Vector3 pos = theNode->GetEntity()->GetPosition();
-		theNode->GetEntity()->SetPosition(Vector3(pos.x + 50.0f, pos.y, pos.z + 50.0f));
-	}
-	if (KeyboardController::GetInstance()->IsKeyReleased('N'))
-	{
-		CSpatialPartition::GetInstance()->PrintSelf();
-	}
-
-	// if the left mouse button was released
-	if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
-	{
-		cout << "Left Mouse Button was released!" << endl;
-	}
-	if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
-	{
-		cout << "Right Mouse Button was released!" << endl;
-	}
-	if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
-	{
-		cout << "Middle Mouse Button was released!" << endl;
-	}
-	if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
-	{
-		cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << endl;
-	}
-	if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
-	{
-		cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << endl;
-	}
-	// <THERE>
-
-	// Update the player position and other details based on keyboard and mouse inputs
 	playerInfo->Update(dt);
 
-	if (boss->GetHealth() <= 0 && playerInfo->GetHP() > 0)
+	if (Mainmenu)
 	{
-		//bg->SetPositionY(background->GetPositionY() + dt);
-		playerInfo->SetTerrain(groundEntity);
-		for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
+		if (KeyboardController::GetInstance()->IsKeyDown('1'))
 		{
-			(*it)->isDead = true;
+			Mainmenu = false;
+			
 		}
-		bg->SetPositionY(bg->GetPositionY() + dt);
-		win = true;
 	}
-
-	if (playerInfo->GetHP() > 0 && boss->GetHealth() > 0)
+	else if (!Mainmenu)
 	{
-		boss->Update(dt);
-		for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
+		// Update our entities
+		playerInfo->shoot = true;
+		static float stopwatchSpawner = 0.f;
+		stopwatchSpawner += 2 * dt;
+
+		
+		CSpatialPartition::GetInstance()->Update();
+		EntityManager::GetInstance()->Update(dt, playerInfo, spaceVec, boss);
+		GraphicsManager::GetInstance()->UpdateLights(dt);
+		
+		// THIS WHOLE CHUNK TILL <THERE> CAN REMOVE INTO ENTITIES LOGIC! Or maybe into a scene function to keep the update clean
+		if (KeyboardController::GetInstance()->IsKeyDown('1'))
+			glEnable(GL_CULL_FACE);
+		if (KeyboardController::GetInstance()->IsKeyDown('2'))
+			glDisable(GL_CULL_FACE);
+		if (KeyboardController::GetInstance()->IsKeyDown('3'))
+			glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		if (KeyboardController::GetInstance()->IsKeyDown('4'))
+			glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
+		if (KeyboardController::GetInstance()->IsKeyDown('5'))
 		{
-			if (stopwatchSpawner > 2.6f)
+			lights[0]->type = Light::LIGHT_POINT;
+		}
+		else if (KeyboardController::GetInstance()->IsKeyDown('6'))
+		{
+			lights[0]->type = Light::LIGHT_DIRECTIONAL;
+		}
+		else if (KeyboardController::GetInstance()->IsKeyDown('7'))
+		{
+			lights[0]->type = Light::LIGHT_SPOT;
+		}
+
+		if (KeyboardController::GetInstance()->IsKeyDown('I'))
+			lights[0]->position.z -= (float)(10.f * dt);
+		if (KeyboardController::GetInstance()->IsKeyDown('K'))
+			lights[0]->position.z += (float)(10.f * dt);
+		if (KeyboardController::GetInstance()->IsKeyDown('J'))
+			lights[0]->position.x -= (float)(10.f * dt);
+		if (KeyboardController::GetInstance()->IsKeyDown('L'))
+			lights[0]->position.x += (float)(10.f * dt);
+		if (KeyboardController::GetInstance()->IsKeyDown('O'))
+			lights[0]->position.y -= (float)(10.f * dt);
+		if (KeyboardController::GetInstance()->IsKeyDown('P'))
+			lights[0]->position.y += (float)(10.f * dt);
+
+		if (KeyboardController::GetInstance()->IsKeyPressed('Z'))
+			playerInfo->SetBoundary(Vector3(24.f, 40.f, 500.f), Vector3(-24.f, 40.f, 450.f));
+
+		if (KeyboardController::GetInstance()->IsKeyPressed('X'))
+			playerInfo->SetTerrain(groundEntity);
+
+		if (KeyboardController::GetInstance()->IsKeyReleased('M'))
+		{
+			CSceneNode* theNode = CSceneGraph::GetInstance()->GetNode(1);
+			Vector3 pos = theNode->GetEntity()->GetPosition();
+			theNode->GetEntity()->SetPosition(Vector3(pos.x + 50.0f, pos.y, pos.z + 50.0f));
+		}
+		if (KeyboardController::GetInstance()->IsKeyReleased('N'))
+		{
+			CSpatialPartition::GetInstance()->PrintSelf();
+		}
+
+		// if the left mouse button was released
+		if (MouseController::GetInstance()->IsButtonReleased(MouseController::LMB))
+		{
+			cout << "Left Mouse Button was released!" << endl;
+		}
+		if (MouseController::GetInstance()->IsButtonReleased(MouseController::RMB))
+		{
+			cout << "Right Mouse Button was released!" << endl;
+		}
+		if (MouseController::GetInstance()->IsButtonReleased(MouseController::MMB))
+		{
+			cout << "Middle Mouse Button was released!" << endl;
+		}
+		if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) != 0.0)
+		{
+			cout << "Mouse Wheel has offset in X-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_XOFFSET) << endl;
+		}
+		if (MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) != 0.0)
+		{
+			cout << "Mouse Wheel has offset in Y-axis of " << MouseController::GetInstance()->GetMouseScrollStatus(MouseController::SCROLL_TYPE_YOFFSET) << endl;
+		}
+		// <THERE>
+
+		// Update the player position and other details based on keyboard and mouse inputs
+		
+
+		
+
+		if (playerInfo->GetHP() > 0 && boss->GetHealth() > 0)
+		{
+			boss->Update(dt);
+			for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
 			{
-				if (!(*it)->GetReady())
+				if (stopwatchSpawner > 2.6f)
 				{
-					(*it)->SetReady(true);
-					(*it)->velocity = (playerInfo->GetPos() - (*it)->getPos()).Normalized() * (*it)->m_dSpeed;
-					stopwatchSpawner = false;
+					if (!(*it)->GetReady())
+					{
+						(*it)->SetReady(true);
+						(*it)->velocity = (playerInfo->GetPos() - (*it)->getPos()).Normalized() * (*it)->m_dSpeed;
+						stopwatchSpawner = false;
+					}
+				}
+
+				if ((*it)->GetReady())
+				{
+					(*it)->Update(dt);
 				}
 			}
 
-			if ((*it)->GetReady())
-			{
-				(*it)->Update(dt);
-			}
 		}
-
-	}
-	else if (playerInfo->GetHP() <= 0)
-	{
-		for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
+		else if (boss->GetHealth() <= 0 && playerInfo->GetHP() > 0)
 		{
-			(*it)->isDead = true;
+			for (std::vector<SpaceShip*>::iterator it = spaceVec.begin(); it != spaceVec.end(); it++)
+			{
+				(*it)->isDead = true;
+			}
+			win = true;
+			playerInfo->shoot = false;
 		}
-		background->SetPositionY(background->GetPositionY() + dt);
-		playerInfo->SetTerrain(groundEntity);
+		else if (playerInfo->GetHP() <= 0)
+		{
+			lose = true;
+			playerInfo->shoot = false;
+		}
+
+		//camera.Update(dt); // Can put the camera into an entity rather than here (Then we don't have to write this)
+
+
+		
+
+		// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P
+		// Eg. FPSRenderEntity or inside RenderUI for LightEntity
+		std::ostringstream ss;
+		ss.precision(5);
+		float fps = (float)(1.f / dt);
+		ss << "FPS: " << fps;
+		textObj[1]->SetText(ss.str());
+
+		std::ostringstream ss1;
+		ss1.precision(4);
+		ss1 << "Player:" << playerInfo->GetPos();
+		textObj[2]->SetText(ss1.str());
+
+		std::ostringstream ss2;
+		ss2.precision(13);
+		ss2 << "Boss HP:" << boss->GetHealth();
+		textObj[3]->SetText(ss2.str());
+
+		std::ostringstream ss3;
+		ss3.precision(13);
+		ss3 << "Your HP:" << playerInfo->GetHP();
+		textObj[4]->SetText(ss3.str());
+
+		
 	}
-	
-	//camera.Update(dt); // Can put the camera into an entity rather than here (Then we don't have to write this)
+}
 
+void SceneAssignment1::RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, float sizeY, float sizeZ, float x, float y)
+{
+	Mtx44 ortho;
+	ortho.SetToOrtho(-80, 80, -60, 60, -10, 10);
+	projectionStack.PushMatrix();
+	projectionStack.LoadMatrix(ortho);
+	viewStack.PushMatrix();
+	viewStack.LoadIdentity();
+	modelStack.PushMatrix();
+	modelStack.LoadIdentity();
+	modelStack.Scale(sizeX, sizeY, sizeZ);
+	modelStack.Translate(x, y, 0);
 
-	GraphicsManager::GetInstance()->UpdateLights(dt);
+	Mtx44 MVP, modelView, modelView_inverse_transpose;
 
-	// Update the 2 text object values. NOTE: Can do this in their own class but i'm lazy to do it now :P
-	// Eg. FPSRenderEntity or inside RenderUI for LightEntity
-	std::ostringstream ss;
-	ss.precision(5);
-	float fps = (float)(1.f / dt);
-	ss << "FPS: " << fps;
-	textObj[1]->SetText(ss.str());
+	MVP = projectionStack.Top() * viewStack.Top() * modelStack.Top();
+	glUniformMatrix4fv(currProg->GetUniform("MVP"), 1, GL_FALSE, &MVP.a[0]);
+	if (mesh->textureID > 0)
+	{
+		glUniform1i(currProg->GetUniform("colorTextureEnabled"), 1);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, mesh->textureID);
+		glUniform1i(currProg->GetUniform("colorTexture"), 0);
+	}
+	else
+	{
+		glUniform1i(currProg->GetUniform("colorTextureEnabled"), 0);
+	}
+	mesh->Render();
+	if (mesh->textureID > 0)
+	{
+		glBindTexture(GL_TEXTURE_2D, 0);
+	}
 
-	std::ostringstream ss1;
-	ss1.precision(4);
-	ss1 << "Player:" << playerInfo->GetPos();
-	textObj[2]->SetText(ss1.str());
+	modelStack.PopMatrix();
+	viewStack.PopMatrix();
+	projectionStack.PopMatrix();
 
-	std::ostringstream ss2;
-	ss2.precision(13);
-	ss2 << "Boss HP:" << boss->GetHealth();
-	textObj[3]->SetText(ss2.str());
-
-	std::ostringstream ss3;
-	ss3.precision(13);
-	ss3 << "Your HP:" << playerInfo->GetHP();
-	textObj[4]->SetText(ss3.str());
 }
 
 void SceneAssignment1::Render()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	
-	GraphicsManager::GetInstance()->UpdateLightUniforms();
-	// Setup 3D pipeline then render 3D
-	GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
-	GraphicsManager::GetInstance()->AttachCamera(&camera);
-
-	int halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2;
-	int halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2;
-
+	float halfWindowWidth = Application::GetInstance().GetWindowWidth() / 2.0f;
+	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	int WindowWidth = Application::GetInstance().GetWindowWidth();
 	int WindowHeight = Application::GetInstance().GetWindowHeight();
-
-	//spaceShip->Render();
-
-	theSkyBox->Render();
-	groundEntity->Render();
-
-	if (playerInfo->GetHP() <= 0)
+	
+	if (Mainmenu && !win && !lose)
 	{
-		background->Render();
-		boss->setHealth(0);
+		RenderMeshIn2D(MeshBuilder::GetInstance()->GetMesh("MainMenu"), false, halfWindowWidth / 2.5f, halfWindowHeight/ 2.5f, 1.f, 0.f, 0.f);
 	}
-	else if (playerInfo->GetHP() > 0 && boss->GetHealth() > 0)
+	else if (!Mainmenu && !win && !lose)
 	{
+		GraphicsManager::GetInstance()->UpdateLightUniforms();
+		// Setup 3D pipeline then render 3D
+		GraphicsManager::GetInstance()->SetPerspectiveProjection(45.0f, 4.0f / 3.0f, 0.1f, 10000.0f);
+		GraphicsManager::GetInstance()->AttachCamera(&camera);
+
+		//spaceShip->Render();
+
+		theSkyBox->Render();
+		groundEntity->Render();
+
+
+		if (playerInfo->GetHP() > 0 && boss->GetHealth() > 0)
+		{
 			// Setup 2D pipeline then render 2D
 			EntityManager::GetInstance()->Render();
 			if (playerInfo->getWeaponHeld() == playerInfo->getPrimaryWeapon())
@@ -564,14 +624,17 @@ void SceneAssignment1::Render()
 			GraphicsManager::GetInstance()->DetachCamera();
 			EntityManager::GetInstance()->RenderUI();
 			//EntityManager::GetInstance()->Render();
-	}
-	else if (playerInfo->GetHP() > 0 && boss->GetHealth() < 0)
-	{
-		if (win)
-		{
-			bg->Render();
 		}
 	}
+	else if (!Mainmenu && !win && lose)
+	{
+		RenderMeshIn2D(MeshBuilder::GetInstance()->GetMesh("Lose"), false, halfWindowWidth / 2.5f, halfWindowHeight / 2.5f, 1.f, 0.f, 0.f);
+	}
+	else if (!Mainmenu && win && !lose)
+	{
+		RenderMeshIn2D(MeshBuilder::GetInstance()->GetMesh("Win"), false, halfWindowWidth / 2.5f, halfWindowHeight / 2.5f, 1.f, 0.f, 0.f);
+	}
+	
 	
 }
 

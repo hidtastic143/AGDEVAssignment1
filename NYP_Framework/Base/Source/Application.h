@@ -3,6 +3,7 @@
 
 #include "timer.h"
 #include "Sound.h"
+#include "SceneAssignment1.h"
 
 struct GLFWwindow;
 

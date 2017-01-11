@@ -247,8 +247,6 @@ bool EntityManager::CheckSphereCollision(EntityBase *ThisEntity, EntityBase *Tha
 	return false;
 }
 
-
-
 // Check where a line segment between two positions intersects a plane
 bool EntityManager::GetIntersection(const float fDst1, const float fDst2, Vector3 P1, Vector3 P2, Vector3 &Hit)
 {

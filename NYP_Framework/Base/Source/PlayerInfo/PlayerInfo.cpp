@@ -53,7 +53,7 @@ void CPlayerInfo::Init(void)
 
 	// Set the current values
 	position.Set(0, 0, 470);
-	target.Set(0, 0, 460);
+	target.Set(0, 0.5, 460);
 	up.Set(0, 1, 0);
 
 	// Set the default values
@@ -84,6 +84,8 @@ void CPlayerInfo::Init(void)
 	secondaryWeapon->Init();
 
 	weaponHeld = primaryWeapon;
+
+	shoot = false;
 }
 
 // Returns true if the player is on ground
@@ -433,58 +435,62 @@ void CPlayerInfo::Update(double dt)
 		right = rightUV;
 	}
 
-	// If the user presses SPACEBAR, then make him jump
-	if (KeyboardController::GetInstance()->IsKeyDown(VK_SPACE) &&
-		position.y == m_pTerrain->GetTerrainHeight(position))
+	if (shoot)
 	{
-		SetToJumpUpwards(true);
-	}
+		// If the user presses SPACEBAR, then make him jump
+		if (KeyboardController::GetInstance()->IsKeyDown(VK_SPACE) &&
+			position.y == m_pTerrain->GetTerrainHeight(position))
+		{
+			SetToJumpUpwards(true);
+		}
 
-	// Update the weapons
-	if (KeyboardController::GetInstance()->IsKeyReleased('R'))
-	{
+		// Update the weapons
+		if (KeyboardController::GetInstance()->IsKeyReleased('R'))
+		{
+			if (primaryWeapon)
+			{
+				primaryWeapon->Reload();
+				ReloadGun();
+				//primaryWeapon->PrintSelf();
+			}
+			if (secondaryWeapon)
+			{
+				secondaryWeapon->Reload();
+				//secondaryWeapon->PrintSelf();
+			}
+		}
 		if (primaryWeapon)
-		{
-			primaryWeapon->Reload();
-			ReloadGun();
-			//primaryWeapon->PrintSelf();
-		}
+			primaryWeapon->Update(dt);
 		if (secondaryWeapon)
-		{
-			secondaryWeapon->Reload();
-			//secondaryWeapon->PrintSelf();
-		}
-	}
-	if (primaryWeapon)
-		primaryWeapon->Update(dt);
-	if (secondaryWeapon)
-		secondaryWeapon->Update(dt);
+			secondaryWeapon->Update(dt);
 
-	// if Mouse Buttons were activated, then act on them
-	if (MouseController::GetInstance()->IsButtonDown(MouseController::LMB) && !KeyboardController::GetInstance()->IsKeyReleased('R'))
-	{
-		if (weaponHeld == primaryWeapon)
-			primaryWeapon->Discharge(position, target, this);
-		else if (weaponHeld == secondaryWeapon)
-			secondaryWeapon->Discharge(position, target, this);
-	}
+		// if Mouse Buttons were activated, then act on them
+		if (MouseController::GetInstance()->IsButtonDown(MouseController::LMB) && !KeyboardController::GetInstance()->IsKeyReleased('R'))
+		{
+			if (weaponHeld == primaryWeapon)
+				primaryWeapon->Discharge(position, target, this);
+			else if (weaponHeld == secondaryWeapon)
+				secondaryWeapon->Discharge(position, target, this);
+		}
 
-	if (KeyboardController::GetInstance()->IsKeyPressed(0x31))
-	{
-		if (weaponHeld == secondaryWeapon)
+		if (KeyboardController::GetInstance()->IsKeyPressed(0x31))
 		{
-			weaponHeld = primaryWeapon;
-			std::cout << "RIFLE" << std::endl;
+			if (weaponHeld == secondaryWeapon)
+			{
+				weaponHeld = primaryWeapon;
+				std::cout << "RIFLE" << std::endl;
+			}
+		}
+		else if (KeyboardController::GetInstance()->IsKeyPressed(0x32))
+		{
+			if (weaponHeld == primaryWeapon)
+			{
+				weaponHeld = secondaryWeapon;
+				std::cout << "PISTOL" << std::endl;
+			}
 		}
 	}
-	else if (KeyboardController::GetInstance()->IsKeyPressed(0x32))
-	{
-		if (weaponHeld == primaryWeapon)
-		{
-			weaponHeld = secondaryWeapon;
-			std::cout << "PISTOL" << std::endl;
-		}
-	}
+	
 
 	// If the user presses R key, then reset the view to default values
 	if (KeyboardController::GetInstance()->IsKeyDown('P'))

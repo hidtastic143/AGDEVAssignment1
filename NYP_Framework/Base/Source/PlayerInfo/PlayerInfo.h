@@ -117,6 +117,8 @@ public:
 	void SetHP(const int& newHP);
 	int GetHP() const;
 
+	bool shoot;
+
 private:
 	Vector3 defaultPosition, defaultTarget, defaultUp;
 	Vector3 rotationInfo;

@@ -28,6 +28,10 @@ public:
 	virtual void Update(double dt);
 	virtual void Render();
 	virtual void Exit();
+	virtual void RenderMeshIn2D(Mesh *mesh, bool enableLight, float sizeX, float sizeY, float sizeZ, float x, float y);
+
+	bool Mainmenu;
+	bool Credit;
 
 private:
 	SceneAssignment1(SceneManager* _sceneMgr); // This is used to register to SceneManager
@@ -37,17 +41,20 @@ private:
 	GroundEntity* groundEntity;
 	SkyBoxEntity* theSkyBox;
 	FPSCamera camera;
-	TextEntity* textObj[5];
+	TextEntity* textObj[6];
 	Light* lights[2];
 
 	GenericEntity* theCube;
 	GenericEntity* Rifle;
-	GenericEntity* background;
-	GenericEntity* bg;
 	Boss* boss;
 	SpaceShip* spaceShip;
 
 	bool win;
+	bool lose;
+
+	MS modelStack;
+	MS viewStack;
+	MS projectionStack;
 
 	std::vector<SpaceShip*> spaceVec;
 

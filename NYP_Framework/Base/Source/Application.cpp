@@ -105,6 +105,7 @@ void Application::Init()
 	glfwSetScrollCallback(m_window, &Application::MouseScrollCallbacks);
 
 	// Init systems
+
 	GraphicsManager::GetInstance()->Init();
 	StartUP();
 }
