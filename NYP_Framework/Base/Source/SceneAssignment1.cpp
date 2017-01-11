@@ -175,6 +175,13 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("DishStand", "OBJ//DishStand.obj");
 	MeshBuilder::GetInstance()->GetMesh("DishStand")->textureID = LoadTGA("Image//DishStand.tga");
 
+	MeshBuilder::GetInstance()->GenerateOBJ("DishHead1", "OBJ//DishHead.obj");
+	MeshBuilder::GetInstance()->GetMesh("DishHead1")->textureID = LoadTGA("Image//DishHead.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("DishNeck1", "OBJ//DishNeck.obj");
+	MeshBuilder::GetInstance()->GetMesh("DishNeck1")->textureID = LoadTGA("Image//DishNeck.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("DishStand1", "OBJ//DishStand.obj");
+	MeshBuilder::GetInstance()->GetMesh("DishStand1")->textureID = LoadTGA("Image//DishStand.tga");
+
 	MeshBuilder::GetInstance()->GenerateOBJ("WholeDish", "OBJ//WholeDish.obj");
 	MeshBuilder::GetInstance()->GetMesh("WholeDish")->textureID = LoadTGA("Image//WholeDish.tga");
 
@@ -314,20 +321,48 @@ void SceneAssignment1::Init()
 	
 	
 	GenericEntity* DishStand = Create::Entity("DishStand");
+	DishStand->SetAABB(DishStand->GetScale(), -DishStand->GetScale() + Vector3(0, 15, 0));
 	DishStand->SetCollider(true);
-	DishStand->SetAABB(Vector3(10, 10, 10), Vector3(-10, -10, -10));
 	CSceneNode* parent = CSceneGraph::GetInstance()->AddNode(DishStand);
-	parent->ApplyTranslate(250.f, -10.f, 150.f);
+	//parent->ApplyTranslate(250.f, -10.f, 150.f);
+
 	GenericEntity* DishNeck = Create::Entity("DishNeck");
+	DishNeck->SetAABB(DishNeck->GetScale() + Vector3(0, 45, 0), -DishNeck->GetScale() + Vector3(0, 45, 0));
+	DishNeck->SetCollider(true);
 	CSceneNode* child = parent->AddChild(DishNeck);
+
 	GenericEntity* DishHead = Create::Entity("DishHead");
-	DishHead->SetCollider(true);
-	DishHead->SetAABB(Vector3(10, 10, 10), Vector3(-10, -10, -10));
+	DishHead->SetAABB(DishHead->GetScale(), -DishHead->GetScale());
 	CSceneNode* grandchild = child->AddChild(DishHead);
 	CUpdateTransformation* baseMtx = new CUpdateTransformation();
 	baseMtx->ApplyUpdate(1.f, 0.f, 1.f, 0.f);
 	baseMtx->SetSteps(-180, 180);
+	//baseMtx->ApplyTranslate(250.f, -10.f, 150.f);
+
+	grandchild->ApplyTranslate(250.f, 2.f, 150.f);
 	grandchild->SetUpdateTransformation(baseMtx);
+
+	GenericEntity* DishStand1 = Create::Entity("DishStand1");
+	DishStand1->SetAABB(DishStand1->GetScale(), -DishStand1->GetScale() + Vector3(0, 15, 0));
+	DishStand1->SetCollider(true);
+	CSceneNode* parent1 = CSceneGraph::GetInstance()->AddNode(DishStand1);
+	//parent->ApplyTranslate(250.f, -10.f, 150.f);
+
+	GenericEntity* DishNeck1 = Create::Entity("DishNeck1");
+	DishNeck1->SetAABB(DishNeck1->GetScale() + Vector3(0, 45, 0), -DishNeck1->GetScale() + Vector3(0, 45, 0));
+	DishNeck1->SetCollider(true);
+	CSceneNode* child1 = parent1->AddChild(DishNeck1);
+
+	GenericEntity* DishHead1 = Create::Entity("DishHead1");
+	DishHead1->SetAABB(DishHead1->GetScale(), -DishHead1->GetScale());
+	CSceneNode* grandchild1 = child1->AddChild(DishHead1);
+	CUpdateTransformation* baseMtx1 = new CUpdateTransformation();
+	baseMtx1->ApplyUpdate(-1.f, 0.f, 1.f, 0.f);
+	baseMtx1->SetSteps(-180, 180);
+	//baseMtx->ApplyTranslate(250.f, -10.f, 150.f);
+
+	grandchild1->ApplyTranslate(250.f, 2.f, 300.f);
+	grandchild1->SetUpdateTransformation(baseMtx1);
 
 	GenericEntity* WholeDish = Create::Entity("WholeDish");
 
@@ -347,8 +382,6 @@ void SceneAssignment1::Init()
 	float halfWindowHeight = Application::GetInstance().GetWindowHeight() / 2.0f;
 	float fontSize = 25.0f;
 	float halfFontSize = fontSize / 2.0f;
-
-
 
 	for (int i = 0; i < 5; ++i)
 	{
