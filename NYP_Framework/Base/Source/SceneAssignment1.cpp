@@ -186,6 +186,13 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateOBJ("WholeDish", "OBJ//WholeDish.obj");
 	MeshBuilder::GetInstance()->GetMesh("WholeDish")->textureID = LoadTGA("Image//WholeDish.tga");
 
+	MeshBuilder::GetInstance()->GenerateOBJ("Planet1", "OBJ//Planet1.obj");
+	MeshBuilder::GetInstance()->GetMesh("Planet1")->textureID = LoadTGA("Image//Planet1_Texture.tga");	
+	MeshBuilder::GetInstance()->GenerateOBJ("Planet2", "OBJ//Planet2.obj");
+	MeshBuilder::GetInstance()->GetMesh("Planet2")->textureID = LoadTGA("Image//Planet2_Texture.tga");	
+	MeshBuilder::GetInstance()->GenerateOBJ("Planet3", "OBJ//Planet3.obj");
+	MeshBuilder::GetInstance()->GetMesh("Planet3")->textureID = LoadTGA("Image//Planet3_Texture.tga");
+
 	MeshBuilder::GetInstance()->GenerateCube("cube", Color(1.0f, 1.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("cube2", Color(0.0f, 1.0f, 0.0f), 1.0f);
 	MeshBuilder::GetInstance()->GenerateCube("cube3", Color(1.0f, 0.0f, 0.0f), 1.0f);
@@ -328,7 +335,28 @@ void SceneAssignment1::Init()
 		"SKYBOX_TOP", "SKYBOX_BOTTOM");
 
 	
-	
+	GenericEntity* Planet1 = Create::Entity("Planet1");
+	CSceneNode*planetParent = CSceneGraph::GetInstance()->AddNode(Planet1);
+	CUpdateTransformation* planetMtx = new CUpdateTransformation();
+	planetParent->ApplyTranslate(-300, 100, 0);
+	planetMtx->SetForever(true);
+	planetMtx->ApplyUpdate(1.f, 0.f, 1.f, 0.f);
+	planetMtx->SetSteps(0, 360);
+	planetParent->SetUpdateTransformation(planetMtx);
+
+	GenericEntity* Planet2 = Create::Entity("Planet2");
+	CSceneNode* Mun = planetParent->AddChild(Planet2);
+	Mun->ApplyTranslate(22, 0, 0);
+
+	GenericEntity* Planet3 = Create::Entity("Planet3");
+	CSceneNode* MunMun = Mun->AddChild(Planet3);
+	CUpdateTransformation* MunMunMtx = new CUpdateTransformation();
+	MunMunMtx->SetForever(true);
+	MunMunMtx->ApplyUpdate(1.f, 1, 0, 1);
+	MunMunMtx->SetSteps(0, 360);
+	MunMun->SetUpdateTransformation(MunMunMtx);
+	MunMun->ApplyTranslate(-5, 0, 0);
+
 	GenericEntity* DishStand = Create::Entity("DishStand");
 	DishStand->SetAABB(DishStand->GetScale(), -DishStand->GetScale() + Vector3(0, 15, 0));
 	DishStand->SetCollider(true);
