@@ -243,6 +243,8 @@ void SceneAssignment1::Init()
 
 	MeshBuilder::GetInstance()->GenerateOBJ("Shuttle", "OBJ//Shuttle.obj");
 	MeshBuilder::GetInstance()->GetMesh("Shuttle")->textureID = LoadTGA("Image//Shuttle_Texture.tga");
+	MeshBuilder::GetInstance()->GenerateOBJ("Shuttle1", "OBJ//Shuttle1.obj");
+	MeshBuilder::GetInstance()->GetMesh("Shuttle1")->textureID = LoadTGA("Image//Shuttle_Texture.tga");
 
 	MeshBuilder::GetInstance()->GenerateOBJ("Floor", "OBJ//Floor.obj");
 	MeshBuilder::GetInstance()->GetMesh("Floor")->textureID = LoadTGA("Image//Floor_Texture.tga");
@@ -278,8 +280,6 @@ void SceneAssignment1::Init()
 	//Rifle = Create::Entity("M4A4");
 	//Rifle->SetPosition(Vector3(playerInfo->GetPos().x + 1.f, playerInfo->GetPos().y - 2.f, playerInfo->GetPos().z - 5));
 
-	GenericEntity* Shuttle = Create::Entity("Shuttle");
-
 	GenericEntity* Barricade = Create::Entity("Barricade1");
 	Barricade->SetAABB(Barricade->GetScale(), -Barricade->GetScale());
 	GenericEntity* Barricade2 = Create::Entity("Barricade2");
@@ -302,6 +302,9 @@ void SceneAssignment1::Init()
 
 	boss = new Boss();
 	boss->Init();
+
+	GenericEntity* Shuttle = Create::Entity("Shuttle");
+	Shuttle->InitLOD("cube", "Shuttle1", "Shuttle");
 
 	for (int i = 0; i < 50; i++)
 	{
