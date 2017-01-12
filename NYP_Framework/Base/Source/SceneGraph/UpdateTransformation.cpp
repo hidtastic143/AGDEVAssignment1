@@ -6,6 +6,7 @@ CUpdateTransformation::CUpdateTransformation()
 	, deltaSteps(1)
 	, minSteps(0)
 	, maxSteps(0)
+	, forever(false)
 {
 	Update_Mtx.SetToIdentity();
 	Update_Mtx_REVERSED.SetToIdentity();
@@ -23,11 +24,24 @@ void CUpdateTransformation::Reset(void)
 	Update_Mtx_REVERSED.SetToIdentity();
 }
 
+void CUpdateTransformation::SetForever(bool newForever)
+{
+	forever = newForever;
+}
+
 // Update the steps
 void CUpdateTransformation::Update(void)
 {
 	curSteps += deltaSteps;
-	if ((curSteps >= maxSteps) || (curSteps <= minSteps))
+
+	if (forever)
+	{
+		if (curSteps >= maxSteps)
+			curSteps = minSteps;
+		else if (curSteps <= minSteps)
+			curSteps = maxSteps;
+	}
+	else if ((curSteps >= maxSteps) || (curSteps <= minSteps))
 	{
 		deltaSteps *= -1;
 	}

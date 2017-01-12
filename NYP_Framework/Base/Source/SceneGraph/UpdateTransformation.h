@@ -6,6 +6,7 @@ class CUpdateTransformation
 protected:
 	int curSteps, deltaSteps, minSteps, maxSteps;
 	Mtx44 Update_Mtx, Update_Mtx_REVERSED;
+	bool forever;
 
 public:
 	CUpdateTransformation();
@@ -20,6 +21,9 @@ public:
 	void ApplyTranslate(const float dx, const float dy, const float dz);
 	// Apply a rotation to the Update Transformation Matrix
 	void ApplyUpdate(const float angle, const float rx, const float ry, const float rz);
+
+	// Setting if wanting rotating forever
+	void SetForever(bool newForever);
 
 	// Set the minSteps and maxSteps
 	void SetSteps(const int minSteps, const int maxSteps);
