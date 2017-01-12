@@ -105,7 +105,7 @@ void CGrid::Render(void)
 		{
 			modelStack.PushMatrix();
 			modelStack.Translate(0.5, -0.5, 0);
-			RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("Testing"));
+			RenderHelper::RenderMesh(MeshBuilder::GetInstance()->GetMesh("MoonS"));
 			modelStack.PopMatrix();
 		}
 	}

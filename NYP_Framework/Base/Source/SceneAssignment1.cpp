@@ -200,6 +200,11 @@ void SceneAssignment1::Init()
 	MeshBuilder::GetInstance()->GenerateQuad("GEO_GRASS_LIGHTGREEN", Color(1, 1, 1), 1.f);
 	MeshBuilder::GetInstance()->GetMesh("GEO_GRASS_LIGHTGREEN")->textureID = LoadTGA("Image//grass_lightgreen.tga");
 
+	MeshBuilder::GetInstance()->GenerateQuad("MoonF", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("MoonF")->textureID = LoadTGA("Image//MoonF.tga");
+	MeshBuilder::GetInstance()->GenerateQuad("MoonS", Color(1, 1, 1), 1.f);
+	MeshBuilder::GetInstance()->GetMesh("MoonS")->textureID = LoadTGA("Image//MoonS.tga");
+
 	//Gun
 	MeshBuilder::GetInstance()->GenerateOBJ("M4A4", "OBJ//M4A4.obj");
 	MeshBuilder::GetInstance()->GetMesh("M4A4")->textureID = LoadTGA("Image//M4A4_Texture.tga");
@@ -295,7 +300,7 @@ void SceneAssignment1::Init()
 	GenericEntity* Barricade7 = Create::Entity("Barricade7");
 	Barricade->SetAABB(Barricade7->GetScale(), -Barricade7->GetScale());
 
-	GenericEntity* Floor = Create::Entity("Floor");
+	//GenericEntity* Floor = Create::Entity("Floor");
 
 	playerInfo->getPrimaryWeapon()->SetMesh(MeshBuilder::GetInstance()->GetMesh("M4A4"));
 	playerInfo->getSecondaryWeapon()->SetMesh(MeshBuilder::GetInstance()->GetMesh("SecondWeapon"));
@@ -314,7 +319,7 @@ void SceneAssignment1::Init()
 	}
 	//enemy->InitLOD("Spaceship", "Spaceship", "Spaceship2");
 
-	groundEntity = Create::Ground("GRASS_DARKGREEN", "GEO_GRASS_LIGHTGREEN");
+	groundEntity = Create::Ground("MoonF", "MoonF");
 	//	Create::Text3DObject("text", Vector3(0.0f, 0.0f, 0.0f), "DM2210", Vector3(10.0f, 10.0f, 10.0f), Color(0, 1, 1));
 	Create::Sprite2DObject("crosshair", Vector3(0.0f, 0.0f, 0.0f), Vector3(10.0f, 10.0f, 10.0f));
 
